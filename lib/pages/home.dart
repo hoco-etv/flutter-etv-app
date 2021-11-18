@@ -4,6 +4,19 @@ import 'package:etv_app/layouts/default.dart';
 import 'package:etv_app/widgets/calendar.dart';
 import 'package:etv_app/widgets/boardroom_indicator.dart';
 import 'package:etv_app/widgets/news_booth.dart';
+import 'package:etv_app/widgets/refreshable.dart';
+
+final pageContent = <Widget>[
+  BoardroomStateIndicator(),
+
+  const SizedBox(height: pagePadding),
+
+  Calendar(),
+
+  const SizedBox(height: pagePadding),
+
+  BulletinList(),
+];
 
 class HomePage extends StatelessWidget {
   const HomePage([Key? key]) : super(key: key);
@@ -13,21 +26,22 @@ class HomePage extends StatelessWidget {
   {
     return DefaultLayout(
       title: 'Electrotechnische Vereeniging',
-      pageContent: ListView(
-        padding: const EdgeInsets.all(pagePadding),
+      pageContent: RefreshIndicator(
+        child: ListView(
+          padding: const EdgeInsets.all(pagePadding),
 
-        children: const <Widget>[
-          BoardroomStateIndicator(),
+          children: pageContent,
+        ),
 
-          SizedBox(height: pagePadding),
-
-          Calendar(),
-
-          SizedBox(height: pagePadding),
-
-          BulletinList(),
-        ],
+        onRefresh: () {
+          return Future.wait(
+            pageContent
+            .whereType<RefreshableWidget>()
+            .map((w) => w.refresh())
+          );
+        }
       ),
+
     );
   }
 }

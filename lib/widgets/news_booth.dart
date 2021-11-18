@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
+import 'package:etv_app/widgets/refreshable.dart';
 
-class BulletinList extends StatefulWidget {
-  const BulletinList({Key? key}) : super(key: key);
+class BulletinList extends RefreshableWidget {
+  BulletinList({Key? key}) : super(key: key);
+
+  final _BulletinListState state = _BulletinListState();
 
   @override
-  State<BulletinList> createState() => _BulletinListState();
+  State<BulletinList> createState() => state;
+
+  @override
+  Future<void> refresh()
+  {
+    return state.refresh();
+  }
 }
 
 class _BulletinListState extends State<BulletinList> {
@@ -104,12 +113,17 @@ class _BulletinListState extends State<BulletinList> {
     );
   }
 
+  refresh()
+  {
+    return etv.getNews()
+    .then((n) => setState(() { _newsItems = n; }));
+  }
+
   @override
   initState()
   {
     super.initState();
 
-    etv.getNews()
-    .then((n) => setState(() { _newsItems = n; }));
+    refresh();
   }
 }

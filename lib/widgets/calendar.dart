@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
+import 'package:etv_app/widgets/refreshable.dart';
 import 'conditional.dart';
 
-class Calendar extends StatefulWidget {
-  const Calendar({Key? key}) : super(key: key);
+class Calendar extends RefreshableWidget {
+  Calendar({Key? key}) : super(key: key);
+
+  final _CalendarState state = _CalendarState();
 
   @override
-  State<Calendar> createState() => _CalendarState();
+  State<Calendar> createState() => state;
+
+  @override
+  Future<void> refresh()
+  {
+    return state.refresh();
+  }
 }
 
 class _CalendarState extends State<Calendar> {
@@ -126,12 +135,17 @@ class _CalendarState extends State<Calendar> {
     );
   }
 
+  refresh()
+  {
+    return etv.getActivities()
+    .then((a) => setState(() { _activities = a; }));
+  }
+
   @override
   initState()
   {
     super.initState();
 
-    etv.getActivities()
-    .then((a) => setState(() { _activities = a; }));
+    refresh();
   }
 }

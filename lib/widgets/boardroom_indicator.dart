@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
 import 'package:etv_app/utils/etv_style.dart';
+import 'package:etv_app/widgets/refreshable.dart';
 
-class BoardroomStateIndicator extends StatefulWidget {
-  const BoardroomStateIndicator({Key? key}) : super(key: key);
+class BoardroomStateIndicator extends RefreshableWidget {
+  BoardroomStateIndicator({Key? key}) : super(key: key);
+
+  final _BoardroomIndicatorState state = _BoardroomIndicatorState();
 
   @override
-  State<BoardroomStateIndicator> createState() => _BoardroomIndicatorState();
+  State<BoardroomStateIndicator> createState() => state;
+
+  @override
+  Future<void> refresh()
+  {
+    return state.refresh();
+  }
 }
 
 class _BoardroomIndicatorState extends State<BoardroomStateIndicator> {
@@ -48,12 +57,17 @@ class _BoardroomIndicatorState extends State<BoardroomStateIndicator> {
     );
   }
 
+  refresh()
+  {
+    return etv.getBoardroomState()
+    .then((bs) => setState(() { _boardroomState = bs; }));
+  }
+
   @override
   initState()
   {
     super.initState();
 
-    etv.getBoardroomState()
-    .then((bs) => setState(() { _boardroomState = bs; }));
+    refresh();
   }
 }
