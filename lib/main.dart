@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zandbak/utils/etv_style.dart';
-import 'package:zandbak/pages/home.dart';
-import 'package:zandbak/pages/activity.dart';
-import 'package:zandbak/pages/bulletin.dart';
+import 'package:etv_app/utils/etv_style.dart';
+import 'package:etv_app/pages/home.dart';
+import 'package:etv_app/pages/activity.dart';
+import 'package:etv_app/pages/bulletin.dart';
 
 void main() {
   runApp(const EtvApp());

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:zandbak/utils/etv_style.dart';
-import 'package:zandbak/layouts/default.dart';
-import 'package:zandbak/widgets/calendar.dart';
-import 'package:zandbak/widgets/boardroom_indicator.dart';
-import 'package:zandbak/widgets/news_booth.dart';
+import 'package:etv_app/utils/etv_style.dart';
+import 'package:etv_app/layouts/default.dart';
+import 'package:etv_app/widgets/calendar.dart';
+import 'package:etv_app/widgets/boardroom_indicator.dart';
+import 'package:etv_app/widgets/news_booth.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage([Key? key]) : super(key: key);

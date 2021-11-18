@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:zandbak/layouts/default.dart';
-import 'package:zandbak/utils/etv_api_client.dart';
-import 'package:zandbak/utils/etv_style.dart';
+import 'package:etv_app/layouts/default.dart';
+import 'package:etv_app/utils/etv_api_client.dart';
+import 'package:etv_app/utils/etv_style.dart';
 
 class BulletinPage extends StatelessWidget {
   const BulletinPage([Key? key]) : super(key: key);

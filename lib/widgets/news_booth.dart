@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/etv_api_client.dart' as etv;
-import '../utils/etv_style.dart';
+import 'package:etv_app/utils/etv_style.dart';
+import 'package:etv_app/utils/etv_api_client.dart' as etv;
 
 class BulletinList extends StatefulWidget {
   const BulletinList({Key? key}) : super(key: key);

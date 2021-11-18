@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zandbak/utils/etv_api_client.dart' as etv;
-import 'package:zandbak/utils/etv_style.dart';
+import 'package:etv_app/utils/etv_api_client.dart' as etv;
+import 'package:etv_app/utils/etv_style.dart';
 
 class BoardroomStateIndicator extends StatefulWidget {
   const BoardroomStateIndicator({Key? key}) : super(key: key);
