@@ -15,7 +15,7 @@ class BulletinPage extends StatelessWidget {
     return DefaultLayout(
       title: newsItem.name,
       pageContent: ListView(
-        padding: const EdgeInsets.all(pagePadding),
+        padding: outerPadding,
         children: <Widget>[
           /* Author */
           Row(children: [
@@ -29,7 +29,7 @@ class BulletinPage extends StatelessWidget {
               textScaleFactor: 1.3,
             ),
           ]),
-          const SizedBox(height: pagePadding),
+          const SizedBox(height: outerPaddingSize),
 
           /* Content */
           HtmlWidget(

@@ -36,6 +36,11 @@ dependencies:
 
   flutter_widget_from_html: ^0.8.2
 
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+
+  flutter_font_icons: ^2.0.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -67,6 +72,12 @@ flutter:
     - assets/etv_shield.png
     - assets/etv_background_dark.png
     - assets/etv_background_light.png
+
+  fonts:
+    - family: RobotoMono
+      fonts:
+        - asset: assets/RobotoMono-Medium.ttf
+          weight: 500
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

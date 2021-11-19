@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:etv_app/utils/etv_style.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 class DefaultLayout extends StatelessWidget {
   final String title;
@@ -15,15 +17,67 @@ class DefaultLayout extends StatelessWidget {
         title: Text(title),
       ),
 
-      body: Container (
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              // icon: const Icon(Feather.home),
+              icon: Icon(ModalRoute.of(context)?.settings.name == '/' ? Ionicons.home : Ionicons.home_outline),
+              iconSize: 32,
+              padding: innerPadding,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              onPressed: () { Navigator.popUntil(context, ModalRoute.withName('/')); },
+            ),
+            IconButton(
+              icon: Icon(ModalRoute.of(context)?.settings.name == '/activities' ? Ionicons.calendar : Ionicons.calendar_outline),
+              iconSize: 32,
+              padding: innerPadding,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/activities',
+                  ModalRoute.withName('/'),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(ModalRoute.of(context)?.settings.name == '/news' ? Ionicons.newspaper : Ionicons.newspaper_outline),
+              iconSize: 32,
+              padding: innerPadding,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/news',
+                  ModalRoute.withName('/'),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(ModalRoute.of(context)?.settings.name == '/profile' ? Ionicons.person : Ionicons.person_outline),
+              iconSize: 32,
+              padding: innerPadding/2,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              onPressed: () { Navigator.pushNamed(context, '/profile'); },
+            ),
+          ],
+        ),
+      ),
+
+      body: Container(
         child: pageContent,
 
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.contain,
             alignment: Alignment.bottomCenter,
-            image: AssetImage('assets/etv_background_dark.png'),
-            colorFilter: ColorFilter.mode(Colors.black12, BlendMode.dstIn),
+            image: const AssetImage('assets/etv_background_light.png'),
+            colorFilter: ColorFilter.mode(
+              Colors.grey.withOpacity(0.4),
+              BlendMode.srcIn,
+            ),
           ),
         ),
       ),

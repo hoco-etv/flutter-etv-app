@@ -4,7 +4,6 @@ import 'package:etv_app/layouts/default.dart';
 import 'package:etv_app/utils/etv_api_client.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
-import 'package:etv_app/widgets/conditional.dart';
 
 class ActivityPage extends StatelessWidget {
   const ActivityPage([Key? key]) : super(key: key);
@@ -17,23 +16,23 @@ class ActivityPage extends StatelessWidget {
     return DefaultLayout(
       title: activity.name,
       pageContent: ListView(
-        padding: const EdgeInsets.all(pagePadding),
+        padding: outerPadding,
         children: <Widget>[
           /* Image */
-          Conditional(
-            displayCondition: activity.image != null,
+          Visibility(
+            visible: activity.image != null,
             child: Container(
-              margin: const EdgeInsets.only(bottom: pagePadding),
+              margin: const EdgeInsets.only(bottom: outerPaddingSize),
               child: Image.network(activity.image ?? ''),
               // child: Image.network('https://etv.tudelft.nl/photos/default/photo?id=582&file=bruikbaar2.png&thumbnail=0'),
             ),
           ),
 
           /* Subtitle */
-          Conditional(
-            displayCondition: activity.summary != null,
+          Visibility(
+            visible: activity.summary != null,
             child: Container(
-              margin: const EdgeInsets.only(bottom: pagePadding),
+              margin: const EdgeInsets.only(bottom: outerPaddingSize),
               child: Text(
                 activity.summary ?? 'samenvatting',
                 style: Theme.of(context).textTheme.headline6,
@@ -42,8 +41,8 @@ class ActivityPage extends StatelessWidget {
           ),
 
           /* Where */
-          Conditional(
-            displayCondition: activity.location != null,
+          Visibility(
+            visible: activity.location != null,
             child: Row(
               children: [
                 Text(
@@ -71,11 +70,11 @@ class ActivityPage extends StatelessWidget {
               textScaleFactor: 1.3,
             ),
           ]),
-          const SizedBox(height: pagePadding),
+          const SizedBox(height: outerPaddingSize),
 
           /* Description */
-          Conditional(
-            displayCondition: activity.description != null,
+          Visibility(
+            visible: activity.description != null,
             child: HtmlWidget(
               activity.description ?? '',
               customWidgetBuilder: (element) {

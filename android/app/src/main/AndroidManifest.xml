@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.zandbak">
+    package="nl.tudelft.etv.app">
     <application
         android:label="ETV"
         android:icon="@mipmap/ic_launcher">

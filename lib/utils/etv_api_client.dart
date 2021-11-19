@@ -1,39 +1,115 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:etv_app/store/user.dart';
 
-const String baseUrl = 'https://etv.tudelft.nl/api/v1';
+const String _baseUrl = 'https://etv.tudelft.nl/api/v1';
+// const String _baseUrl = 'http://10.0.2.2:8000/api/v1';
 
-Future getEndpoint(String endpoint) async
+Future _get(String endpoint) async
 {
-  final response = await http.get(Uri.parse(baseUrl + endpoint));
+  Map<String, String> headers = {
+    'Accept': 'application/json',
+  };
+
+  final accessToken = await getToken();
+  if (accessToken != null) {
+    headers['Authorization'] = 'Bearer $accessToken';
+  }
+
+  final response = await http.get(
+    Uri.parse(_baseUrl + endpoint),
+    headers: headers,
+  );
 
   if (response.statusCode == 200) {
     return json.decode(response.body);
   }
   else {
+    if (response.statusCode == 401) {
+      await resetAuthState();
+    }
     throw Exception("Failed to fetch from `$endpoint`");
   }
 }
 
-Future<List<EtvActivity>> getActivities() async
+Future _post(String endpoint, Map<String, dynamic> body) async
 {
-  return (await getEndpoint('/activities') as List<dynamic>)
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Accept':       'application/json',
+  };
+
+  final accessToken = await getToken();
+  if (accessToken != null) {
+    headers['Authorization'] = 'Bearer $accessToken';
+  }
+
+  final response = await http.post(
+    Uri.parse(_baseUrl + endpoint),
+    body: json.encode(body),
+    headers: headers,
+  );
+
+  if (response.statusCode >= 200 && response.statusCode < 300) {
+    return json.decode(response.body);
+  }
+  else {
+    if (response.statusCode == 401) {
+      await resetAuthState();
+    }
+    throw Exception("POST request to `$endpoint` failed");
+  }
+}
+
+Future<List<EtvActivity>> fetchActivities() async
+{
+  return (await _get('/activities') as List<dynamic>)
     .map((e) => EtvActivity.fromJson(e))
     .toList();
 }
 
-Future<EtvBoardroomState> getBoardroomState() async
+Future<EtvBoardroomState> fetchBoardroomState() async
 {
   return EtvBoardroomState.fromJson(
-    await getEndpoint('/boardroom')
+    await _get('/boardroom')
   );
 }
 
-Future<List<EtvBulletin>> getNews() async
+Future<List<EtvBulletin>> fetchNews() async
 {
-  return (await getEndpoint('/news') as List<dynamic>)
+  return (await _get('/news') as List<dynamic>)
     .map((e) => EtvBulletin.fromJson(e))
     .toList();
+}
+
+/// @returns `UserProfile | null`
+Future fetchProfile() async
+{
+  if (!await isLoggedIn()) {
+    return null;
+  }
+
+  final result = await _get('/profile') as Map<String, dynamic>;
+  final profile = UserProfile.fromMap(result);
+  storeUser(profile);
+  return profile;
+}
+
+/// returns an access token if successful, null otherwise
+Future login(String username, String password) async
+{
+  final response = await _post('/login', {
+    'email': username,
+    'password': password,
+  });
+
+  if (response['success']) {
+    storeToken(response['access_token']);
+    return fetchProfile();
+  }
+  else {
+    return null;
+  }
 }
 
 class EtvActivity {

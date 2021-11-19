@@ -1,143 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/utils/time_formats.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
-import 'package:etv_app/widgets/refreshable.dart';
-import 'conditional.dart';
+import 'package:etv_app/widgets/activity_list.dart';
 
-class Calendar extends RefreshableWidget {
-  Calendar({Key? key}) : super(key: key);
-
-  final _CalendarState state = _CalendarState();
+class Calendar extends StatefulWidget {
+  const Calendar({Key? key}) : super(key: key);
 
   @override
-  State<Calendar> createState() => state;
-
-  @override
-  Future<void> refresh()
-  {
-    return state.refresh();
-  }
+  State<Calendar> createState() => CalendarState();
 }
 
-class _CalendarState extends State<Calendar> {
+class CalendarState extends State<Calendar> {
   List<etv.EtvActivity>? _activities;
 
   @override
   Widget build(BuildContext context)
   {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
-      margin: EdgeInsets.zero,
+    return Card(child: Container(
+      padding: innerPadding,
 
       child: Column(
         children: [
           /* title */
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
-            ),
-
-            child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                'Activiteiten',
-                style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(
-                  color: titleGrey,
-                )),
-              ),
+            alignment: Alignment.center,
+            child: Text(
+              'Activiteiten',
+              style: Theme.of(context).textTheme.headline5,
             ),
           ),
 
           /* activity list */
           Container(
-            padding: const EdgeInsets.only(bottom: borderRadius - innerBorderRadius),
-            child: Column(
-              children: _activities?.map((e) {
-                List<Widget> activityContent = [];
-                if (e.summary != null) activityContent.add(Text(e.summary!));
+            padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-                return Card(
-                  margin: const EdgeInsets.only(
-                    top: borderRadius - innerBorderRadius,
-                    left: borderRadius - innerBorderRadius,
-                    right: borderRadius - innerBorderRadius,
-                  ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(innerBorderRadius)),
+            child: _activities != null ? ActivityList(_activities!.sublist(0, 3)) : null,
+          ),
 
-                  child: ClipPath(
-                    clipper: ShapeBorderClipper(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(innerBorderRadius)
+          /* link to activities page */
+          Visibility(
+            visible: (_activities?.length ?? 0) > 3,
+            child: GestureDetector(
+              onTap: () { Navigator.pushNamed(context, '/activities', arguments: _activities); },
+              child: Container(
+                alignment: Alignment.center,
+
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'nog ${_activities?.length ?? 0 - 3} activiteit${(_activities?.length ?? 0) > 1 ? 'en' : ''}',
+                      style: Theme.of(context).textTheme.headline6?.merge(
+                        TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5))
                       ),
                     ),
 
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/activity',
-                          arguments: e,
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(innerBorderRadius),
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide(color: etvRed, width: innerBorderRadius)
-                          ),
-                        ),
-
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  e.name,
-                                  style: Theme.of(context).textTheme.bodyText2?.merge(const TextStyle(
-                                    color: barelyBlack,
-                                    fontSize: 18,
-                                  )),
-                                ),
-                                Text(
-                                  DateTime.now().isBefore(e.startAt) ? timeLeftBeforeDate(e.startAt) : 'nu'
-                                ),
-                              ],
-                            ),
-
-                            Conditional(
-                              displayCondition: e.summary != null,
-                              child: Container(
-                                margin: const EdgeInsets.only(top: 5),
-                                child: Text(
-                                  e.summary ?? '',
-                                  style: Theme.of(context).textTheme.bodyText2?.merge(const TextStyle(
-                                    fontSize: 14,
-                                  )),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    Icon(
+                      Icons.arrow_forward_outlined,
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
-                  ),
-                );
-              }).toList() ?? []
+                  ],
+                ),
+              ),
             ),
           ),
         ],
       ),
-    );
+    ));
   }
 
   refresh()
   {
-    return etv.getActivities()
+    return etv.fetchActivities()
     .then((a) => setState(() { _activities = a; }));
   }
 

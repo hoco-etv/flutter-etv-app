@@ -1,121 +1,78 @@
+import 'package:etv_app/widgets/bulletin_list.dart';
 import 'package:flutter/material.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
-import 'package:etv_app/widgets/refreshable.dart';
 
-class BulletinList extends RefreshableWidget {
-  BulletinList({Key? key}) : super(key: key);
-
-  final _BulletinListState state = _BulletinListState();
+class NewsBooth extends StatefulWidget {
+  const NewsBooth({Key? key}) : super(key: key);
 
   @override
-  State<BulletinList> createState() => state;
-
-  @override
-  Future<void> refresh()
-  {
-    return state.refresh();
-  }
+  State<NewsBooth> createState() => NewsBoothState();
 }
 
-class _BulletinListState extends State<BulletinList> {
+class NewsBoothState extends State<NewsBooth> {
   List<etv.EtvBulletin>? _newsItems;
 
   @override
   Widget build(BuildContext context)
   {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
-      margin: EdgeInsets.zero,
+    return Card(child: Container(
+      padding: innerPadding,
 
       child: Column(
         children: [
           /* title */
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
-            ),
-
-            child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                'Nieuws',
-                style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(
-                  color: titleGrey,
-                )),
-              ),
+            alignment: Alignment.center,
+            child: Text(
+              'Nieuws',
+              style: Theme.of(context).textTheme.headline5,
             ),
           ),
 
           /* bulletin list */
           Container(
-            padding: const EdgeInsets.only(bottom: borderRadius - innerBorderRadius),
-            child: Column(
-              children: _newsItems?.map((ni) {
-                return Card(
-                  margin: const EdgeInsets.only(
-                    top: borderRadius - innerBorderRadius,
-                    left: borderRadius - innerBorderRadius,
-                    right: borderRadius - innerBorderRadius,
-                  ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(innerBorderRadius)),
+            padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-                  child: ClipPath(
-                    clipper: ShapeBorderClipper(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(innerBorderRadius)
+            child: _newsItems != null ? BulletinList(_newsItems!.sublist(0, 3)) : null,
+          ),
+
+          /* link to news page */
+          Visibility(
+            visible: (_newsItems?.length ?? 0) > 3,
+            child: GestureDetector(
+              onTap: () { Navigator.pushNamed(context, '/news', arguments: _newsItems); },
+              child: Container(
+                alignment: Alignment.center,
+
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) > 1 ? 'en' : ''}',
+                      style: Theme.of(context).textTheme.headline6?.merge(
+                        TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5))
                       ),
                     ),
 
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/bulletin',
-                          arguments: ni,
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(innerBorderRadius),
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                /* Title */
-                                Text(
-                                  ni.name,
-                                  style: Theme.of(context).textTheme.bodyText2?.merge(const TextStyle(
-                                    color: barelyBlack,
-                                    fontSize: 16,
-                                  )),
-                                ),
-
-                                /* Author */
-                                // Text(ni.author),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                    Icon(
+                      Icons.arrow_forward_outlined,
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
-                  ),
-                );
-              }).toList() ?? []
+                  ],
+                ),
+              ),
             ),
           ),
         ],
       ),
-    );
+    ));
   }
 
   refresh()
   {
-    return etv.getNews()
+    return etv.fetchNews()
     .then((n) => setState(() { _newsItems = n; }));
   }
 
