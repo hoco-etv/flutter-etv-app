@@ -1,0 +1,8 @@
+flutter_native_splash:
+  color: "#FFFFFF"
+  #background_image: "assets/background.png"
+  image: assets/4x/etv_schild_met_woordmerk.png
+
+  color_dark: "#B41F21"
+  #background_image_dark: "assets/dark-background.png"
+  image_dark: assets/4x/etv_schild_met_woordmerk_wit.png

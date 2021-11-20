@@ -1,16 +1,38 @@
 # ETV app
+Another attempt at building a nice ETV app.
 
-A new Flutter project.
+## Development
+Assuming you already have the necessary tools:
+1. Clone this repository
+2. Inside the repository, run:  
+`flutter pub get`  
+`flutter pub run flutter_native_splash:create`
+3. You can now `flutter run` the app. :)
 
-## Getting Started
+### Android
+To set up your Flutter development environment:
+1. [Install the flutter SDK](https://docs.flutter.dev/get-started/install)
+2. a. install an Android emulator (via the AVD Manager in the Android SDK)  
+   b. connect an Android phone with USB debugging enabled via a USB cable
 
-This project is a starting point for a Flutter application.
+### iOS
+No idea, this is a `//TODO`.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Feature wish list
+- [x] Login mechanism
+- [x] Digideb
+- [x] Upcoming activities
+  - [ ] Better view on the activities page
+- [x] Cool splash screen
+- [ ] Koffietimer connection
+- [ ] Ledensearch
+- [ ] More profile info
+- [ ] Quotes
+- [ ] Maxwell browser
+- [ ] Exam browser
+- [ ] Education help wizard
+- [ ] Anti-SOG memes
+- [ ] ETV netpresenter content
+- [ ] General assembly stuff
+  - [ ] Integration with [hoco-etv/semicolon](https://github.com/hoco-etv/semicolon) GA module
+  - [ ] Browser for minutes of previous GA's

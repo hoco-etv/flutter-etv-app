@@ -31,6 +31,13 @@
 .pub/
 /build/
 
+# splash screen files are generated on pull so can be omitted from repo
+/android/app/src/main/res/drawable*/
+/android/app/src/main/res/values*/
+/ios/Runner/Assets.xcassets/LaunchBackground.imageset/
+/ios/Runner/Assets.xcassets/LaunchImage.imageset/
+/web/splash/
+
 # Web related
 lib/generated_plugin_registrant.dart
 
