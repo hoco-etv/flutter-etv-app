@@ -24,6 +24,10 @@ No idea, this is a `//TODO`.
 - [x] Upcoming activities
   - [ ] Better view on the activities page
 - [x] Cool splash screen
+- [ ] Notification for new activities
+  - [ ] Periodic background fetching / push message support (TBD)
+  - [ ] Notification bubble
+  - [ ] Toggle for notifications
 - [ ] Koffietimer connection
 - [ ] Ledensearch
 - [ ] More profile info
