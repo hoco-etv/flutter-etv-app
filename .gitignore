@@ -37,6 +37,8 @@
 /ios/Runner/Assets.xcassets/LaunchBackground.imageset/
 /ios/Runner/Assets.xcassets/LaunchImage.imageset/
 /web/splash/
+/assets/*/etv_*_met_woordmerk*.png
+!/assets/4x/etv_*_met_woordmerk*.png
 
 # Web related
 lib/generated_plugin_registrant.dart

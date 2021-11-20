@@ -23,7 +23,7 @@ Also, if you have a hard time keeping your code clean, you might like [Trailing 
 2. a. install an Android emulator (via the AVD Manager in the Android SDK)  
    b. connect an Android phone with USB debugging enabled via a USB cable
 
-### Running and building
+#### Running and building
 Once everything is set up and connected, `flutter run` will build the app in debug mode and run it on the selected device.
 
 For building I recommend you read the [manual][build manual]. My workflow for Android (with my phone connected via USB) is pretty easy:
