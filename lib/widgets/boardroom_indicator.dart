@@ -12,35 +12,43 @@ class BoardroomStateIndicator extends StatefulWidget {
 class BoardroomIndicatorState extends State<BoardroomStateIndicator> {
   etv.EtvBoardroomState? _boardroomState;
 
+  final _lineHeight = 24.0;
+
   @override
   Widget build(BuildContext context)
   {
     return Card(
-      color: _boardroomState?.open == true ? const Color(greenPrimary) : etvRed.shade600,
+      // color: _boardroomState?.open == true ? const Color(greenPrimary) : etvRed.shade600,
 
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: innerPadding,
+
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              _boardroomState != null
-                ? _boardroomState?.open == true ? Icons.coffee_maker : Icons.door_front_door_sharp
-                : Icons.signal_cellular_connected_no_internet_0_bar,
-              size: 32,
-              color: barelyBlack,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: Container(
+                height: _lineHeight,
+                width: 1.618*_lineHeight,
+                color: _boardroomState?.open == true ? const Color(greenPrimary) : etvRed.shade600
+              ),
             ),
+
             Container(
-              padding: const EdgeInsetsDirectional.only(start: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 _boardroomState != null
                   ? _boardroomState?.open == true ? 'BK is open!' : _boardroomState?.closedReason ?? 'BK is dicht'
                   : 'Laden...',
-                style: const TextStyle(
-                  color: almostWhite,
-                  fontSize: 20,
+                style: TextStyle(
+                  fontSize: _lineHeight/1.18,
                 ),
               ),
             ),
+
+            SizedBox(width: 1.618*_lineHeight),
           ]
         ),
       ),
