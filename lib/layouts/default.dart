@@ -18,51 +18,55 @@ class DefaultLayout extends StatelessWidget {
       ),
 
       bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              // icon: const Icon(Feather.home),
-              icon: Icon(ModalRoute.of(context)?.settings.name == '/' ? Ionicons.home : Ionicons.home_outline),
-              iconSize: 32,
-              padding: innerPadding,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              onPressed: () { Navigator.popUntil(context, ModalRoute.withName('/')); },
-            ),
-            IconButton(
-              icon: Icon(ModalRoute.of(context)?.settings.name == '/activities' ? Ionicons.calendar : Ionicons.calendar_outline),
-              iconSize: 32,
-              padding: innerPadding,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/activities',
-                  ModalRoute.withName('/'),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(ModalRoute.of(context)?.settings.name == '/news' ? Ionicons.newspaper : Ionicons.newspaper_outline),
-              iconSize: 32,
-              padding: innerPadding,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/news',
-                  ModalRoute.withName('/'),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(ModalRoute.of(context)?.settings.name == '/profile' ? Ionicons.person : Ionicons.person_outline),
-              iconSize: 32,
-              padding: innerPadding/2,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              onPressed: () { Navigator.pushNamed(context, '/profile'); },
-            ),
-          ],
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: innerPaddingSize),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: [
+              IconButton(
+                icon: Icon(ModalRoute.of(context)?.settings.name == '/' ? Ionicons.home : Ionicons.home_outline),
+                iconSize: 32,
+                padding: innerPadding,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                onPressed: () { Navigator.popUntil(context, ModalRoute.withName('/')); },
+              ),
+              IconButton(
+                icon: Icon(ModalRoute.of(context)?.settings.name == '/activities' ? Ionicons.calendar : Ionicons.calendar_outline),
+                iconSize: 32,
+                padding: innerPadding,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/activities',
+                    ModalRoute.withName('/'),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(ModalRoute.of(context)?.settings.name == '/news' ? Ionicons.newspaper : Ionicons.newspaper_outline),
+                iconSize: 32,
+                padding: innerPadding,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/news',
+                    ModalRoute.withName('/'),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(ModalRoute.of(context)?.settings.name == '/profile' ? Ionicons.person : Ionicons.person_outline),
+                iconSize: 32,
+                padding: innerPadding,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                onPressed: () { Navigator.pushNamed(context, '/profile'); },
+              ),
+            ],
+          ),
         ),
       ),
 
