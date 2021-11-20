@@ -32,12 +32,15 @@ class DefaultLayout extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 onPressed: () { Navigator.popUntil(context, ModalRoute.withName('/')); },
               ),
+
               IconButton(
                 icon: Icon(ModalRoute.of(context)?.settings.name == '/activities' ? Ionicons.calendar : Ionicons.calendar_outline),
                 iconSize: 32,
                 padding: innerPadding,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 onPressed: () {
+                  if (ModalRoute.of(context)?.settings.name == '/activities') return;
+
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/activities',
@@ -45,12 +48,14 @@ class DefaultLayout extends StatelessWidget {
                   );
                 },
               ),
+
               IconButton(
                 icon: Icon(ModalRoute.of(context)?.settings.name == '/news' ? Ionicons.newspaper : Ionicons.newspaper_outline),
                 iconSize: 32,
                 padding: innerPadding,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 onPressed: () {
+                  if (ModalRoute.of(context)?.settings.name == '/news') return;
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/news',
@@ -58,12 +63,16 @@ class DefaultLayout extends StatelessWidget {
                   );
                 },
               ),
+
               IconButton(
                 icon: Icon(ModalRoute.of(context)?.settings.name == '/profile' ? Ionicons.person : Ionicons.person_outline),
                 iconSize: 32,
                 padding: innerPadding,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                onPressed: () { Navigator.pushNamed(context, '/profile'); },
+                onPressed: () {
+                  if (ModalRoute.of(context)?.settings.name == '/profile') return;
+                  Navigator.pushNamed(context, '/profile');
+                },
               ),
             ],
           ),
