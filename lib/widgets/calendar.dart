@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:etv_app/utils/etv_style.dart';
@@ -35,7 +36,7 @@ class CalendarState extends State<Calendar> {
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-            child: _activities != null ? ActivityList(_activities!.sublist(0, 3)) : null,
+            child: _activities != null ? ActivityList(_activities!.sublist(0, min(_activities!.length, 3))) : null,
           ),
 
           /* link to activities page */
@@ -51,7 +52,7 @@ class CalendarState extends State<Calendar> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'nog ${_activities?.length ?? 0 - 3} activiteit${(_activities?.length ?? 0) > 1 ? 'en' : ''}',
+                      'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) > 1 ? 'en' : ''}',
                       style: Theme.of(context).textTheme.headline6?.merge(
                         TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5))
                       ),

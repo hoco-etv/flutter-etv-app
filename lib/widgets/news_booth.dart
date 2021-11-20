@@ -1,5 +1,6 @@
-import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
 import 'package:etv_app/widgets/bulletin_list.dart';
@@ -35,7 +36,7 @@ class NewsBoothState extends State<NewsBooth> {
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-            child: _newsItems != null ? BulletinList(_newsItems!.sublist(0, 3)) : null,
+            child: _newsItems != null ? BulletinList(_newsItems!.sublist(0, min(_newsItems!.length, 3))) : null,
           ),
 
           /* link to news page */

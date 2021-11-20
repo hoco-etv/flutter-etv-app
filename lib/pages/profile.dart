@@ -164,12 +164,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Log in',
                           textScaleFactor: 1.5,
                         ),
-                        Icon(Ionicons.log_in_outline),
+
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 3),
+
+                          child: Icon(
+                            Ionicons.log_in_outline,
+                            size: (Theme.of(context).textTheme.button?.fontSize ?? 0)*2,
+                          ),
+                        ),
                       ],
                     ),
                   ),
