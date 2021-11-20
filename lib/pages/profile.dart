@@ -81,25 +81,33 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
+  initState()
+  {
+    super.initState();
+
+    getUser().then((u) {
+      if (u != null) {
+        setState(() {
+          userProfile = u;
+          _loggedIn = true;
+        });
+
+        etv.fetchProfile()
+        .then((p) {
+          if (_disposed) return;
+          if (p == null) {
+            logout();
+            return;
+          }
+          setState(() { userProfile = p; });
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context)
   {
-    if (!_loggingOut) {
-      getUser().then((u) {
-        if (u != null) {
-          setState(() {
-            userProfile = u;
-            _loggedIn = true;
-          });
-
-          etv.fetchProfile()
-          .then((p) {
-            if (_disposed) return;
-            setState(() { userProfile = p; });
-          });
-        }
-      });
-    }
-
     return DefaultLayout(
       title: _loggedIn ? 'Profiel' : 'Log in',
       pageContent: Switcher(
@@ -120,33 +128,31 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   FractionallySizedBox(
                     widthFactor: 1/4,
-                    child: Image.asset('assets/etv_shield.png'),
+                    child: Image.asset('assets/etv_schild.png'),
                   ),
 
                   const SizedBox(height: outerPaddingSize),
 
-                  TextFormField(
-                    autofillHints: const [
-                      AutofillHints.email,
-                      AutofillHints.username,
-                    ],
-                    onChanged: (newValue) {
-                      username = newValue;
-                    },
-                    decoration: const InputDecoration(labelText: 'e-mail'),
-                  ),
+                  AutofillGroup(
+                    child: Column(children: [
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'e-mail'),
+                        autofillHints: const [ AutofillHints.username ],
+                        onChanged: (newValue) { username = newValue; },
+                        textInputAction: TextInputAction.next,
+                      ),
 
-                  const SizedBox(height: outerPaddingSize),
+                      const SizedBox(height: outerPaddingSize),
 
-                  TextFormField(
-                    autofillHints: const [
-                      AutofillHints.password,
-                    ],
-                    onChanged: (newValue) {
-                      password = newValue;
-                    },
-                    obscureText: true,
-                    decoration: const InputDecoration(labelText: 'wachtwoord'),
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'wachtwoord'),
+                        autofillHints: const [ AutofillHints.password ],
+                        obscureText: true,
+                        onChanged: (newValue) { password = newValue; },
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_value) { login(); },
+                      ),
+                    ]),
                   ),
 
                   const SizedBox(height: outerPaddingSize),

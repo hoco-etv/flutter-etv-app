@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
 
   final boardroomIndicatorState = GlobalKey<BoardroomIndicatorState>();
   final calendarState = GlobalKey<CalendarState>();
-  final bulletinListState = GlobalKey<NewsBoothState>();
+  final newsBoothState = GlobalKey<NewsBoothState>();
 
   @override
   Widget build(BuildContext context)
@@ -21,23 +21,23 @@ class HomePage extends StatelessWidget {
         child: ListView(
           padding: outerPadding,
 
-          children: const <Widget>[
-            BoardroomStateIndicator(),
+          children: <Widget>[
+            BoardroomStateIndicator(key: boardroomIndicatorState),
 
-            SizedBox(height: outerPaddingSize),
+            const SizedBox(height: outerPaddingSize),
 
-            Calendar(),
+            Calendar(key: calendarState),
 
-            SizedBox(height: outerPaddingSize),
+            const SizedBox(height: outerPaddingSize),
 
-            NewsBooth(),
+            NewsBooth(key: newsBoothState),
           ],
         ),
 
         onRefresh: () {
           return Future.wait(<Future>[
             boardroomIndicatorState.currentState?.refresh(),
-            bulletinListState.currentState?.refresh(),
+            newsBoothState.currentState?.refresh(),
             calendarState.currentState?.refresh(),
           ]);
         }

@@ -13,7 +13,7 @@ class DefaultLayout extends StatelessWidget {
   {
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset('assets/etv_shield.png'),
+        leading: Image.asset('assets/etv_schild.png'),
         title: Text(title),
       ),
 
