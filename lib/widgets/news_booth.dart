@@ -1,7 +1,8 @@
-import 'package:etv_app/widgets/bulletin_list.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
+import 'package:etv_app/widgets/bulletin_list.dart';
 
 class NewsBooth extends StatefulWidget {
   const NewsBooth({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class NewsBoothState extends State<NewsBooth> {
                     ),
 
                     Icon(
-                      Icons.arrow_forward_outlined,
+                      Ionicons.arrow_forward_outline,
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:etv_app/store/user.dart';
 import 'package:etv_app/layouts/default.dart';
 import 'package:etv_app/widgets/switcher.dart';
@@ -168,7 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           'Log in',
                           textScaleFactor: 1.5,
                         ),
-                        Icon(Icons.send),
+                        Icon(Ionicons.log_in_outline),
                       ],
                     ),
                   ),
@@ -242,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             'Log uit',
                             textScaleFactor: 1.5,
                           ),
-                          Icon(Icons.logout),
+                          Icon(Ionicons.log_out_outline),
                         ],
                       ),
                     ),
