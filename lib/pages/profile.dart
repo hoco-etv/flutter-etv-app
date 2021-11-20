@@ -16,7 +16,6 @@ class _ProfilePageState extends State<ProfilePage> {
   UserProfile? userProfile;
 
   bool _loggedIn = false;
-  bool _loggingOut = false;
   bool _loginFailedState = false;
   bool _disposed = false;
 
@@ -41,14 +40,13 @@ class _ProfilePageState extends State<ProfilePage> {
       });
 
       ScaffoldMessenger.of(context)
-      .showSnackBar(const SnackBar(content: Text('login failed :(')));
+      .showSnackBar(const SnackBar(content: Text('Inloggen mislukt :(')));
     }
   }
 
   logout() async
   {
     if (!_loggedIn) return;
-    _loggingOut = true;
 
     await resetAuthState();
 
@@ -58,14 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
 
     ScaffoldMessenger.of(context)
-    .showSnackBar(const SnackBar(content: Text('You have been logged out')));
-
-    await Future.delayed(
-      const Duration(milliseconds: 1495),
-      () {
-        _loggingOut = false;
-      }
-    );
+    .showSnackBar(const SnackBar(content: Text('Je bent uitgelogd')));
   }
 
   Color get _balanceColor
@@ -131,7 +122,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Image.asset('assets/etv_schild.png'),
                   ),
 
-                  const SizedBox(height: outerPaddingSize),
+                  SizedBox(height: !_loginFailedState ? outerPaddingSize : innerPaddingSize),
+
+                  Visibility(
+                    visible: _loginFailedState,
+                    child: const Text(
+                      'Ongeldige inloggegevens',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+
+                  const SizedBox(height: innerPaddingSize),
 
                   AutofillGroup(
                     child: Column(children: [
