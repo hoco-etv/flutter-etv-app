@@ -17,7 +17,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  UserProfile? userProfile;
+  User? userProfile;
 
   bool _loggedIn = false;
   String? _loginFailedMessage;
@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _loginRequestPending = true;
 
     final result = await etv.login(username, password);
-    if (result.runtimeType == UserProfile) {
+    if (result.runtimeType == User) {
       setState(() {
         userProfile = result;
         _loggedIn = true;
@@ -76,12 +76,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Color get _balanceColor
   {
-    return userProfile?.digidebBalance != null && userProfile!.digidebBalance! > 0 ? etvRed.shade200 : barelyBlack;
+    return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0 ? etvRed.shade200 : barelyBlack;
   }
 
   String get _balanceText
   {
-    return userProfile?.digidebBalance != null && userProfile!.digidebBalance! > 0
+    return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0
       ? 'Kom het eens een keer aanvullen bij de balie en maak de Thesau heel blij :)'
       : 'Goed bezig ;)';
   }
@@ -227,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 // Text('Overline', style: Theme.of(context).textTheme.overline),
 
                 Visibility(
-                  visible: userProfile?.digidebBalance != null,
+                  visible: userProfile?.person?.digidebBalance != null,
 
                   child: Card(child: Container(
                     padding: outerPadding,
@@ -240,9 +240,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
 
                         Text(
-                          '€ -${userProfile?.digidebBalance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
+                          '€ -${userProfile?.person?.digidebBalance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
                           style: TextStyle(
-                            fontSize: 32 + min(48, userProfile?.digidebBalance ?? 0), // more deb = bigger font :)
+                            fontSize: 32 + min(48, userProfile?.person?.digidebBalance ?? 0), // more deb = bigger font :)
                             fontWeight: FontWeight.w400,
                             color: _balanceColor,
                             height: 1.5,
@@ -265,7 +265,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Card(child: Container(
                   padding: outerPadding,
 
-                  child: userProfile != null ? ProfileView(userProfile!) : Container(),
+                  child: userProfile?.person != null ? ProfileView(userProfile!.person!) : Container(),
                 )),
 
                 const SizedBox(height: outerPaddingSize),

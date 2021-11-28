@@ -8,21 +8,21 @@ import 'package:etv_app/data_source/objects.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 class ProfileView extends StatelessWidget {
-  final UserProfile userProfile;
+  final Person person;
 
-  const ProfileView(this.userProfile, [Key? key]) : super(key: key);
+  const ProfileView(this.person, [Key? key]) : super(key: key);
 
   @override
   Widget build(context)
   {
     final mainBoardPicture =
-      userProfile.boards?[0].pictures
+      person.boards?[0].pictures
       .fold<BoardPicture?>(null, (BoardPicture? a, b) => a == null ? b : a.priority < b.priority ? a : b );
     final boardMember =
-      userProfile.boards?[0].members.singleWhere((m) => m.personId == userProfile.personId);
+      person.boards?[0].members.singleWhere((m) => m.personId == person.personId);
 
-    if (userProfile.committees != null) {
-      userProfile.committees!.sort((a, b) {
+    if (person.committees != null) {
+      person.committees!.sort((a, b) {
         if (a.discharge == null && b.discharge != null) return -1;
         if (b.discharge == null && a.discharge != null) return 1;
         return b.installation.compareTo(a.installation);
@@ -34,7 +34,7 @@ class ProfileView extends StatelessWidget {
       children: <Widget>[]
 
       /* User picture */
-      + (userProfile.pictureId == null ? [] : [
+      + (person.pictureId == null ? [] : [
         ClipRRect(
           borderRadius: BorderRadius.circular(innerPaddingSize),
           child: FutureBuilder(
@@ -42,7 +42,7 @@ class ProfileView extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   return Image.network(
-                    buildImageUrl(userProfile.pictureId!),
+                    buildImageUrl(person.pictureId!),
                     headers: snapshot.data as Map<String, String>,
                   );
                 }
@@ -68,14 +68,10 @@ class ProfileView extends StatelessWidget {
 
       /* Person info */
       + [
-        Container(
-          padding: const EdgeInsets.only(left: 8),
-
-          /* Name */
-          child: Text(
-            userProfile.name ?? '[naam?]',
-            style: Theme.of(context).textTheme.headline3,
-          ),
+        /* Name */
+        Text(
+          person.name,
+          style: Theme.of(context).textTheme.headline3,
         ),
 
         const SizedBox(height: innerPaddingSize),
@@ -83,37 +79,38 @@ class ProfileView extends StatelessWidget {
         /* Contact info */
         Table(
           columnWidths: const {
-            0: FixedColumnWidth(42),
+            0: FixedColumnWidth(28),
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
             {
               'label': 'E-mail',
               'icon': Feather.mail,
-              'text': userProfile.email,
-              'link': 'mailto:${userProfile.email!}'
+              'text': person.email,
+              'link': 'mailto:${person.email!}'
             },
             {
               'label': 'Telefoonnummer',
               'icon': Feather.phone,
-              'text': userProfile.phoneNumber,
-              'link': 'tel:${userProfile.phoneNumber!}'
+              'text': person.phoneNumber,
+              'link': 'tel:${person.phoneNumber!}'
             },
             {
               'label': 'Verjaardag',
               'icon': Feather.gift,
-              'text': formatDate(userProfile.birthDate!, true),
+              'text': formatDate(person.birthDate!, true),
             },
           ]
           .map((rowSpec) => TableRow(children: [
             Container(
               height: 32,
-              padding: const EdgeInsets.only(top: 2),
+              padding: const EdgeInsets.only(top: 2, right: 8),
 
               child: Icon(
                 rowSpec['icon'] as IconData,
                 color: Theme.of(context).colorScheme.primary,
                 size: 20,
+                semanticLabel: rowSpec['label'] as String,
               ),
             ),
 
@@ -146,7 +143,7 @@ class ProfileView extends StatelessWidget {
       ]
 
       /* Board */
-      + (userProfile.boards == null ? [] : [
+      + (person.boards == null ? [] : [
         const SizedBox(height: outerPaddingSize*2),
 
         Container(
@@ -167,19 +164,19 @@ class ProfileView extends StatelessWidget {
                   const SizedBox(height: innerPaddingSize),
 
                   Text(
-                    'Het ${userProfile.boards![0].number}ste Bestuur der Electrotechnische Vereeniging',
+                    'Het ${person.boards![0].number}ste Bestuur der Electrotechnische Vereeniging',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline5?.merge(TextStyle(
-                      color: Color(0xFF000000 + userProfile.boards![0].color),
+                      color: Color(0xFF000000 + person.boards![0].color),
                     )),
                   ),
 
                   const SizedBox(height: innerPaddingSize/4),
 
                   Text(
-                    userProfile.boards![0].discharge == null
-                      ? 'sinds ${formatDate(userProfile.boards![0].installation)}'
-                      : formatDateSpan(userProfile.boards![0].installation, userProfile.boards![0].discharge!),
+                    person.boards![0].discharge == null
+                      ? 'sinds ${formatDate(person.boards![0].installation)}'
+                      : formatDateSpan(person.boards![0].installation, person.boards![0].discharge!),
                     style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(height: 2)),
                   ),
 
@@ -195,25 +192,26 @@ class ProfileView extends StatelessWidget {
             ],
           ),
         ),
+
+        const SizedBox(height: outerPaddingSize),
       ])
 
       /* Committees */
-      + (userProfile.committees == null ? [] : [
-        const SizedBox(height: outerPaddingSize),
+      + (person.committees == null ? [] : [
 
         Table(
           columnWidths: const {
-            0: FixedColumnWidth(42),
+            0: FixedColumnWidth(28),
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
 
-          children: userProfile.committees!.map((committee) => TableRow(
+          children: person.committees!.map((committee) => TableRow(
             children: [
               TableCell(
                 verticalAlignment: TableCellVerticalAlignment.top,
                 child: Container(
                   margin: const EdgeInsets.only(top: innerPaddingSize*1.6),
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: 4, right: 8),
 
                   child: Icon(
                     Feather.users,
@@ -238,7 +236,7 @@ class ProfileView extends StatelessWidget {
                     ),
 
                     Visibility(
-                      visible: committee.functionName != null,
+                      visible: committee.functionName?.isNotEmpty == true,
                       child: Text(
                         committee.functionName ?? '',
                         style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(

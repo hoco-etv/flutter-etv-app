@@ -91,7 +91,7 @@ Future<List<EtvBulletin>> fetchNews() async
     .toList();
 }
 
-/// returns `UserProfile | null`
+/// returns `User | null`
 Future fetchProfile() async
 {
   if (!await isLoggedIn()) {
@@ -99,12 +99,22 @@ Future fetchProfile() async
   }
 
   final result = await _get('/profile') as Map<String, dynamic>;
-  final profile = UserProfile.fromMap(result);
+  final profile = User.fromMap(result);
   storeUser(profile);
   return profile;
 }
 
-/// returns a `UserProfile` if successful, `null` otherwise
+Future<Iterable<Person>> searchMembers(String query) async
+{
+  if (!await isLoggedIn()) {
+    return [];
+  }
+
+  final results = await _get('/search-members?query=${Uri.encodeQueryComponent(query)}') as List;
+  return results.map((result) => Person.fromMap(result));
+}
+
+/// returns a `User` if successful, `null` otherwise
 Future login(String username, String password) async
 {
   final response = await _post('/login', {

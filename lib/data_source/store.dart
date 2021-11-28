@@ -1,20 +1,20 @@
 import 'package:hive/hive.dart';
 import './objects.dart';
 
-Future<void> storeUser(UserProfile user) async
+Future<void> storeUser(User user) async
 {
   final userBox = await Hive.openBox('user');
 
-  userBox.put('profile', user.toMap());
+  userBox.put('userInfo', user.toMap());
 }
 
-/// @returns `UserProfile | null`
+/// @returns `User | null`
 Future getUser() async
 {
   final userBox = await Hive.openBox('user');
-  final storedProfile = userBox.get('profile');
+  final storedUser = userBox.get('userInfo');
 
-  return storedProfile != null ? UserProfile.fromMap(storedProfile) : null;
+  return storedUser != null ? User.fromMap(storedUser) : null;
 }
 
 Future<void> storeToken(String token) async

@@ -1,10 +1,67 @@
-class UserProfile {
+class User {
   final int id;
+  final Person? person;
 
-  final int? personId;
+  const User({
+    required this.id,
+    this.person,
+  });
+
+  factory User.fromMap(Map map)
+  {
+    final remap = Map<String, dynamic>.from(map);
+
+    return User(
+      id: remap['user_id'],
+      person: remap['id'] == null ? null : Person(
+        personId:       remap['id'],
+        name:           remap['name'],
+        nameWithTitle:  remap['name_with_title'],
+        email:          remap['email'],
+        birthDate:      remap['date_of_birth'] != null ? DateTime.parse(remap['date_of_birth']) : null,
+        phoneNumber:    remap['mobile_phone'],
+        pictureId:      remap['picture_id'],
+
+        homeAddress:    remap['home_address'] != null ? PersonAddress.fromMap(remap['home_address']) : null,
+        parentAddress:  remap['parent_address'] != null ? PersonAddress.fromMap(remap['parent_address']) : null,
+
+        boards:         (remap['boards'] as List?)?.map((b) => Board.fromMap(b)).toList(),
+        committees:     (remap['committees'] as List?)?.map((cp) => CommitteeParticipation.fromMap(cp)).toList(),
+
+        digidebBalance: remap['balance'] != null && remap['balance'] != '' ? double.parse(remap['balance']) : null,
+      ),
+    );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'user_id':          id,
+
+      'id':               person?.personId,
+      'name':             person?.name,
+      'name_with_title':  person?.nameWithTitle,
+      'email':            person?.email,
+      'date_of_birth':    person?.birthDate?.toString(),
+      'mobile_phone':     person?.phoneNumber,
+      'picture_id':       person?.pictureId,
+
+      'home_address':   person?.homeAddress?.toMap(),
+      'parent_address': person?.parentAddress?.toMap(),
+
+      'boards':      person?.boards?.map((b) => b.toMap()).toList(),
+      'committees':  person?.committees?.map((c) => c.toMap()).toList(),
+
+      'balance':    person?.digidebBalance?.toString(),
+    };
+  }
+}
+
+class Person {
+  final int personId;
   final int? pictureId;
-  final String? name;
-  final String? nameWithTitle;
+  final String name;
+  final String nameWithTitle;
   final String? email;
   final String? phoneNumber;
   final DateTime? birthDate;
@@ -17,13 +74,11 @@ class UserProfile {
 
   final double? digidebBalance;
 
-  const UserProfile({
-    required this.id,
-
-    this.personId,
+  const Person({
+    required this.personId,
     this.pictureId,
-    this.name,
-    this.nameWithTitle,
+    required this.name,
+    required this.nameWithTitle,
     this.email,
     this.phoneNumber,
     this.birthDate,
@@ -37,13 +92,11 @@ class UserProfile {
     this.digidebBalance,
   });
 
-  factory UserProfile.fromMap(Map map)
+  factory Person.fromMap(Map map)
   {
     final remap = Map<String, dynamic>.from(map);
 
-    return UserProfile(
-      id: remap['user_id'],
-
+    return Person(
       personId:       remap['id'],
       name:           remap['name'],
       nameWithTitle:  remap['name_with_title'],
@@ -65,8 +118,6 @@ class UserProfile {
   Map<String, dynamic> toMap()
   {
     return {
-      'user_id': id,
-
       'id':               personId,
       'name':             name,
       'name_with_title':  nameWithTitle,
@@ -89,17 +140,17 @@ class UserProfile {
 class PersonAddress {
   final String type;
   final String address;
-  final String postalCode;
-  final String town;
-  final String country;
+  final String? postalCode;
+  final String? town;
+  final String? country;
   final String? phoneNumber;
 
   const PersonAddress({
     required this.type,
     required this.address,
-    required this.postalCode,
-    required this.town,
-    required this.country,
+    this.postalCode,
+    this.town,
+    this.country,
     this.phoneNumber,
   });
 

@@ -27,8 +27,8 @@ String formatDateSpan(DateTime startDate, DateTime endDate)
 
   return formatDate(startDate, startDate.year != endDate.year)
     + (!excludeTime ? ' ' + startDate.toIso8601String().substring(11, 16) : '')
-    + ' -'
-    + (startDate.day != endDate.day ? ' ' + formatDate(endDate, startDate.year != endDate.year) : '')
+    + (!startDate.isAtSameMomentAs(endDate) ? ' -' : '')
+    + (startDate.day != endDate.day || endDate.difference(startDate).inDays >= 1 ? ' ' + formatDate(endDate, startDate.year != endDate.year) : '')
     + (!excludeTime ? ' ' + endDate.toIso8601String().substring(11, 16) : '');
 }
 
