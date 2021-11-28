@@ -108,7 +108,7 @@ class Person {
       pictureId:      remap['picture_id'],
 
       homeAddress:    remap['home_address'] != null ? PersonAddress.fromMap(remap['home_address']) : null,
-      parentAddress:  remap['parent_address'] != null ? PersonAddress.fromMap(remap['parent_address']) : null,
+      parentAddress:  remap['parent_address']?['address'] != null ? PersonAddress.fromMap(remap['parent_address']) : null,
 
       boards:         (remap['boards'] as List?)?.map((b) => Board.fromMap(b)).toList(),
       committees:     (remap['committees'] as List?)?.map((cp) => CommitteeParticipation.fromMap(cp)).toList(),
