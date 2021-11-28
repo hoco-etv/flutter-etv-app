@@ -2,8 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/utils/etv_api_client.dart' as etv;
 import 'package:etv_app/widgets/bulletin_list.dart';
+import 'package:etv_app/data_source/api_client.dart';
 
 class NewsBooth extends StatefulWidget {
   const NewsBooth({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class NewsBooth extends StatefulWidget {
 }
 
 class NewsBoothState extends State<NewsBooth> {
-  List<etv.EtvBulletin>? _newsItems;
+  List<EtvBulletin>? _newsItems;
 
   @override
   Widget build(BuildContext context)
@@ -76,7 +76,7 @@ class NewsBoothState extends State<NewsBooth> {
 
   refresh()
   {
-    return etv.fetchNews()
+    return fetchNews()
     .then((n) => setState(() { _newsItems = n; }));
   }
 

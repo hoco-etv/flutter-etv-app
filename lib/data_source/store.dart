@@ -1,31 +1,5 @@
 import 'package:hive/hive.dart';
-
-class UserProfile {
-  final int id;
-  String? name;
-  double? balance;
-
-  UserProfile({ required this.id, this.name, this.balance });
-
-  Map<String, dynamic> toMap()
-  {
-    return {
-      'id': id,
-      'name': name,
-      'balance': balance.toString(),
-    };
-  }
-
-  static UserProfile fromMap(map)
-  {
-    final remap = Map<String, dynamic>.from(map);
-    return UserProfile(
-      id: remap['id'],
-      name: remap['name'],
-      balance: remap['balance'] != null && remap['balance'] != '' ? double.parse(remap['balance']) : null,
-    );
-  }
-}
+import './objects.dart';
 
 Future<void> storeUser(UserProfile user) async
 {

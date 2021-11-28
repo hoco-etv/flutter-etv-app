@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
-import 'package:etv_app/utils/etv_api_client.dart';
+import 'package:etv_app/data_source/api_client.dart';
 
 class ActivityList extends StatelessWidget {
   final List<EtvActivity> activities;

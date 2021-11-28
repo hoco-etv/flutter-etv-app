@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:etv_app/utils/etv_api_client.dart' as etv;
 import 'package:etv_app/utils/etv_style.dart';
+import 'package:etv_app/data_source/api_client.dart';
 
 class BoardroomStateIndicator extends StatefulWidget {
   const BoardroomStateIndicator({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class BoardroomStateIndicator extends StatefulWidget {
 }
 
 class BoardroomIndicatorState extends State<BoardroomStateIndicator> {
-  etv.EtvBoardroomState? _boardroomState;
+  EtvBoardroomState? _boardroomState;
 
   final _lineHeight = 24.0;
 
@@ -79,7 +79,7 @@ class BoardroomIndicatorState extends State<BoardroomStateIndicator> {
 
   refresh()
   {
-    return etv.fetchBoardroomState()
+    return fetchBoardroomState()
     .then((bs) => setState(() { _boardroomState = bs; }));
   }
 
