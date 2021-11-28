@@ -1,28 +1,257 @@
 class UserProfile {
   final int id;
-  String? name;
-  double? balance;
 
-  UserProfile({ required this.id, this.name, this.balance });
+  final int? personId;
+  final int? pictureId;
+  final String? name;
+  final String? nameWithTitle;
+  final String? email;
+  final String? phoneNumber;
+  final DateTime? birthDate;
+
+  final PersonAddress? homeAddress;
+  final PersonAddress? parentAddress;
+
+  final List<Board>? boards;
+  final List<CommitteeParticipation>? committees;
+
+  final double? digidebBalance;
+
+  const UserProfile({
+    required this.id,
+
+    this.personId,
+    this.pictureId,
+    this.name,
+    this.nameWithTitle,
+    this.email,
+    this.phoneNumber,
+    this.birthDate,
+
+    this.homeAddress,
+    this.parentAddress,
+
+    this.boards,
+    this.committees,
+
+    this.digidebBalance,
+  });
+
+  factory UserProfile.fromMap(Map map)
+  {
+    final remap = Map<String, dynamic>.from(map);
+
+    return UserProfile(
+      id: remap['user_id'],
+
+      personId:       remap['id'],
+      name:           remap['name'],
+      nameWithTitle:  remap['name_with_title'],
+      email:          remap['email'],
+      birthDate:      remap['date_of_birth'] != null ? DateTime.parse(remap['date_of_birth']) : null,
+      phoneNumber:    remap['mobile_phone'],
+      pictureId:      remap['picture_id'],
+
+      homeAddress:    remap['home_address'] != null ? PersonAddress.fromMap(remap['home_address']) : null,
+      parentAddress:  remap['parent_address'] != null ? PersonAddress.fromMap(remap['parent_address']) : null,
+
+      boards:         (remap['boards'] as List?)?.map((b) => Board.fromMap(b)).toList(),
+      committees:     (remap['committees'] as List?)?.map((cp) => CommitteeParticipation.fromMap(cp)).toList(),
+
+      digidebBalance: remap['balance'] != null && remap['balance'] != '' ? double.parse(remap['balance']) : null,
+    );
+  }
 
   Map<String, dynamic> toMap()
   {
     return {
-      'id': id,
-      'name': name,
-      'balance': balance.toString(),
+      'user_id': id,
+
+      'id':               personId,
+      'name':             name,
+      'name_with_title':  nameWithTitle,
+      'email':            email,
+      'date_of_birth':    birthDate?.toString(),
+      'mobile_phone':     phoneNumber,
+      'picture_id':       pictureId,
+
+      'home_address':   homeAddress?.toMap(),
+      'parent_address': parentAddress?.toMap(),
+
+      'boards':      boards?.map((b) => b.toMap()).toList(),
+      'committees':  committees?.map((c) => c.toMap()).toList(),
+
+      'balance':    digidebBalance?.toString(),
     };
   }
+}
 
-  static UserProfile fromMap(map)
+class PersonAddress {
+  final String type;
+  final String address;
+  final String postalCode;
+  final String town;
+  final String country;
+  final String? phoneNumber;
+
+  const PersonAddress({
+    required this.type,
+    required this.address,
+    required this.postalCode,
+    required this.town,
+    required this.country,
+    this.phoneNumber,
+  });
+
+  factory PersonAddress.fromMap(Map map)
   {
-    final remap = Map<String, dynamic>.from(map);
-    return UserProfile(
-      id: remap['id'],
-      name: remap['name'],
-      balance: remap['balance'] != null && remap['balance'] != '' ? double.parse(remap['balance']) : null,
+    return PersonAddress(
+      type:         map['type'],
+      address:      map['address'],
+      postalCode:   map['postal_code'],
+      town:         map['town'],
+      country:      map['country'],
+      phoneNumber:  map['phone_number'],
     );
   }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'type':         type,
+      'address':      address,
+      'postal_code':  postalCode,
+      'town':         town,
+      'country':      country,
+      'phone_number': phoneNumber,
+    };
+  }
+}
+
+class CommitteeParticipation {
+  final int committeeId;
+  final bool committeeHasActiveMembers;
+  final String committeeName;
+  final String? functionName;
+  final DateTime installation;
+  final DateTime? discharge;
+
+  const CommitteeParticipation({
+    required this.committeeId,
+    required this.committeeHasActiveMembers,
+    required this.committeeName,
+    required this.installation,
+    this.functionName,
+    this.discharge,
+  });
+
+  factory CommitteeParticipation.fromMap(Map map)
+  {
+    return CommitteeParticipation(
+      committeeId:    map['committee_id'],
+      functionName:   map['function_name'],
+      committeeName:  map['committee_short_name'],
+      installation:   DateTime.parse(map['installation']),
+      discharge:      map['discharge'] != null ? DateTime.parse(map['discharge']) : null,
+      committeeHasActiveMembers: map['committee_has_active_committee_members'],
+    );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'committee_id':         committeeId,
+      'function_name':        functionName,
+      'committee_short_name': committeeName,
+      'installation':         installation.toString(),
+      'discharge':            discharge?.toString(),
+      'committee_has_active_committee_members': committeeHasActiveMembers,
+    };
+  }
+}
+
+class Board {
+  final int id;
+  final int number;
+  final int color;
+  final bool lustrum;
+  final String adjective;
+  final String motto;
+  final String description;
+  final DateTime installation;
+  final DateTime? discharge;
+  final List<BoardPicture> pictures;
+
+  const Board({
+    required this.id,
+    required this.number,
+    required this.color,
+    required this.lustrum,
+    required this.adjective,
+    required this.motto,
+    required this.description,
+    required this.installation,
+    this.discharge,
+    required this.pictures,
+  });
+
+  factory Board.fromMap(Map map)
+  {
+    return Board(
+      id:           map['id'],
+      number:       map['number'],
+      color:        int.parse(map['color'], radix: 16),
+      lustrum:      map['lustrum'],
+      adjective:    map['adjective'],
+      motto:        map['motto'],
+      description:  map['description'],
+      installation: DateTime.parse(map['installation']),
+      discharge:    map['discharge'] != null ? DateTime.parse(map['discharge']) : null,
+      pictures:     (map['pictures'] as List).map((p) =>
+        BoardPicture(
+          id:           p['id'],
+          priority:     p['priority'],
+          description:  p['description'],
+          url:          p['url'],
+        )
+      ).toList(),
+    );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':           id,
+      'number':       number,
+      'color':        color.toRadixString(16),
+      'lustrum':      lustrum,
+      'adjective':    adjective,
+      'motto':        motto,
+      'description':  description,
+      'installation': installation.toString(),
+      'discharge':    discharge?.toString(),
+      'pictures':     pictures.map((p) => {
+        'id':           p.id,
+        'priority':     p.priority,
+        'description':  p.description,
+        'url':          p.url,
+      }).toList(),
+    };
+  }
+}
+
+class BoardPicture {
+  final int id;
+  final int priority;
+  final String description;
+  final String url;
+
+  const BoardPicture({
+    required this.id,
+    required this.priority,
+    required this.description,
+    required this.url,
+  });
 }
 
 class EtvActivity {

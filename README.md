@@ -48,7 +48,7 @@ No idea, this is a `//TODO`.
   - [ ] Toggle for notifications
 - [ ] Koffietimer connection
 - [ ] Ledensearch
-- [ ] More profile info
+- [x] More profile info
 - [ ] Quotes
   - [ ] Quote submissions
 - [ ] Maxwell browser
