@@ -1,46 +1,63 @@
 import 'package:hive/hive.dart';
 import './objects.dart';
 
-Future<void> storeUser(User user) async
+void storeUser(User user)
 {
-  final userBox = await Hive.openBox('user');
+  final userBox = Hive.box('user');
 
   userBox.put('userInfo', user.toMap());
 }
 
 /// @returns `User | null`
-Future getUser() async
+dynamic getUser() async
 {
-  final userBox = await Hive.openBox('user');
+  final userBox = Hive.box('user');
   final storedUser = userBox.get('userInfo');
 
   return storedUser != null ? User.fromMap(storedUser) : null;
 }
 
-Future<void> storeToken(String token) async
+void storeToken(String token)
 {
-  final userBox = await Hive.openBox('user');
-
+  final userBox = Hive.box('user');
   userBox.put('accessToken', token);
 }
 
 /// @returns `String | null`
-Future getToken() async
+dynamic getToken()
 {
-  final userBox = await Hive.openBox('user');
-
+  final userBox = Hive.box('user');
   return userBox.get('accessToken');
 }
 
-Future<bool> isLoggedIn() async
+bool isLoggedIn()
 {
-  final userBox = await Hive.openBox('user');
-
+  final userBox = Hive.box('user');
   return userBox.containsKey('accessToken');
+}
+
+void onLogin(void Function() onLogin)
+{
+  final userBox = Hive.box('user');
+  userBox.watch().listen((event) {
+    if (event.key == 'userInfo' && event.value != null) {
+      onLogin();
+    }
+  });
+}
+
+void onLogout(void Function() onLogout)
+{
+  final userBox = Hive.box('user');
+  userBox.watch().listen((event) {
+    if (event.key == 'userInfo' && event.deleted) {
+      onLogout();
+    }
+  });
 }
 
 Future<void> resetAuthState() async
 {
-  final userBox = await Hive.openBox('user');
+  final userBox = Hive.box('user');
   await userBox.clear();
 }

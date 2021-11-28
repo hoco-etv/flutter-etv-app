@@ -11,6 +11,8 @@ import 'package:etv_app/pages/bulletin.dart';
 
 void main() async {
   await Hive.initFlutter();
+  await Hive.openBox('user');
+
   runApp(const EtvApp());
 }
 

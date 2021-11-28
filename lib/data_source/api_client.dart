@@ -94,7 +94,7 @@ Future<List<EtvBulletin>> fetchNews() async
 /// returns `User | null`
 Future fetchProfile() async
 {
-  if (!await isLoggedIn()) {
+  if (!isLoggedIn()) {
     return null;
   }
 
@@ -106,7 +106,7 @@ Future fetchProfile() async
 
 Future<Iterable<Person>> searchMembers(String query) async
 {
-  if (!await isLoggedIn()) {
+  if (!isLoggedIn()) {
     return [];
   }
 
