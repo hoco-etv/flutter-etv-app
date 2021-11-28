@@ -18,6 +18,8 @@ class ProfileView extends StatelessWidget {
     final mainBoardPicture =
       userProfile.boards?[0].pictures
       .fold<BoardPicture?>(null, (BoardPicture? a, b) => a == null ? b : a.priority < b.priority ? a : b );
+    final boardMember =
+      userProfile.boards?[0].members.singleWhere((m) => m.personId == userProfile.personId);
 
     if (userProfile.committees != null) {
       userProfile.committees!.sort((a, b) {
@@ -172,21 +174,21 @@ class ProfileView extends StatelessWidget {
                     )),
                   ),
 
+                  const SizedBox(height: innerPaddingSize/4),
+
                   Text(
                     userProfile.boards![0].discharge == null
                       ? 'sinds ${formatDate(userProfile.boards![0].installation)}'
                       : formatDateSpan(userProfile.boards![0].installation, userProfile.boards![0].discharge!),
-                    style: const TextStyle(height: 2),
+                    style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(height: 2)),
                   ),
 
-                  Text(userProfile.boards![0].adjective, style: const TextStyle(
-                    fontStyle: FontStyle.italic,
-                    height: 1.8,
-                  )),
+                  const SizedBox(height: innerPaddingSize/2),
 
                   Text(
-                    '"${userProfile.boards![0].motto}"',
-                    style: Theme.of(context).textTheme.subtitle1,
+                    '${boardMember!.functionNumber}. ${boardMember.functionName}'.replaceFirst('&', '\n&'),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ]
               )
@@ -197,7 +199,7 @@ class ProfileView extends StatelessWidget {
 
       /* Committees */
       + (userProfile.committees == null ? [] : [
-        const SizedBox(height: innerPaddingSize),
+        const SizedBox(height: outerPaddingSize),
 
         Table(
           columnWidths: const {

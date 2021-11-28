@@ -180,6 +180,7 @@ class Board {
   final String description;
   final DateTime installation;
   final DateTime? discharge;
+  final List<BoardMember> members;
   final List<BoardPicture> pictures;
 
   const Board({
@@ -192,6 +193,7 @@ class Board {
     required this.description,
     required this.installation,
     this.discharge,
+    required this.members,
     required this.pictures,
   });
 
@@ -207,6 +209,16 @@ class Board {
       description:  map['description'],
       installation: DateTime.parse(map['installation']),
       discharge:    map['discharge'] != null ? DateTime.parse(map['discharge']) : null,
+
+      members:     (map['members'] as List).map((m) =>
+        BoardMember(
+          personId:       m['person_id'],
+          personName:     m['person_name'],
+          functionName:   m['function_name'],
+          functionNumber: m['function_number'],
+        )
+      ).toList(),
+
       pictures:     (map['pictures'] as List).map((p) =>
         BoardPicture(
           id:           p['id'],
@@ -230,6 +242,14 @@ class Board {
       'description':  description,
       'installation': installation.toString(),
       'discharge':    discharge?.toString(),
+
+      'members':      members.map((m) => {
+        'person_id':        m.personId,
+        'person_name':      m.personName,
+        'function_name':    m.functionName,
+        'function_number':  m.functionNumber,
+      }).toList(),
+
       'pictures':     pictures.map((p) => {
         'id':           p.id,
         'priority':     p.priority,
@@ -251,6 +271,20 @@ class BoardPicture {
     required this.priority,
     required this.description,
     required this.url,
+  });
+}
+
+class BoardMember {
+  final int personId;
+  final String personName;
+  final String functionName;
+  final int functionNumber;
+
+  const BoardMember({
+    required this.personId,
+    required this.personName,
+    required this.functionName,
+    required this.functionNumber,
   });
 }
 

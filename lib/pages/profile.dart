@@ -154,20 +154,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(children: [
                         TextFormField(
                           decoration: const InputDecoration(labelText: 'e-mail'),
-                          autofillHints: const [ AutofillHints.username ],
                           onChanged: (newValue) { username = newValue; },
+                          autofillHints: const [ AutofillHints.username ],
                           textInputAction: TextInputAction.next,
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                         ),
 
                         const SizedBox(height: outerPaddingSize),
 
                         TextFormField(
-                          decoration: const InputDecoration(labelText: 'wachtwoord'),
-                          autofillHints: const [ AutofillHints.password ],
                           obscureText: true,
+                          decoration: const InputDecoration(labelText: 'wachtwoord'),
                           onChanged: (newValue) { password = newValue; },
+                          autofillHints: const [ AutofillHints.password ],
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_value) { login(); },
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                         ),
                       ]),
                     ),
@@ -212,6 +214,18 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
 
               children: [
+                // Text('Heading 1', style: Theme.of(context).textTheme.headline1),
+                // Text('Heading 2', style: Theme.of(context).textTheme.headline2),
+                // Text('Heading 3', style: Theme.of(context).textTheme.headline3),
+                // Text('Heading 4', style: Theme.of(context).textTheme.headline4),
+                // Text('Heading 5', style: Theme.of(context).textTheme.headline5),
+                // Text('Heading 6', style: Theme.of(context).textTheme.headline6),
+                // Text('Subtitle 1', style: Theme.of(context).textTheme.subtitle1),
+                // Text('Subtitle 2', style: Theme.of(context).textTheme.subtitle2),
+                // Text('Body text 1', style: Theme.of(context).textTheme.bodyText1),
+                // Text('Body text 2', style: Theme.of(context).textTheme.bodyText2),
+                // Text('Overline', style: Theme.of(context).textTheme.overline),
+
                 Visibility(
                   visible: userProfile?.digidebBalance != null,
 
@@ -234,6 +248,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 1.5,
                           ),
                         ),
+
+                        const SizedBox(height: innerPaddingSize/2),
 
                         Text(
                           _balanceText,
