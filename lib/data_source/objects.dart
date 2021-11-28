@@ -397,13 +397,13 @@ class EtvBoardroomState {
     this.closedUntil,
   });
 
-  factory EtvBoardroomState.fromJson(dynamic json)
+  factory EtvBoardroomState.fromJson(Map json)
   {
     return EtvBoardroomState(
       open: !json['is_closed'],
       closedReason: json['closure']?['description'],
-      closedSince: DateTime.parse(json['closure']?['closed_begin']),
-      closedUntil: DateTime.parse(json['closure']?['closed_end']),
+      closedSince: json.containsKey('closure') ? DateTime.parse(json['closure']?['closed_begin']) : null,
+      closedUntil: json.containsKey('closure') ? DateTime.parse(json['closure']?['closed_end']) : null,
     );
   }
 }
