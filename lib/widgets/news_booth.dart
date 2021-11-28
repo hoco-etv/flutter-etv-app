@@ -23,23 +23,23 @@ class NewsBoothState extends State<NewsBooth> {
 
       child: Column(
         children: [
-          /* title */
+          /* Title */
           Container(
             alignment: Alignment.center,
             child: Text(
               'Nieuws',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ),
 
-          /* bulletin list */
+          /* Bulletin list */
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-            child: _newsItems != null ? BulletinList(_newsItems!.sublist(0, min(_newsItems!.length, 3))) : null,
+            child: _newsItems != null ? BulletinList(_newsItems!.sublist(0, min(_newsItems!.length, 3)), compact: true) : null,
           ),
 
-          /* link to news page */
+          /* Link to news page */
           Visibility(
             visible: (_newsItems?.length ?? 0) > 3,
             child: GestureDetector(
@@ -49,17 +49,19 @@ class NewsBoothState extends State<NewsBooth> {
 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+
                   children: [
                     Text(
                       'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) > 1 ? 'en' : ''}',
-                      style: Theme.of(context).textTheme.headline6?.merge(
-                        TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5))
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                       ),
                     ),
 
                     Icon(
-                      Ionicons.arrow_forward_outline,
+                      Feather.arrow_right,
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
                   ],

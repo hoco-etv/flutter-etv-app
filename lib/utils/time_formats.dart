@@ -15,16 +15,21 @@ const months = {
 
 String formatDate(DateTime date, [bool includeYear = false])
 {
-  return '${date.day} ${months[date.month]}' + (includeYear ? ' ${date.year}' : '');
+  return '${date.day} ${months[date.month]}'
+    + (includeYear || date.year != DateTime.now().year ? ' ${date.year}' : '');
 }
 
 String formatDateSpan(DateTime startDate, DateTime endDate)
 {
+  final excludeTime =
+    startDate.hour == 0 && startDate.minute == 0
+    && endDate.hour == 0 && endDate.minute == 0;
+
   return formatDate(startDate, startDate.year != endDate.year)
-    + ' ' + startDate.toIso8601String().substring(11, 16)
+    + (!excludeTime ? ' ' + startDate.toIso8601String().substring(11, 16) : '')
     + ' -'
     + (startDate.day != endDate.day ? ' ' + formatDate(endDate, startDate.year != endDate.year) : '')
-    + ' ' + endDate.toIso8601String().substring(11, 16);
+    + (!excludeTime ? ' ' + endDate.toIso8601String().substring(11, 16) : '');
 }
 
 String timeAgoSinceDate(DateTime date, {bool short = false})

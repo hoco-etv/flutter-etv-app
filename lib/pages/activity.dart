@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/utils/etv_api_client.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
+import 'package:etv_app/utils/etv_api_client.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class ActivityPage extends StatelessWidget {
   const ActivityPage([Key? key]) : super(key: key);
@@ -14,75 +15,97 @@ class ActivityPage extends StatelessWidget {
     final EtvActivity activity = ModalRoute.of(context)!.settings.arguments as EtvActivity;
 
     return DefaultLayout(
-      title: activity.name,
+      title: 'Activiteit',
+      textBackground: true,
+
       pageContent: ListView(
-        padding: outerPadding,
         children: <Widget>[
           /* Image */
           Visibility(
             visible: activity.image != null,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: outerPaddingSize),
-              child: Image.network(activity.image ?? ''),
-              // child: Image.network('https://etv.tudelft.nl/photos/default/photo?id=582&file=bruikbaar2.png&thumbnail=0'),
-            ),
+            child: Image.network(activity.image ?? ''),
           ),
 
-          /* Subtitle */
-          Visibility(
-            visible: activity.summary != null,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: outerPaddingSize),
-              child: Text(
-                activity.summary ?? 'samenvatting',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            ),
-          ),
+          /* Content */
+          Container(
+            padding: outerPadding.copyWith(top: innerPaddingSize),
 
-          /* Where */
-          Visibility(
-            visible: activity.location != null,
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
+                /* Title */
                 Text(
-                  'Waar: ',
-                  style: Theme.of(context).textTheme.bodyText1,
-                  textScaleFactor: 1.3,
+                  activity.name,
+                  style: Theme.of(context).textTheme.headline3,
                 ),
-                Text(
-                  activity.location ?? '',
-                  textScaleFactor: 1.3,
+
+                /* Subtitle */
+                Visibility(
+                  visible: activity.summary != null,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: innerPaddingSize/2),
+
+                    child: Text(
+                      activity.summary ?? 'samenvatting',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: innerPaddingSize),
+
+                /* When */
+                Row(children: [
+                  Icon(
+                    Feather.calendar,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: innerPaddingSize),
+                  Text(
+                    formatDateSpan(activity.startAt, activity.endAt),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ]),
+
+                /* Where */
+                Visibility(
+                  visible: activity.location != null,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: innerPaddingSize/2),
+
+                    child: Row(
+                      children: [
+                        Icon(
+                          Feather.map_pin,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: innerPaddingSize),
+                        Text(
+                          activity.location ?? '',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: innerPaddingSize),
+
+                /* Description */
+                Visibility(
+                  visible: activity.description != null,
+                  child: HtmlWidget(
+                    activity.description ?? '',
+                    customWidgetBuilder: (element) {
+                      if (element.localName == 'img' && element.attributes.containsKey('src')) {
+                        return Image.network(element.attributes['src']!);
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ],
-            ),
-          ),
-
-          /* When */
-          Row(children: [
-            Text(
-              'Wanneer: ',
-              style: Theme.of(context).textTheme.bodyText1,
-              textScaleFactor: 1.3,
-            ),
-            Text(
-              formatDateSpan(activity.startAt, activity.endAt),
-              textScaleFactor: 1.3,
-            ),
-          ]),
-          const SizedBox(height: outerPaddingSize),
-
-          /* Description */
-          Visibility(
-            visible: activity.description != null,
-            child: HtmlWidget(
-              activity.description ?? '',
-              customWidgetBuilder: (element) {
-                if (element.localName == 'img' && element.attributes.containsKey('src')) {
-                  return Image.network(element.attributes['src']!);
-                }
-                return null;
-              },
             ),
           ),
         ],

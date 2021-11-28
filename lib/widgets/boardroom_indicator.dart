@@ -35,26 +35,36 @@ class BoardroomIndicatorState extends State<BoardroomStateIndicator> {
           padding: innerPadding,
 
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
             children: [
+              /* Colored indicator chip */
               ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius),
                 child: Container(
                   height: _lineHeight,
                   width: 1.618*_lineHeight,
-                  color: _boardroomState?.open == true ? const Color(greenPrimary) : etvRed.shade600
+                  color: _boardroomState == null
+                    ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4)
+                    : _boardroomState!.open == true
+                      ? const Color(greenPrimary)
+                      : etvRed.shade600
                 ),
               ),
 
+              /* Description */
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.only(top: 2),  // nicely center text vertically
+
                 child: Text(
                   _boardroomState != null
                     ? _boardroomState?.open == true ? 'BK is open!' : _boardroomState?.closedReason ?? 'BK is dicht'
                     : 'Laden...',
                   style: TextStyle(
                     fontSize: _lineHeight/1.18,
+                    height: 1,
                   ),
                 ),
               ),

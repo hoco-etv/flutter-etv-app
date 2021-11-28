@@ -17,6 +17,8 @@ dependencies:
 
   intl: ^0.17.0
 
+  url_launcher: ^6.0.15
+
   hive_flutter: ^1.1.0
 
   cupertino_icons: ^1.0.2
@@ -57,5 +59,11 @@ flutter:
   fonts:
     - family: RobotoMono
       fonts:
-        - asset: assets/RobotoMono-Medium.ttf
+        - asset: assets/fonts/RobotoMono-Regular.ttf
+        - asset: assets/fonts/RobotoMono-Medium.ttf
           weight: 500
+    - family: RobotoSlab
+      fonts:
+        - asset: assets/fonts/RobotoSlab-Light.ttf
+          weight: 300
+        - asset: assets/fonts/RobotoSlab-Regular.ttf

@@ -23,23 +23,23 @@ class CalendarState extends State<Calendar> {
 
       child: Column(
         children: [
-          /* title */
+          /* Title */
           Container(
             alignment: Alignment.center,
             child: Text(
               'Activiteiten',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ),
 
-          /* activity list */
+          /* Activity list */
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
             child: _activities != null ? ActivityList(_activities!.sublist(0, min(_activities!.length, 3))) : null,
           ),
 
-          /* link to activities page */
+          /* Link to activities page */
           Visibility(
             visible: (_activities?.length ?? 0) > 3,
             child: GestureDetector(
@@ -49,17 +49,19 @@ class CalendarState extends State<Calendar> {
 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+
                   children: [
                     Text(
                       'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) > 1 ? 'en' : ''}',
-                      style: Theme.of(context).textTheme.headline6?.merge(
-                        TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5))
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                       ),
                     ),
 
                     Icon(
-                      Ionicons.arrow_forward_outline,
+                      Feather.arrow_right,
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
                   ],

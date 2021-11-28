@@ -68,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String get _balanceText
   {
     return userProfile?.balance != null && userProfile!.balance! > 0
-      ? 'Kom hem eens een keer aanvullen bij de balie en maak de Thesau heel blij :)'
+      ? 'Kom het eens een keer aanvullen bij de balie en maak de Thesau heel blij :)'
       : 'Goed bezig ;)';
   }
 
@@ -165,16 +165,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Log in',
-                          textScaleFactor: 1.5,
+                          style: Theme.of(context).textTheme.button?.merge(const TextStyle(fontSize: 21)),
                         ),
 
                         Container(
                           padding: const EdgeInsets.only(bottom: 3),
 
                           child: Icon(
-                            Ionicons.log_in_outline,
+                            Feather.log_in,
                             size: (Theme.of(context).textTheme.button?.fontSize ?? 0)*2,
                           ),
                         ),
@@ -201,26 +201,28 @@ class _ProfilePageState extends State<ProfilePage> {
                 visible: userProfile?.balance != null,
 
                 child: Card(child: Container(
-                  padding: outerPadding*1.5,
+                  padding: outerPadding,
 
                   child: Column(
                     children: [
                       Text(
-                        'Je huidige debstand is',
-                        style: Theme.of(context).textTheme.headline5,
+                        'ETVermogen',
+                        style: Theme.of(context).textTheme.headline3,
                       ),
-                      const SizedBox(height: outerPaddingSize),
+
                       Text(
                         '€ -${userProfile?.balance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
-                        style: Theme.of(context).textTheme.headline2?.merge(
-                          TextStyle(color: _balanceColor),
+                        style: TextStyle(
+                          fontSize: 32 + min(48, userProfile?.balance ?? 0), // more deb = bigger font :)
+                          fontWeight: FontWeight.w400,
+                          color: _balanceColor,
+                          height: 1.5,
                         ),
                       ),
 
-                      const SizedBox(height: outerPaddingSize),
-
                       Text(
-                        _balanceText
+                        _balanceText,
+                        textAlign: TextAlign.center,
                       )
                     ],
                   ),
@@ -232,30 +234,39 @@ class _ProfilePageState extends State<ProfilePage> {
               Card(child: Container(
                 padding: outerPadding,
 
-                child: Column(
-                  children: [
-                    Text(
-                      userProfile?.name ?? '[naam?]',
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
+                child: Text(
+                  userProfile?.name ?? '[naam?]',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              )),
 
-                    const SizedBox(height: outerPaddingSize),
+              const SizedBox(height: outerPaddingSize),
 
-                    ElevatedButton(
-                      onPressed: logout,
+              Card(child: Container(
+                padding: outerPadding,
 
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            'Log uit',
-                            textScaleFactor: 1.5,
-                          ),
-                          Icon(Ionicons.log_out_outline),
-                        ],
+                child: ElevatedButton(
+                  onPressed: logout,
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                    children: [
+                      Text(
+                        'Log uit',
+                        style: Theme.of(context).textTheme.button?.merge(const TextStyle(fontSize: 21)),
                       ),
-                    ),
-                  ],
+
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 3),
+
+                        child: Icon(
+                          Feather.log_out,
+                          size: (Theme.of(context).textTheme.button?.fontSize ?? 0)*2,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               )),
             ],

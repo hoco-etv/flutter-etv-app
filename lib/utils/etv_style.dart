@@ -36,7 +36,6 @@ const orangePrimary = 0xFFFA7921;
 
 const barelyBlack = Color(0xFF252730);
 const almostWhite = Color(0xFFFCFDFE);
-const titleGrey = Color(0xFF404245);
 const disabledGrey = Color(0xFFA0A2A5);
 
 final _lightColorScheme = ColorScheme.light(
@@ -55,8 +54,73 @@ final _darkColorScheme = ColorScheme.dark(
 
 ThemeData getTheme(Brightness brightness)
 {
+  final colorScheme = brightness == Brightness.light ? _lightColorScheme : _darkColorScheme;
   final baseTheme = ThemeData.from(
-    colorScheme: brightness == Brightness.light ? _lightColorScheme : _darkColorScheme,
+    colorScheme: colorScheme,
+
+    textTheme: TextTheme(
+      bodyText1: const TextStyle(
+        fontSize: 16,
+        height: 1.5,
+      ),
+      bodyText2: const TextStyle(
+        fontSize: 16,
+        height: 1.5,
+      ),
+
+      headline1: TextStyle(
+        fontSize: 48,
+        fontFamily: 'RobotoSlab',
+        fontWeight: FontWeight.w300,
+        height: 1.5,
+        color: colorScheme.onBackground,
+      ),
+      headline2: TextStyle(
+        fontSize: 30,
+        fontFamily: 'RobotoSlab',
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+        color: colorScheme.onBackground,
+      ),
+      headline3: TextStyle(
+        fontSize: 26,
+        fontWeight: FontWeight.w500,
+        height: 1.5,
+        color: colorScheme.onBackground,
+      ),
+
+      headline4: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w500,
+        height: 1.5,
+        color: colorScheme.onSurface.withOpacity(0.8),
+      ),
+      headline5: const TextStyle(
+        fontSize: 20,
+        fontFamily: 'RobotoSlab',
+        height: 1.5,
+      ),
+      headline6: const TextStyle(
+        fontSize: 18,
+        fontFamily: 'RobotoSlab',
+        height: 1.5,
+      ),
+
+      subtitle1: TextStyle(
+        fontFamily: 'RobotoSlab',
+        height: 1.5,
+        color: colorScheme.onSurface.withOpacity(0.6),
+      ),
+      subtitle2: TextStyle(
+        fontWeight: FontWeight.w400,
+        height: 1.4,
+        color: colorScheme.onSurface.withOpacity(0.6),
+      ),
+
+      button: const TextStyle(
+        color: almostWhite,
+      ),
+    ),
   );
 
   return baseTheme.copyWith(

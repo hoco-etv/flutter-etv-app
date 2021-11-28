@@ -69,7 +69,7 @@ No idea, this is a `//TODO`.
 * [Hive document store](https://pub.dev/packages/hive)
 * [HTML display library](https://pub.dev/packages/flutter_widget_from_html)
 * [Splash screen generator](https://pub.dev/packages/flutter_native_splash)
-* [Icon bundle](https://pub.dev/packages/flutter_font_icons) (currently only using [Ionicons](https://ionic.io/ionicons))
+* [Icon bundle](https://pub.dev/packages/flutter_font_icons) (currently only using [Feather icons](https://feathericons.com))
 
 ### Dart in short
 Dart is a strongly typed language, not unlike Java or C#. In many ways I have found it to closely resemble TypeScript in its functionality, with a few notable differences. Firstly, simple objects as such do not exist; instead Dart has Maps, Classes and Enums. Parameters for widgets and functions are almost always a primitive type or typed with a class instance or an enum, so instead of `f({ axis: 'horizontal' })` you would input `f( axis: Axis.horizontal )`. This ensures the correct input type for `f` at compile time.

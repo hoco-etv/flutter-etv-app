@@ -19,13 +19,13 @@ class ActivityList extends StatelessWidget {
         List<Widget> activityContent = [];
         if (e.summary != null) activityContent.add(Text(e.summary!));
 
-        /* activity card */
+        /* Activity card */
         return Card(
           margin: const EdgeInsets.only(top: innerPaddingSize),
           shape: innerBorderShape,
           color: Theme.of(context).brightness == Brightness.light
             ? Colors.white
-            : Colors.grey.shade800,
+            : Colors.grey.shade800.withOpacity(0.9),
 
           child: ClipPath(
             clipper: ShapeBorderClipper(shape: innerBorderShape),
@@ -39,6 +39,7 @@ class ActivityList extends StatelessWidget {
                 );
               },
               borderRadius: BorderRadius.circular(innerBorderRadius),
+
               child: Container(
                 padding: innerPadding,
                 decoration: BoxDecoration(
@@ -54,36 +55,26 @@ class ActivityList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
 
                   children: [
-                    /* tijd */
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        DateTime.now().isBefore(e.startAt) ? timeLeftBeforeDate(e.startAt) : 'nu',
-                        style: TextStyle(
-                          fontWeight: e.startAt.difference(DateTime.now()).inDays <= 7 ? FontWeight.bold : FontWeight.normal,
-                        ),
-                      ),
+                    /* Date */
+                    Text(
+                      DateTime.now().isBefore(e.startAt) ? timeLeftBeforeDate(e.startAt) : 'nu',
+                      style: e.startAt.difference(DateTime.now()).inDays <= 7
+                        ? Theme.of(context).textTheme.bodyText1
+                        : Theme.of(context).textTheme.bodyText2,
                     ),
 
-                    /* titel */
+                    /* Title */
                     Text(
                       e.name,
-                      style: Theme.of(context).textTheme.bodyText2?.merge(const TextStyle(
-                        fontSize: 18,
-                      )),
+                      style: Theme.of(context).textTheme.headline6?.merge(const TextStyle(fontFamily: 'Roboto')),
                     ),
 
-                    /* ondertitel */
+                    /* Subtitle */
                     Visibility(
                       visible: e.summary != null,
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          e.summary ?? '',
-                          style: Theme.of(context).textTheme.bodyText2?.merge(const TextStyle(
-                            fontSize: 14,
-                          )),
-                        ),
+                      child: Text(
+                        e.summary ?? '',
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                     ),
                   ],

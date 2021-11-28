@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/utils/etv_api_client.dart';
 import 'package:etv_app/utils/etv_style.dart';
+import 'package:etv_app/utils/time_formats.dart';
+import 'package:etv_app/utils/etv_api_client.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class BulletinPage extends StatelessWidget {
   const BulletinPage([Key? key]) : super(key: key);
@@ -13,30 +14,54 @@ class BulletinPage extends StatelessWidget {
     final EtvBulletin newsItem = ModalRoute.of(context)!.settings.arguments as EtvBulletin;
 
     return DefaultLayout(
-      title: newsItem.name,
+      title: 'Nieuwsbericht',
+      textBackground: true,
+
       pageContent: ListView(
         padding: outerPadding,
         children: <Widget>[
-          /* Author */
-          Row(children: [
-            Text(
-              'Door: ',
-              style: Theme.of(context).textTheme.bodyText1,
-              textScaleFactor: 1.3,
+          /* Title */
+          Text(
+            newsItem.name,
+            style: Theme.of(context).textTheme.headline2,
+          ),
+
+          /* Author & date */
+          Container(
+            margin: const EdgeInsets.only(top: innerPaddingSize/2),
+
+            child: Wrap(
+              children: [
+                Text(
+                  '${newsItem.author}  •  ',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+
+                Text(
+                  formatDate(newsItem.createdAt),
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ]
             ),
-            Text(
-              newsItem.author,
-              textScaleFactor: 1.3,
-            ),
-          ]),
+          ),
+
           const SizedBox(height: outerPaddingSize),
 
           /* Content */
           HtmlWidget(
             newsItem.description,
-            customWidgetBuilder: (element) {
-              if (element.localName == 'img' && element.attributes.containsKey('src')) {
-                return Image.network(element.attributes['src']!);
+
+            customStylesBuilder: (e) {
+              if (e.localName == 'p') {
+                return {
+                  'margin-bottom': '0.5em',
+                };
+              }
+              return null;
+            },
+            customWidgetBuilder: (e) {
+              if (e.localName == 'img' && e.attributes.containsKey('src')) {
+                return Image.network(e.attributes['src']!);
               }
               return null;
             },
