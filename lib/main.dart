@@ -4,10 +4,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/pages/home.dart';
 import 'package:etv_app/pages/news.dart';
-import 'package:etv_app/pages/activities.dart';
 import 'package:etv_app/pages/profile.dart';
 import 'package:etv_app/pages/activity.dart';
 import 'package:etv_app/pages/bulletin.dart';
+import 'package:etv_app/pages/activities.dart';
+import 'package:etv_app/pages/search_members.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -30,11 +31,12 @@ class EtvApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
+        '/news': (context) => const NewsPage(),
         '/profile': (context) => const ProfilePage(),
         '/activity': (context) => const ActivityPage(),
         '/bulletin': (context) => const BulletinPage(),
         '/activities': (context) => const ActivitiesPage(),
-        '/news': (context) => const NewsPage(),
+        '/search_members': (context) => const MemberSearchPage(),
       }
     );
   }
