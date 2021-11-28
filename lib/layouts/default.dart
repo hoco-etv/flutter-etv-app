@@ -113,7 +113,7 @@ class DefaultLayoutState extends State<DefaultLayout> {
             NavButtonData(
               visible: loggedIn,
               route: '/search_members',
-              label: 'Members',
+              label: 'Leden',
               icon: Feather.search,
               onPressed: () {
                 if (ModalRoute.of(context)?.settings.name == '/search_members') return;
