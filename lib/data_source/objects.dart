@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class User {
   final int id;
   final Person? person;
@@ -184,15 +186,15 @@ class CommitteeParticipation {
   final bool committeeHasActiveMembers;
   final String committeeName;
   final String? functionName;
-  final DateTime installation;
+  final DateTime? installation;
   final DateTime? discharge;
 
   const CommitteeParticipation({
     required this.committeeId,
     required this.committeeHasActiveMembers,
     required this.committeeName,
-    required this.installation,
     this.functionName,
+    this.installation,
     this.discharge,
   });
 
@@ -202,7 +204,7 @@ class CommitteeParticipation {
       committeeId:    map['committee_id'],
       functionName:   map['function_name'],
       committeeName:  map['committee_short_name'],
-      installation:   DateTime.parse(map['installation']),
+      installation:   map['installation'] != null ? DateTime.parse(map['installation']) : null,
       discharge:      map['discharge'] != null ? DateTime.parse(map['discharge']) : null,
       committeeHasActiveMembers: map['committee_has_active_committee_members'],
     );
@@ -214,7 +216,7 @@ class CommitteeParticipation {
       'committee_id':         committeeId,
       'function_name':        functionName,
       'committee_short_name': committeeName,
-      'installation':         installation.toString(),
+      'installation':         installation?.toString(),
       'discharge':            discharge?.toString(),
       'committee_has_active_committee_members': committeeHasActiveMembers,
     };
@@ -224,8 +226,8 @@ class CommitteeParticipation {
 class Board {
   final int id;
   final int number;
-  final int color;
   final bool lustrum;
+  final Color color;
   final String adjective;
   final String motto;
   final String description;
@@ -237,8 +239,8 @@ class Board {
   const Board({
     required this.id,
     required this.number,
-    required this.color,
     required this.lustrum,
+    required this.color,
     required this.adjective,
     required this.motto,
     required this.description,
@@ -253,8 +255,8 @@ class Board {
     return Board(
       id:           map['id'],
       number:       map['number'],
-      color:        int.parse(map['color'], radix: 16),
       lustrum:      map['lustrum'],
+      color:        Color(0xFF000000 + int.parse(map['color'], radix: 16)),
       adjective:    map['adjective'],
       motto:        map['motto'],
       description:  map['description'],
@@ -286,7 +288,7 @@ class Board {
     return {
       'id':           id,
       'number':       number,
-      'color':        color.toRadixString(16),
+      'color':        (color.value - 0xFF000000).toRadixString(16),
       'lustrum':      lustrum,
       'adjective':    adjective,
       'motto':        motto,

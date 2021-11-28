@@ -5,6 +5,7 @@ import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
 import 'package:etv_app/data_source/api_client.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:etv_app/widgets/utils/loaded_network_image.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class ActivityPage extends StatelessWidget {
@@ -24,7 +25,10 @@ class ActivityPage extends StatelessWidget {
           /* Image */
           Visibility(
             visible: activity.image != null,
-            child: Image.network(activity.image ?? ''),
+            child: LoadedNetworkImage(
+              activity.image ?? '',
+              aspectRatio: 4/3,
+            ),
           ),
 
           /* Content */

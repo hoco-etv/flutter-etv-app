@@ -21,7 +21,11 @@ dependencies:
 
   hive_flutter: ^1.1.0
 
+  provider: ^6.0.1
+
   cupertino_icons: ^1.0.2
+
+  skeleton_loader: ^2.0.0
 
   flutter_font_icons: ^2.0.0
 

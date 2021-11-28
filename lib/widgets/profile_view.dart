@@ -6,6 +6,7 @@ import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
 import 'package:etv_app/data_source/objects.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:etv_app/widgets/utils/shimmer_box.dart';
 
 class ProfileView extends StatelessWidget {
   final Person person;
@@ -25,7 +26,8 @@ class ProfileView extends StatelessWidget {
       person.committees!.sort((a, b) {
         if (a.discharge == null && b.discharge != null) return -1;
         if (b.discharge == null && a.discharge != null) return 1;
-        return b.installation.compareTo(a.installation);
+        if (a.installation == null || b.installation == null) return 0;
+        return b.installation!.compareTo(a.installation!);
       });
     }
 
@@ -47,16 +49,11 @@ class ProfileView extends StatelessWidget {
                   );
                 }
                 else {
-                  // FIXME: loading picture failed -> display proper error message
-                  return ErrorWidget.withDetails(message: 'Loading profile picture failed :(');
+                  return const SizedBox();
                 }
               }
               else {
-                return Container(
-                  height: 200,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-                  child: const Text('Laden...', style: TextStyle(fontFamily: 'RobotoMono', fontSize: 24)),
-                );
+                return const ShimmerBox(aspectRatio: 3/2);
               }
             },
             future: authHeader(),
@@ -158,7 +155,10 @@ class ProfileView extends StatelessWidget {
                   /* Board picture */
                   ClipRRect(
                     borderRadius: BorderRadius.circular(innerBorderRadius),
-                    child: Image.network('https://etv.tudelft.nl/boards/default/image?picture_id=${mainBoardPicture?.id}'),
+                    child: LoadedNetworkImage(
+                      'https://etv.tudelft.nl/boards/default/image?picture_id=${mainBoardPicture?.id}',
+                      baseColor: person.boards![0].color
+                    ),
                   ),
 
                   const SizedBox(height: innerPaddingSize),
@@ -167,7 +167,7 @@ class ProfileView extends StatelessWidget {
                     'Het ${person.boards![0].number}ste Bestuur der Electrotechnische Vereeniging',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline5?.merge(TextStyle(
-                      color: Color(0xFF000000 + person.boards![0].color),
+                      color: person.boards![0].color,
                     )),
                   ),
 
@@ -246,11 +246,16 @@ class ProfileView extends StatelessWidget {
                     ),
 
                     /* Committee participation period */
-                    Text(
-                      committee.discharge == null
-                        ? 'sinds ${formatDate(committee.installation)}'
-                        : formatDateSpan(committee.installation, committee.discharge!),
-                      style: Theme.of(context).textTheme.subtitle2,
+                    Visibility(
+                      visible: committee.installation != null || committee.discharge != null,
+                      child: Text(
+                        committee.discharge == null
+                          ? committee.installation != null ? 'sinds ${formatDate(committee.installation!)}' : ''
+                          : committee.installation != null
+                            ? formatDateSpan(committee.installation!, committee.discharge!)
+                            : 'onbekend - ${formatDate(committee.discharge!)}',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
                     ),
                   ],
                 ),
