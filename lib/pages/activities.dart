@@ -18,7 +18,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   {
     return fetchActivities()
     .then((activities) {
-      setState(() { _activities = activities; });
+      setState(() { _activities = activities.where((a) => DateTime.now().isBefore(a.endAt)).toList(); });
     })
     .catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(

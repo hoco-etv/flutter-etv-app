@@ -77,7 +77,7 @@ class CalendarState extends State<Calendar> {
   refresh()
   {
     return etv.fetchActivities()
-    .then((a) => setState(() { _activities = a; }));
+    .then((a) => setState(() { _activities = a.where((a) => DateTime.now().isBefore(a.endAt)).toList(); }));
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:etv_app/layouts/default.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
@@ -97,6 +98,8 @@ class ActivityPage extends StatelessWidget {
                   visible: activity.description != null,
                   child: HtmlWidget(
                     activity.description ?? '',
+
+                    onTapUrl: (url) => launch(url),
                     customWidgetBuilder: (element) {
                       if (element.localName == 'img' && element.attributes.containsKey('src')) {
                         return Image.network(element.attributes['src']!);

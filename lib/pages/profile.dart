@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:etv_app/store/user.dart';
 import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/widgets/switcher.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/etv_api_client.dart' as etv;
+import 'package:etv_app/widgets/utils/switcher.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage([Key? key]) : super(key: key);
@@ -17,7 +17,8 @@ class _ProfilePageState extends State<ProfilePage> {
   UserProfile? userProfile;
 
   bool _loggedIn = false;
-  bool _loginFailedState = false;
+  String? _loginFailedMessage;
+  bool _loginRequestPending = false;
   bool _disposed = false;
 
   String username = '';
@@ -27,22 +28,32 @@ class _ProfilePageState extends State<ProfilePage> {
   {
     if (_loggedIn) return;
 
+    if (username == '' || password == '') {
+      setState(() {
+        _loginFailedMessage = 'E-mail en wachtwoord zijn vereist';
+      });
+      return;
+    }
+
+    _loginRequestPending = true;
+
     final result = await etv.login(username, password);
     if (result.runtimeType == UserProfile) {
       setState(() {
         userProfile = result;
         _loggedIn = true;
-        _loginFailedState = false;
+        _loginFailedMessage = null;
+        username = '';
+        password = '';
       });
     }
     else {
       setState(() {
-        _loginFailedState = true;
+        _loginFailedMessage = 'Ongeldige inloggegevens';
       });
-
-      ScaffoldMessenger.of(context)
-      .showSnackBar(const SnackBar(content: Text('Inloggen mislukt :(')));
     }
+
+    _loginRequestPending = false;
   }
 
   logout() async
@@ -123,13 +134,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Image.asset('assets/etv_schild.png'),
                   ),
 
-                  SizedBox(height: !_loginFailedState ? outerPaddingSize : innerPaddingSize),
+                  SizedBox(height: _loginFailedMessage == null ? outerPaddingSize : innerPaddingSize),
 
                   Visibility(
-                    visible: _loginFailedState,
-                    child: const Text(
-                      'Ongeldige inloggegevens',
-                      style: TextStyle(color: Colors.red),
+                    visible: _loginFailedMessage != null,
+                    child: Text(
+                      _loginFailedMessage ?? '',
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
 
@@ -160,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: outerPaddingSize),
 
                   ElevatedButton(
-                    onPressed: login,
+                    onPressed: !_loginRequestPending ? login : null,
 
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:etv_app/layouts/default.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
@@ -51,6 +52,7 @@ class BulletinPage extends StatelessWidget {
           HtmlWidget(
             newsItem.description,
 
+            onTapUrl: (url) => launch(url),
             customStylesBuilder: (e) {
               if (e.localName == 'p') {
                 return {
