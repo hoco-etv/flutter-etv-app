@@ -4,7 +4,7 @@ import 'package:etv_app/layouts/default.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/data_source/store.dart';
 import 'package:etv_app/data_source/objects.dart';
-import 'package:etv_app/data_source/api_client.dart' as etv;
+import 'package:etv_app/data_source/api_client/endpoints.dart' as etv;
 import 'package:etv_app/widgets/profile_view.dart';
 import 'package:etv_app/widgets/utils/switcher.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';

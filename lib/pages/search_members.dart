@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:etv_app/layouts/default.dart';
 import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/data_source/objects.dart';
-import 'package:etv_app/data_source/api_client.dart';
 import 'package:etv_app/widgets/profile_view.dart';
+import 'package:etv_app/data_source/api_client/main.dart';
 
 class MemberSearchPage extends StatefulWidget {
   const MemberSearchPage([Key? key]) : super(key: key);

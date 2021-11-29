@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/widgets/bulletin_list.dart';
-import 'package:etv_app/data_source/api_client.dart';
+import 'package:etv_app/data_source/api_client/main.dart';
 
 class NewsBooth extends StatefulWidget {
   const NewsBooth({Key? key}) : super(key: key);

@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
 import 'package:etv_app/data_source/objects.dart';
-import 'package:etv_app/data_source/api_client.dart';
+import 'package:etv_app/data_source/api_client/utils.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:etv_app/widgets/utils/loaded_network_image.dart';
 
