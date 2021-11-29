@@ -1,12 +1,12 @@
-import 'package:etv_app/data_source/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:etv_app/utils/etv_style.dart';
 import 'package:etv_app/utils/time_formats.dart';
 import 'package:etv_app/data_source/objects.dart';
+import 'package:etv_app/data_source/api_client.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:etv_app/widgets/utils/shimmer_box.dart';
+import 'package:etv_app/widgets/utils/loaded_network_image.dart';
 
 class ProfileView extends StatelessWidget {
   final Person person;
@@ -39,24 +39,9 @@ class ProfileView extends StatelessWidget {
       + (person.pictureId == null ? [] : [
         ClipRRect(
           borderRadius: BorderRadius.circular(innerPaddingSize),
-          child: FutureBuilder(
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return Image.network(
-                    buildImageUrl(person.pictureId!),
-                    headers: snapshot.data as Map<String, String>,
-                  );
-                }
-                else {
-                  return const SizedBox();
-                }
-              }
-              else {
-                return const ShimmerBox(aspectRatio: 3/2);
-              }
-            },
-            future: authHeader(),
+          child: LoadedNetworkImage(
+            buildPictureUrl(PictureType.person, person.pictureId!),
+            httpHeaders: authHeader(),
           ),
         ),
 
@@ -156,7 +141,7 @@ class ProfileView extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(innerBorderRadius),
                     child: LoadedNetworkImage(
-                      'https://etv.tudelft.nl/boards/default/image?picture_id=${mainBoardPicture?.id}',
+                      buildPictureUrl(PictureType.board, mainBoardPicture!.id),
                       baseColor: person.boards![0].color
                     ),
                   ),
@@ -198,7 +183,6 @@ class ProfileView extends StatelessWidget {
 
       /* Committees */
       + (person.committees == null ? [] : [
-
         Table(
           columnWidths: const {
             0: FixedColumnWidth(28),

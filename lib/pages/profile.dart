@@ -91,24 +91,23 @@ class _ProfilePageState extends State<ProfilePage> {
   {
     super.initState();
 
-    getUser().then((u) {
-      if (u != null) {
-        setState(() {
-          userProfile = u;
-          _loggedIn = true;
-        });
+    final u = getUser();
+    if (u != null) {
+      setState(() {
+        userProfile = u;
+        _loggedIn = true;
+      });
 
-        etv.fetchProfile()
-        .then((p) {
-          if (_disposed) return;
-          if (p == null) {
-            logout();
-            return;
-          }
-          setState(() { userProfile = p; });
-        });
-      }
-    });
+      etv.fetchProfile()
+      .then((p) {
+        if (_disposed) return;
+        if (p == null) {
+          logout();
+          return;
+        }
+        setState(() { userProfile = p; });
+      });
+    }
   }
 
   @override

@@ -5,12 +5,14 @@ class LoadedNetworkImage extends StatelessWidget {
   final String url;
   final Color? baseColor;
   final double? aspectRatio;
+  final Map<String, String>? httpHeaders;
 
   const LoadedNetworkImage(
     this.url,
     {
       this.baseColor,
       this.aspectRatio,
+      this.httpHeaders,
       Key? key
     }
   ) : super(key: key);
@@ -20,10 +22,11 @@ class LoadedNetworkImage extends StatelessWidget {
   {
     return Image.network(
       url,
+      headers: httpHeaders,
       frameBuilder: (context, image, frame, loadedSynchronously) =>
         frame != null || loadedSynchronously
           ? image
-          : ShimmerBox(aspectRatio: aspectRatio ?? 3/2, baseColor: baseColor)
+          : ShimmerBox(aspectRatio: aspectRatio ?? 3/2, baseColor: baseColor),
     );
   }
 }

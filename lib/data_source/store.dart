@@ -9,7 +9,7 @@ void storeUser(User user)
 }
 
 /// @returns `User | null`
-dynamic getUser() async
+dynamic getUser()
 {
   final userBox = Hive.box('user');
   final storedUser = userBox.get('userInfo');

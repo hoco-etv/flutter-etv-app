@@ -9,11 +9,11 @@ export './objects.dart';
 const String _baseUrl = 'http://192.168.2.17:8000/api/v1';
 // const String _baseUrl = 'http://10.0.2.2:8000/api/v1';
 
-Future<Map<String, String>> authHeader() async
+Map<String, String> authHeader()
 {
   Map<String, String> headers = {};
 
-  final accessToken = await getToken();
+  final accessToken = getToken();
   if (accessToken != null) {
     headers['Authorization'] = 'Bearer $accessToken';
   }
@@ -23,7 +23,7 @@ Future<Map<String, String>> authHeader() async
 
 Future _get(String endpoint) async
 {
-  final headers = await authHeader();
+  final headers = authHeader();
   headers['Accept'] = 'application/json';
 
   final response = await http.get(
@@ -44,7 +44,7 @@ Future _get(String endpoint) async
 
 Future _post(String endpoint, Map<String, dynamic> body) async
 {
-  final headers = await authHeader();
+  final headers = authHeader();
   headers['Accept'] = headers['Content-Type'] = 'application/json';
 
   final response = await http.post(
@@ -65,9 +65,24 @@ Future _post(String endpoint, Map<String, dynamic> body) async
 }
 
 
-String buildImageUrl(int imageId)
+class PictureType {
+  static const person = PictureType._('person');
+  static const board = PictureType._('board');
+  static const committee = PictureType._('committee');
+
+  final String _value;
+  const PictureType._(this._value);
+
+  @override
+  toString()
+  {
+    return _value;
+  }
+}
+
+String buildPictureUrl(PictureType type, int id)
 {
-  return _baseUrl + '/image?id=$imageId';
+  return _baseUrl + '/picture?type=$type&id=$id';
 }
 
 Future<List<EtvActivity>> fetchActivities() async
