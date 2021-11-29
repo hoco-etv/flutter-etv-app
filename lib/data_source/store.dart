@@ -39,20 +39,16 @@ bool isLoggedIn()
 void onLogin(void Function() onLogin)
 {
   final userBox = Hive.box('user');
-  userBox.watch().listen((event) {
-    if (event.key == 'userInfo' && event.value != null) {
-      onLogin();
-    }
+  userBox.watch(key: 'accessToken').listen((event) {
+    if (!event.deleted) onLogin();
   });
 }
 
 void onLogout(void Function() onLogout)
 {
   final userBox = Hive.box('user');
-  userBox.watch().listen((event) {
-    if (event.key == 'userInfo' && event.deleted) {
-      onLogout();
-    }
+  userBox.watch(key: 'accessToken').listen((event) {
+    if (event.deleted) onLogout();
   });
 }
 
