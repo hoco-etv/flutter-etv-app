@@ -30,7 +30,7 @@ Future fetchProfile() async
     return null;
   }
 
-  final result = await get('/profile') as Map<String, dynamic>;
+  final result = await get('/user/profile') as Map<String, dynamic>;
   final profile = User.fromMap(result);
   storeUser(profile);
   return profile;
@@ -42,14 +42,14 @@ Future<Iterable<Person>> searchMembers(String query) async
     return [];
   }
 
-  final results = await get('/search-members?query=${Uri.encodeQueryComponent(query)}') as List;
+  final results = await get('/members/search?query=${Uri.encodeQueryComponent(query)}') as List;
   return results.map((result) => Person.fromMap(result));
 }
 
 /// returns a `User` if successful, `null` otherwise
 Future login(String username, String password) async
 {
-  final response = await post('/login', {
+  final response = await post('/user/login', {
     'email': username,
     'password': password,
   });

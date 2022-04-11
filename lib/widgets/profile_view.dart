@@ -40,7 +40,7 @@ class ProfileView extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(innerPaddingSize),
           child: LoadedNetworkImage(
-            buildPictureUrl(PictureType.person, person.pictureId!),
+            person.pictureUrl,
             httpHeaders: authHeader(),
           ),
         ),
@@ -141,7 +141,7 @@ class ProfileView extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(innerBorderRadius),
                     child: LoadedNetworkImage(
-                      buildPictureUrl(PictureType.board, mainBoardPicture!.id),
+                      buildPictureUrl(PictureType.board, person.boards![0].id),
                       baseColor: person.boards![0].color
                     ),
                   ),

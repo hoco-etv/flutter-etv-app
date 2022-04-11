@@ -15,14 +15,14 @@ Map<String, String> authHeader()
 
 String buildPictureUrl(PictureType type, int id)
 {
-  return baseUrl + '/picture?type=$type&id=$id';
+  return baseUrl + '/$type/$id/picture';
 }
 
 
 class PictureType {
-  static const person = PictureType._('person');
-  static const board = PictureType._('board');
-  static const committee = PictureType._('committee');
+  static const board = PictureType._('boards');
+  static const member = PictureType._('members');
+  static const committee = PictureType._('committees');
 
   final String _value;
   const PictureType._(this._value);
