@@ -1,3 +1,4 @@
+import 'package:etv_app/data_source/api_client/_config.dart';
 import 'package:flutter/material.dart';
 
 class User {
@@ -136,6 +137,11 @@ class Person {
 
       'balance':    digidebBalance?.toString(),
     };
+  }
+
+  String get pictureUrl
+  {
+    return baseUrl + '/members/$personId/picture';
   }
 }
 
@@ -372,9 +378,9 @@ class EtvActivity {
   {
     return EtvActivity(
       id:           json['id'],
-      name:         json['name'],
-      summary:      json['summary'] != '' ? json['summary'] : null,
-      description:  json['description'] != '' ? json['description'] : null,
+      name:         collapseLocalizedString(Map.from(json['name'])),
+      summary:      collapseLocalizedString(Map.from(json['summary'])),
+      description:  collapseLocalizedString(Map.from(json['description'])),
       link:         json['link'],
       image:        json['image'],
       location:     json['location'] != '' ? json['location'] : null,
@@ -435,4 +441,10 @@ class EtvBulletin {
       createdAt:    DateTime.parse(json['created_at']),
     );
   }
+}
+
+dynamic collapseLocalizedString(Map<String, String> map)
+{
+  final content = map.entries.firstWhere((e) => e.key.startsWith('nl-NL'), orElse: () => map.entries.first).value;
+  return content != '' ? content : null;
 }

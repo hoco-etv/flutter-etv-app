@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     _loginRequestPending = true;
 
-    final result = await etv.login(username, password);
+    final result = await etv.login(username.trim(), password);
     if (result.runtimeType == User) {
       setState(() {
         userProfile = result;
