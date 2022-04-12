@@ -10,8 +10,9 @@ import 'package:etv_app/widgets/utils/loaded_network_image.dart';
 
 class ProfileView extends StatelessWidget {
   final Person person;
+  final bool summary;
 
-  const ProfileView(this.person, [Key? key]) : super(key: key);
+  const ProfileView(this.person, {this.summary = false, Key? key}) : super(key: key);
 
   @override
   Widget build(context)
@@ -39,9 +40,12 @@ class ProfileView extends StatelessWidget {
       + (person.pictureId == null ? [] : [
         ClipRRect(
           borderRadius: BorderRadius.circular(innerPaddingSize),
+
           child: LoadedNetworkImage(
             person.pictureUrl,
             httpHeaders: authHeader(),
+            aspectRatio: 1,
+            fit: BoxFit.cover,
           ),
         ),
 
@@ -75,7 +79,7 @@ class ProfileView extends StatelessWidget {
               'label': 'Telefoonnummer',
               'icon': Feather.phone,
               'text': person.phoneNumber,
-              'link': 'tel:${person.phoneNumber!}'
+              'link': 'tel:${person.phoneNumber}'
             },
             {
               'label': 'Verjaardag',
@@ -83,6 +87,7 @@ class ProfileView extends StatelessWidget {
               'text': formatDate(person.birthDate!, true),
             },
           ]
+          .where((element) => element['text'] != null)
           .map((rowSpec) => TableRow(children: [
             Container(
               height: 32,
@@ -125,7 +130,7 @@ class ProfileView extends StatelessWidget {
       ]
 
       /* Board */
-      + (person.boards == null ? [] : [
+      + (summary || person.boards == null ? [] : [
         const SizedBox(height: outerPaddingSize*2),
 
         Container(
@@ -182,7 +187,7 @@ class ProfileView extends StatelessWidget {
       ])
 
       /* Committees */
-      + (person.committees == null ? [] : [
+      + (summary || person.committees == null ? [] : [
         Table(
           columnWidths: const {
             0: FixedColumnWidth(28),

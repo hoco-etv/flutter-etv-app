@@ -47,7 +47,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
               margin: const EdgeInsets.only(top: 5, left: 5),
 
               child: Text(
-                '${results?.length} leden gevonden',
+                '${results?.length} ${results?.length == 1 ? 'lid' : 'leden'} gevonden',
                 style: Theme.of(context).textTheme.subtitle2,
               ),
             ),
@@ -61,7 +61,7 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
             child: Container(
               padding: outerPadding,
 
-              child: ProfileView(member),
+              child: ProfileView(member, summary: true),
             )
           ),
         ).toList()
