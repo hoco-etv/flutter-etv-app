@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/utils/time_formats.dart';
-import 'package:etv_app/data_source/objects.dart';
-import 'package:etv_app/data_source/api_client/utils.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:etv_app/widgets/utils/loaded_network_image.dart';
+
+import '/utils/etv_style.dart';
+import '/utils/time_formats.dart';
+import '/data_source/objects.dart';
+import '/data_source/api_client/utils.dart';
+import '/widgets/utils/loaded_network_image.dart';
 
 class ProfileView extends StatelessWidget {
   final Person person;

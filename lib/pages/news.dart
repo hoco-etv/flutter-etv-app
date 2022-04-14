@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/widgets/bulletin_list.dart';
-import 'package:etv_app/data_source/api_client/main.dart';
+
+import '/utils/etv_style.dart';
+import '/layouts/default.dart';
+import '/widgets/bulletin_list.dart';
+import '/data_source/api_client/main.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage([Key? key]) : super(key: key);

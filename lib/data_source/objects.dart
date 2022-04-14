@@ -1,5 +1,6 @@
-import 'package:etv_app/data_source/api_client/_config.dart';
 import 'package:flutter/material.dart';
+
+import './api_client/_config.dart';
 
 class User {
   final int id;

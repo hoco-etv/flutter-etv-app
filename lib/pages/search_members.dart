@@ -1,8 +1,10 @@
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/widgets/profile_view.dart';
-import 'package:etv_app/data_source/api_client/main.dart';
+
+import '/utils/etv_style.dart';
+import '/layouts/default.dart';
+import '/widgets/profile_view.dart';
+import '/data_source/api_client/main.dart';
 
 class MemberSearchPage extends StatefulWidget {
   const MemberSearchPage([Key? key]) : super(key: key);
@@ -26,6 +28,8 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
   @override
   Widget build(BuildContext context)
   {
+    final _searchFieldController = TextEditingController(text: query);
+
     return DefaultLayout(
       title: 'Zoek leden',
 
@@ -34,10 +38,23 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
 
         children: <Widget>[
           TextFormField(
-            decoration: const InputDecoration(labelText: 'Zoeken'),
+            decoration: InputDecoration(
+              labelText: 'Zoeken',
+              suffixIcon: IconButton(
+                icon: const Icon(Feather.x),
+                onPressed: () {
+                  _searchFieldController.clear();
+
+                  setState(() {
+                    query = '';
+                    results = null;
+                  });
+                },
+              ),
+            ),
             onFieldSubmitted: updateResults,
             onChanged: (newValue) { query = newValue; },
-            controller: TextEditingController(text: query),
+            controller: _searchFieldController,
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
 

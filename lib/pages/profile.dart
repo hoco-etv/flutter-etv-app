@@ -1,13 +1,13 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/data_source/store.dart';
-import 'package:etv_app/data_source/objects.dart';
-import 'package:etv_app/data_source/api_client/endpoints.dart' as etv;
-import 'package:etv_app/widgets/profile_view.dart';
-import 'package:etv_app/widgets/utils/switcher.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:flutter/material.dart';
+
+import '/utils/etv_style.dart';
+import '/layouts/default.dart';
+import '/widgets/profile_view.dart';
+import '/widgets/utils/switcher.dart';
+import '/data_source/store.dart';
+import '/data_source/objects.dart';
+import '/data_source/api_client/endpoints.dart' as etv;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage([Key? key]) : super(key: key);
@@ -229,29 +229,37 @@ class _ProfilePageState extends State<ProfilePage> {
                   visible: userProfile?.person?.digidebBalance != null,
 
                   child: Card(child: Container(
-                    padding: outerPadding,
+                    padding: outerPadding.copyWith(top: innerPaddingSize),
 
                     child: Column(
                       children: [
-                        Text(
-                          'ETVermogen',
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'ETVermogen:',
+                              style: Theme.of(context).textTheme.headline4?.merge(const TextStyle(fontFamily: 'RobotoSlab')),
+                            ),
 
-                        Text(
-                          '€ -${userProfile?.person?.digidebBalance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
-                          style: TextStyle(
-                            fontSize: 32 + min(48, userProfile?.person?.digidebBalance ?? 0), // more deb = bigger font :)
-                            fontWeight: FontWeight.w400,
-                            color: _balanceColor,
-                            height: 1.5,
-                          ),
+                            Text(
+                              '€ -${userProfile?.person?.digidebBalance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'RobotoSlab',
+                                letterSpacing: 1.25,
+                                fontWeight: FontWeight.w500,
+                                color: _balanceColor,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
                         ),
 
                         const SizedBox(height: innerPaddingSize/2),
 
                         Text(
                           _balanceText,
+                          style: Theme.of(context).textTheme.subtitle1,
                           textAlign: TextAlign.center,
                         )
                       ],
