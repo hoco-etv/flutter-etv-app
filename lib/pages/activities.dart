@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
+<<<<<<< HEAD
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
 import '/widgets/activity_list.dart';
 import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
+=======
+import '/data_source/api_client/main.dart';
+import '/widgets/activity_list.dart';
+import '/layouts/default.dart';
+import '/utils/etv_style.dart';
+>>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 
 class ActivitiesPage extends StatefulWidget {
   const ActivitiesPage([Key? key]) : super(key: key);

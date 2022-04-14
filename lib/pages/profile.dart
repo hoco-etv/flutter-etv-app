@@ -1,11 +1,19 @@
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+<<<<<<< HEAD
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+=======
+import 'package:flutter/material.dart';
+>>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
 import '/widgets/profile_view.dart';
+<<<<<<< HEAD
+=======
+import '/widgets/utils/switcher.dart';
+>>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 import '/data_source/store.dart';
 import '/data_source/objects.dart';
 import '/data_source/api_client/endpoints.dart' as etv;
@@ -304,6 +312,67 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
+<<<<<<< HEAD
+=======
+                    ),
+                  ]
+                ),
+              )
+
+            ),
+          ),
+
+
+          /* *** PROFILE *** */
+          childIfTrue: Container(
+            padding: outerPadding,
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: [
+                // Text('Heading 1', style: Theme.of(context).textTheme.headline1),
+                // Text('Heading 2', style: Theme.of(context).textTheme.headline2),
+                // Text('Heading 3', style: Theme.of(context).textTheme.headline3),
+                // Text('Heading 4', style: Theme.of(context).textTheme.headline4),
+                // Text('Heading 5', style: Theme.of(context).textTheme.headline5),
+                // Text('Heading 6', style: Theme.of(context).textTheme.headline6),
+                // Text('Subtitle 1', style: Theme.of(context).textTheme.subtitle1),
+                // Text('Subtitle 2', style: Theme.of(context).textTheme.subtitle2),
+                // Text('Body text 1', style: Theme.of(context).textTheme.bodyText1),
+                // Text('Body text 2', style: Theme.of(context).textTheme.bodyText2),
+                // Text('Overline', style: Theme.of(context).textTheme.overline),
+
+                Visibility(
+                  visible: userProfile?.person?.digidebBalance != null,
+
+                  child: Card(child: Container(
+                    padding: outerPadding.copyWith(top: innerPaddingSize),
+
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'ETVermogen:',
+                              style: Theme.of(context).textTheme.headline4?.merge(const TextStyle(fontFamily: 'RobotoSlab')),
+                            ),
+
+                            Text(
+                              '€ -${userProfile?.person?.digidebBalance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'RobotoSlab',
+                                letterSpacing: 1.25,
+                                fontWeight: FontWeight.w500,
+                                color: _balanceColor,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+>>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 
                       if (userProfile!.person!.digidebBalance! > 0) ...[
                         const SizedBox(height: innerPaddingSize/2),

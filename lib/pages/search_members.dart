@@ -28,7 +28,11 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
   @override
   Widget build(BuildContext context)
   {
+<<<<<<< HEAD
     final searchFieldController = TextEditingController(text: query);
+=======
+    final _searchFieldController = TextEditingController(text: query);
+>>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 
     return DefaultLayout(
       title: 'Zoek leden',
@@ -43,7 +47,11 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
               suffixIcon: IconButton(
                 icon: const Icon(Feather.x),
                 onPressed: () {
+<<<<<<< HEAD
                   searchFieldController.clear();
+=======
+                  _searchFieldController.clear();
+>>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 
                   setState(() {
                     query = '';
@@ -54,7 +62,11 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
             ),
             onFieldSubmitted: updateResults,
             onChanged: (newValue) { query = newValue; },
+<<<<<<< HEAD
             controller: searchFieldController,
+=======
+            controller: _searchFieldController,
+>>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
 
