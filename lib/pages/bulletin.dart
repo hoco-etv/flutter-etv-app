@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/utils/time_formats.dart';
-import 'package:etv_app/data_source/objects.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/material.dart';
+
+import '/data_source/objects.dart';
+import '/layouts/default.dart';
+import '/utils/etv_style.dart';
+import '/utils/time_formats.dart';
 
 class BulletinPage extends StatelessWidget {
   final EtvBulletin bulletin;

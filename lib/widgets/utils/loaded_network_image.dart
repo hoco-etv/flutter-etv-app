@@ -1,5 +1,6 @@
-import 'package:etv_app/widgets/utils/shimmer_box.dart';
 import 'package:flutter/material.dart';
+
+import '/widgets/utils/shimmer_box.dart';
 
 class LoadedNetworkImage extends StatelessWidget {
   final String url;
@@ -26,20 +27,21 @@ class LoadedNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context)
   {
-    return AspectRatio(
-      aspectRatio: aspectRatio ?? 3/2,
+    final image = Image.network(
+      url,
+      fit: fit,
+      height: height,
+      width: width,
+      headers: httpHeaders,
+      frameBuilder: (context, image, frame, loadedSynchronously) =>
+        frame != null || loadedSynchronously
+          ? image
+          : ShimmerBox(aspectRatio: aspectRatio ?? 3/2, baseColor: baseColor),
+    );
 
-      child: Image.network(
-        url,
-        fit: fit,
-        height: height,
-        width: width,
-        headers: httpHeaders,
-        frameBuilder: (context, image, frame, loadedSynchronously) =>
-          frame != null || loadedSynchronously
-            ? image
-            : ShimmerBox(aspectRatio: aspectRatio ?? 3/2, baseColor: baseColor),
-      )
+    return aspectRatio == null ? image : AspectRatio(
+      aspectRatio: aspectRatio!,
+      child: image,
     );
   }
 }
