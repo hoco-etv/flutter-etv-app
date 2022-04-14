@@ -1,9 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/widgets/activity_list.dart';
-import 'package:etv_app/data_source/api_client/main.dart';
+
+import '/router.gr.dart';
+import '/utils/etv_style.dart';
+import '/widgets/activity_list.dart';
+import '/data_source/api_client/main.dart';
+
 
 class Calendar extends StatefulWidget {
   const Calendar({Key? key}) : super(key: key);
@@ -43,7 +47,8 @@ class CalendarState extends State<Calendar> {
           Visibility(
             visible: (_activities?.length ?? 0) > 3,
             child: GestureDetector(
-              onTap: () { Navigator.pushNamed(context, '/activities', arguments: _activities); },
+              onTap: () { context.navigateTo(const ActivitiesTab()); },
+
               child: Container(
                 alignment: Alignment.center,
 

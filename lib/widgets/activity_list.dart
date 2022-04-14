@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/utils/time_formats.dart';
-import 'package:etv_app/data_source/objects.dart';
+
+import '/data_source/objects.dart';
+import '/utils/time_formats.dart';
+import '/utils/etv_style.dart';
+import '/router.gr.dart';
 
 class ActivityList extends StatelessWidget {
   final List<EtvActivity> activities;
@@ -32,12 +35,13 @@ class ActivityList extends StatelessWidget {
 
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/activity',
-                  arguments: e,
+                context.navigateTo(
+                  AppScaffold(children: [
+                    ActivitiesTab(children: [ ActivityRoute(activity: e) ]),
+                  ])
                 );
               },
+
               borderRadius: BorderRadius.circular(innerBorderRadius),
 
               child: Container(

@@ -9,13 +9,16 @@ import 'package:etv_app/widgets/utils/loaded_network_image.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class ActivityPage extends StatelessWidget {
-  const ActivityPage([Key? key]) : super(key: key);
+  final EtvActivity activity;
+
+  const ActivityPage({
+    required this.activity,
+    Key? key
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context)
   {
-    final EtvActivity activity = ModalRoute.of(context)!.settings.arguments as EtvActivity;
-
     return DefaultLayout(
       title: 'Activiteit',
       textBackground: true,

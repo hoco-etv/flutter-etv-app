@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/layouts/default.dart';
-import 'package:etv_app/widgets/calendar.dart';
-import 'package:etv_app/widgets/boardroom_indicator.dart';
-import 'package:etv_app/widgets/news_booth.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage([Key? key]) : super(key: key);
+import '/utils/etv_style.dart';
+import '/layouts/default.dart';
+import '/widgets/calendar.dart';
+import '/widgets/news_booth.dart';
+import '/widgets/boardroom_indicator.dart';
 
-  final boardroomIndicatorState = GlobalKey<BoardroomIndicatorState>();
-  final calendarState = GlobalKey<CalendarState>();
-  final newsBoothState = GlobalKey<NewsBoothState>();
+class DashboardPage extends StatelessWidget {
+  const DashboardPage([Key? key]) : super(key: key);
 
   @override
   Widget build(BuildContext context)
   {
+    final boardroomIndicatorState = GlobalKey<BoardroomIndicatorState>();
+    final calendarState = GlobalKey<CalendarState>();
+    final newsBoothState = GlobalKey<NewsBoothState>();
+
     return DefaultLayout(
       title: 'Electrotechnische Vereeniging',
       pageContent: RefreshIndicator(

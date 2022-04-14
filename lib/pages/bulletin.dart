@@ -7,13 +7,16 @@ import 'package:etv_app/data_source/objects.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class BulletinPage extends StatelessWidget {
-  const BulletinPage([Key? key]) : super(key: key);
+  final EtvBulletin bulletin;
+
+  const BulletinPage({
+    required this.bulletin,
+    Key? key
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context)
   {
-    final EtvBulletin newsItem = ModalRoute.of(context)!.settings.arguments as EtvBulletin;
-
     return DefaultLayout(
       title: 'Nieuwsbericht',
       textBackground: true,
@@ -23,7 +26,7 @@ class BulletinPage extends StatelessWidget {
         children: <Widget>[
           /* Title */
           Text(
-            newsItem.name,
+            bulletin.name,
             style: Theme.of(context).textTheme.headline2,
           ),
 
@@ -34,12 +37,12 @@ class BulletinPage extends StatelessWidget {
             child: Wrap(
               children: [
                 Text(
-                  '${newsItem.author}  •  ',
+                  '${bulletin.author}  •  ',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
 
                 Text(
-                  formatDate(newsItem.createdAt),
+                  formatDate(bulletin.createdAt),
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
               ]
@@ -50,7 +53,7 @@ class BulletinPage extends StatelessWidget {
 
           /* Content */
           HtmlWidget(
-            newsItem.description,
+            bulletin.description,
 
             onTapUrl: (url) => launch(url),
             customStylesBuilder: (e) {
