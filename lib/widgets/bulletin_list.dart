@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/utils/time_formats.dart';
-import 'package:etv_app/data_source/objects.dart';
+
+import '/router.gr.dart';
+import '/utils/etv_style.dart';
+import '/utils/time_formats.dart';
+import '/data_source/objects.dart';
 
 class BulletinList extends StatelessWidget {
   final List<EtvBulletin> newsItems;
@@ -31,12 +34,11 @@ class BulletinList extends StatelessWidget {
 
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/bulletin',
-                arguments: ni,
+              context.navigateTo(
+                NewsTab(children: [ BulletinRoute(bulletin: ni) ]),
               );
             },
+
             borderRadius: BorderRadius.circular(innerBorderRadius),
 
             child: Container(

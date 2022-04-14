@@ -1,9 +1,12 @@
 import 'dart:math';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/widgets/bulletin_list.dart';
-import 'package:etv_app/data_source/api_client/main.dart';
+
+import '/router.gr.dart';
+import '/utils/etv_style.dart';
+import '/widgets/bulletin_list.dart';
+import '/data_source/api_client/main.dart';
 
 class NewsBooth extends StatefulWidget {
   const NewsBooth({Key? key}) : super(key: key);
@@ -43,7 +46,8 @@ class NewsBoothState extends State<NewsBooth> {
           Visibility(
             visible: (_newsItems?.length ?? 0) > 3,
             child: GestureDetector(
-              onTap: () { Navigator.pushNamed(context, '/news', arguments: _newsItems); },
+              onTap: () { context.navigateTo(const NewsTab()); },
+
               child: Container(
                 alignment: Alignment.center,
 

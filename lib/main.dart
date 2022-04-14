@@ -1,43 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:etv_app/utils/etv_style.dart';
-import 'package:etv_app/pages/home.dart';
-import 'package:etv_app/pages/news.dart';
-import 'package:etv_app/pages/profile.dart';
-import 'package:etv_app/pages/activity.dart';
-import 'package:etv_app/pages/bulletin.dart';
-import 'package:etv_app/pages/activities.dart';
-import 'package:etv_app/pages/search_members.dart';
+
+import '/utils/etv_style.dart';
+import '/router.gr.dart';
 
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('user');
 
-  runApp(const EtvApp());
+  runApp(EtvApp());
 }
 
 class EtvApp extends StatelessWidget {
-  const EtvApp({Key? key}) : super(key: key);
+  EtvApp({Key? key}) : super(key: key);
+
+  final appRouter = AppRouter();
+
+  ThemeData get theme
+  {
+    return getTheme(SchedulerBinding.instance!.window.platformBrightness);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'ETV',
       color: etvRed,
 
-      theme: getTheme(SchedulerBinding.instance!.window.platformBrightness),
-
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomePage(),
-        '/news': (context) => const NewsPage(),
-        '/profile': (context) => const ProfilePage(),
-        '/activity': (context) => const ActivityPage(),
-        '/bulletin': (context) => const BulletinPage(),
-        '/activities': (context) => const ActivitiesPage(),
-        '/search_members': (context) => const MemberSearchPage(),
-      }
+      theme: theme,
+      routerDelegate: appRouter.delegate(),
+      routeInformationParser: appRouter.defaultRouteParser(),
     );
   }
 }
