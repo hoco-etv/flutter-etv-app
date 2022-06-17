@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -73,7 +74,7 @@ class ActivityList extends StatelessWidget {
                     /* Title */
                     Text(
                       e.name,
-                      style: Theme.of(context).textTheme.headline6?.merge(const TextStyle(fontFamily: 'Roboto')),
+                      style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(fontFamily: 'Roboto')),
                     ),
 
                     /* Subtitle */
@@ -92,6 +93,37 @@ class ActivityList extends StatelessWidget {
         );
       })
       .toList()
+      + [ /* "Geen activiteiten" placeholder */
+        if (activities.isEmpty) const SizedBox(height: outerPaddingSize),
+        if (activities.isEmpty) DottedBorder(
+          borderType: BorderType.RRect,
+          strokeWidth: 4,
+          strokeCap: StrokeCap.round,
+          dashPattern: const [10, 8, 5, 8],
+          radius: const Radius.circular(innerBorderRadius),
+
+          color: Theme.of(context).brightness == Brightness.light
+            ? Colors.white
+            : Colors.grey.shade800.withOpacity(0.6),
+
+          child: ClipPath(
+            clipper: ShapeBorderClipper(shape: innerBorderShape),
+
+            child: SizedBox(
+              height: 60,
+              child: Center(
+                child: Text(
+                  "Geen activiteiten\nin de komende maand",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                    color: Colors.grey.shade500.withOpacity(0.8)
+                  ),
+                )
+              ),
+            )
+          )
+        )
+      ]
     );
   }
 }
