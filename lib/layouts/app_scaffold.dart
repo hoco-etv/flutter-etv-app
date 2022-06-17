@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'components/bottom_navigation_bar.dart' as etv_app;
 import '/data_source/store.dart';
-import '/router.gr.dart';
+import '/router.gr.dart' as Router;
 
 class AppScaffold extends StatefulWidget {
   const AppScaffold([Key? key]) : super(key: key);
@@ -31,8 +31,9 @@ class AppScaffoldState extends State<AppScaffold> {
   {
     return WillPopScope(
       onWillPop: () {
-        if (context.topRoute.name != DashboardRoute.name) {
-          context.navigateTo(const DashboardRoute());
+        final route = context.router;
+        if (route.topRoute.name != Router.DashboardRoute.name) {
+          route.navigate(const Router.AppScaffold());
           return Future.value(false);
         }
 
@@ -41,45 +42,53 @@ class AppScaffoldState extends State<AppScaffold> {
 
       child: AutoTabsScaffold(
         routes: const [
-          DashboardRoute(),
-          ActivitiesTab(),
-          NewsTab(),
-          MembersTab(),
-          ProfileRoute(),
+          Router.DashboardRoute(),
+          Router.ActivitiesTab(),
+          Router.NewsTab(),
+          Router.MembersTab(),
+          Router.ProfileRoute(),
         ],
 
         bottomNavigationBuilder: (_, tabsRouter) => etv_app.BottomNavigationBar(
           activeIndex: tabsRouter.activeIndex,
-          onTap: tabsRouter.setActiveIndex,
+          onTap: (int index) {
+            if (
+              index == tabsRouter.activeIndex
+              && tabsRouter.topRoute.breadcrumbs.length > 3
+            ) {
+              tabsRouter.popTop();
+            }
+            tabsRouter.setActiveIndex(index);
+          },
 
           navButtons: <etv_app.NavButtonData>[
             const etv_app.NavButtonData(
-              destination: DashboardRoute(),
+              destination: Router.DashboardRoute(),
               label: 'Huis',
               icon: Feather.home,
             ),
 
             const etv_app.NavButtonData(
-              destination: ActivitiesRoute(),
+              destination: Router.ActivitiesRoute(),
               label: 'Activiteiten',
               icon: Feather.calendar,
             ),
 
             const etv_app.NavButtonData(
-              destination: NewsRoute(),
+              destination: Router.NewsRoute(),
               label: 'Nieuws',
               icon: Feather.bell,
             ),
 
             etv_app.NavButtonData(
               visible: loggedIn,
-              destination: const MemberSearchRoute(),
+              destination: const Router.MemberSearchRoute(),
               label: 'Leden',
               icon: Feather.search,
             ),
 
             const etv_app.NavButtonData(
-              destination: ProfileRoute(),
+              destination: Router.ProfileRoute(),
               label: 'Profiel',
               icon: Feather.user,
             ),

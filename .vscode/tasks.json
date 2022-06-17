@@ -12,6 +12,30 @@
 			"group": "build",
 			"problemMatcher": [],
 			"label": "flutter: flutter build apk (split)"
-		}
+		},
+		{
+			"type": "flutter",
+			"command": "flutter",
+			"args": [
+				"pub",
+				"run",
+				"build_runner",
+				"build"
+			],
+			"group": "build",
+			"label": "flutter: route builder",
+		},
+		{
+			"type": "flutter",
+			"command": "flutter",
+			"args": [
+				"pub",
+				"run",
+				"build_runner",
+				"watch"
+			],
+			"group": "build",
+			"label": "flutter: route builder (watch)",
+		},
 	]
 }

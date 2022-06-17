@@ -33,6 +33,8 @@ dependencies:
 
   flutter_widget_from_html: ^0.8.2
 
+  dotted_border: ^2.0.0+2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

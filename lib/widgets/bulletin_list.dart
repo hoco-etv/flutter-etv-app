@@ -35,7 +35,12 @@ class BulletinList extends StatelessWidget {
           child: InkWell(
             onTap: () {
               context.navigateTo(
-                NewsTab(children: [ BulletinRoute(bulletin: ni) ]),
+                AppScaffold(
+                  children: [
+                    const DashboardRoute(),
+                    NewsTab(children: [ BulletinRoute(bulletin: ni) ]),
+                  ],
+                ),
               );
             },
 
