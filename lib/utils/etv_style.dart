@@ -60,58 +60,60 @@ ThemeData getTheme(Brightness brightness)
 
     textTheme: TextTheme(
       bodyText1: const TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         height: 1.5,
       ),
       bodyText2: const TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         height: 1.5,
       ),
 
       headline1: TextStyle(
-        fontSize: 48,
+        fontSize: 36,
         fontFamily: 'RobotoSlab',
         fontWeight: FontWeight.w300,
         height: 1.5,
         color: colorScheme.onBackground,
       ),
       headline2: TextStyle(
-        fontSize: 30,
+        fontSize: 32,
         fontFamily: 'RobotoSlab',
         fontWeight: FontWeight.w400,
         height: 1.5,
         color: colorScheme.onBackground,
       ),
       headline3: TextStyle(
-        fontSize: 26,
+        fontSize: 21,
         fontWeight: FontWeight.w500,
         height: 1.5,
         color: colorScheme.onBackground,
       ),
 
       headline4: TextStyle(
-        fontSize: 24,
+        fontSize: 19,
         fontWeight: FontWeight.w500,
         height: 1.5,
         color: colorScheme.onSurface.withOpacity(0.8),
       ),
       headline5: const TextStyle(
-        fontSize: 20,
+        fontSize: 17,
         fontFamily: 'RobotoSlab',
         height: 1.5,
       ),
       headline6: const TextStyle(
-        fontSize: 18,
+        fontSize: 15,
         fontFamily: 'RobotoSlab',
         height: 1.5,
       ),
 
       subtitle1: TextStyle(
+        fontSize: 15,
         fontFamily: 'RobotoSlab',
         height: 1.5,
         color: colorScheme.onSurface.withOpacity(0.6),
       ),
       subtitle2: TextStyle(
+        fontSize: 14,
         fontWeight: FontWeight.w400,
         height: 1.4,
         color: colorScheme.onSurface.withOpacity(0.6),

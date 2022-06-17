@@ -178,6 +178,16 @@ class ProfileView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline6,
                   ),
+
+                  // Text(userProfile.boards![0].adjective, style: const TextStyle(
+                  //   fontStyle: FontStyle.italic,
+                  //   height: 1.8,
+                  // )),
+
+                  // Text(
+                  //   '"${userProfile.boards![0].motto}"',
+                  //   style: Theme.of(context).textTheme.subtitle1,
+                  // ),
                 ]
               )
             ],

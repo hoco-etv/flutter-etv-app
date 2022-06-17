@@ -59,7 +59,7 @@ class CalendarState extends State<Calendar> {
                     Text(
                       'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) > 1 ? 'en' : ''}',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                       ),

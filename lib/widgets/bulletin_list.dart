@@ -57,11 +57,7 @@ class BulletinList extends StatelessWidget {
                   Text(
                     ni.name,
 
-                    style: (
-                      compact
-                        ? Theme.of(context).textTheme.headline6
-                        : Theme.of(context).textTheme.headline5
-                      )?.merge(const TextStyle(height: 1.3)),
+                    style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(height: 1.3)),
                     softWrap: true,
                     overflow: TextOverflow.clip,
                   ),

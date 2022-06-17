@@ -58,7 +58,7 @@ class NewsBoothState extends State<NewsBooth> {
                     Text(
                       'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) > 1 ? 'en' : ''}',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                       ),
