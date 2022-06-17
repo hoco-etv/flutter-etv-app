@@ -36,9 +36,12 @@ class ActivityList extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 context.navigateTo(
-                  AppScaffold(children: [
-                    ActivitiesTab(children: [ ActivityRoute(activity: e) ]),
-                  ])
+                  AppScaffold(
+                    children: [
+                      const DashboardRoute(),
+                      ActivitiesTab(children: [ ActivityRoute(activity: e), ]),
+                    ],
+                  ),
                 );
               },
 
