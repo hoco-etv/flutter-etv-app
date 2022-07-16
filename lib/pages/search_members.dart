@@ -69,19 +69,19 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
               ),
             ),
           ),
-        ]
 
-        + (results ?? []).map(
-          (Person member) => Card(
+          for (final Person person in (results ?? [])) Card(
             margin: const EdgeInsets.only(top: outerPaddingSize),
 
             child: Container(
-              padding: outerPadding,
+              padding: person.boards != null || !(person.committees?.isEmpty ?? true)
+                ? outerPadding.copyWith(bottom: 0)
+                : outerPadding,
 
-              child: ProfileView(member, summary: true),
+              child: ProfileView(person, summary: true),
             )
           ),
-        ).toList()
+        ]
       ),
     );
   }

@@ -9,55 +9,67 @@ import '/data_source/objects.dart';
 import '/data_source/api_client/utils.dart';
 import '/widgets/utils/loaded_network_image.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   final Person person;
   final bool summary;
 
   const ProfileView(this.person, {this.summary = false, Key? key}) : super(key: key);
 
   @override
-  Widget build(context)
-  {
-    final mainBoardPicture =
-      person.boards?[0].pictures
-      .fold<BoardPicture?>(null, (BoardPicture? a, b) => a == null ? b : a.priority < b.priority ? a : b );
-    final boardMember =
-      person.boards?[0].members.singleWhere((m) => m.personId == person.personId);
+  State<ProfileView> createState() => _ProfileViewState();
+}
 
-    if (person.committees != null) {
-      person.committees!.sort((a, b) {
+class _ProfileViewState extends State<ProfileView> {
+  bool activitiesExpanded = false;
+  BoardMember? boardMember;
+  BoardPicture? mainBoardPicture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    boardMember =
+      widget.person.boards?[0].members.singleWhere((m) => m.personId == widget.person.personId);
+    mainBoardPicture =
+      widget.person.boards?[0].pictures
+      .fold<BoardPicture?>(null, (BoardPicture? a, b) => a == null ? b : a.priority < b.priority ? a : b );
+
+    if (widget.person.committees != null) {
+      widget.person.committees!.sort((a, b) {
         if (a.discharge == null && b.discharge != null) return -1;
         if (b.discharge == null && a.discharge != null) return 1;
         if (a.installation == null || b.installation == null) return 0;
         return b.installation!.compareTo(a.installation!);
       });
     }
+  }
 
+  @override
+  Widget build(context)
+  {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[]
+      children: <Widget>[
+        /* User picture */
+        if (widget.person.pictureId != null) ...[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(innerPaddingSize),
 
-      /* User picture */
-      + (person.pictureId == null ? [] : [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(innerPaddingSize),
-
-          child: LoadedNetworkImage(
-            person.pictureUrl,
-            httpHeaders: authHeader(),
-            aspectRatio: 1,
-            fit: BoxFit.cover,
+            child: LoadedNetworkImage(
+              widget.person.pictureUrl,
+              httpHeaders: authHeader(),
+              aspectRatio: 1,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
 
-        const SizedBox(height: innerPaddingSize),
-      ])
+          const SizedBox(height: innerPaddingSize),
+        ],
 
-      /* Person info */
-      + [
+        /*** Person info ***/
         /* Name */
         Text(
-          person.name,
+          widget.person.name,
           style: Theme.of(context).textTheme.headline3,
         ),
 
@@ -73,19 +85,19 @@ class ProfileView extends StatelessWidget {
             {
               'label': 'E-mail',
               'icon': Feather.mail,
-              'text': person.email,
-              'link': 'mailto:${person.email!}'
+              'text': widget.person.email,
+              'link': Uri(scheme: 'mailto', path: widget.person.email),
             },
             {
               'label': 'Telefoonnummer',
               'icon': Feather.phone,
-              'text': person.phoneNumber,
-              'link': 'tel:${person.phoneNumber}'
+              'text': widget.person.phoneNumber,
+              'link': Uri(scheme: 'tel', path: widget.person.phoneNumber),
             },
             {
               'label': 'Verjaardag',
               'icon': Feather.gift,
-              'text': formatDate(person.birthDate!, true),
+              'text': formatDate(widget.person.birthDate!, true),
             },
           ]
           .where((element) => element['text'] != null)
@@ -104,13 +116,13 @@ class ProfileView extends StatelessWidget {
 
             GestureDetector(
               onTap: rowSpec.containsKey('link')
-                ? () async { await launch(rowSpec['link'] as String); }
+                ? () async { await launchUrl(rowSpec['link'] as Uri); }
                 : null,
 
               onLongPress: () {
                 Clipboard.setData(ClipboardData(text:
                   rowSpec.containsKey('link')
-                    ? rowSpec['link'] as String
+                    ? (rowSpec['link'] as Uri).toString()
                     : rowSpec['text'] as String
                 ));
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -128,142 +140,177 @@ class ProfileView extends StatelessWidget {
           ]))
           .toList(),
         ),
+
+        if (widget.person.boards != null || !(widget.person.committees?.isEmpty ?? true)) ...[
+          if (widget.summary) ExpansionTile(
+            title: Text(
+              [
+                if (widget.person.boards != null) 'Bestuur',
+                if (!(widget.person.committees?.isEmpty ?? true)) 'commissies'
+              ]
+              .join(', '),
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+
+            tilePadding: const EdgeInsets.only(),
+
+            // subtitle: const Text('Custom expansion arrow icon'),
+            trailing: Icon(
+              activitiesExpanded
+                  ? Icons.arrow_drop_up_rounded
+                  : Icons.arrow_drop_down_rounded,
+            ),
+
+            onExpansionChanged: (bool expanded) {
+              setState(() => activitiesExpanded = expanded);
+            },
+
+            childrenPadding: const EdgeInsets.only(bottom: outerPaddingSize),
+
+            children: associationActivities,
+          )
+          else ...associationActivities,
+        ],
       ]
+    );
+  }
 
-      /* Board */
-      + (summary || person.boards == null ? [] : [
-        const SizedBox(height: outerPaddingSize*2),
 
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
+  List<Widget> get associationActivities => [
+    /* Board */
+    if (widget.person.boards != null) ...[
+      SizedBox(height: widget.summary ? outerPaddingSize : outerPaddingSize*2),
 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
 
-            children: [
-              Column(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+
+          children: [
+            Column(
+              children: [
+                /* Board picture */
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(innerBorderRadius),
+                  child: LoadedNetworkImage(
+                    buildPictureUrl(PictureType.board, widget.person.boards![0].id),
+                    baseColor: widget.person.boards![0].color
+                  ),
+                ),
+
+                const SizedBox(height: innerPaddingSize),
+
+                Text(
+                  'Het ${widget.person.boards![0].number}ste Bestuur der Electrotechnische Vereeniging',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline5?.merge(TextStyle(
+                    color: widget.person.boards![0].color,
+                  )),
+                ),
+
+                const SizedBox(height: innerPaddingSize/4),
+
+                Text(
+                  widget.person.boards![0].discharge == null
+                    ? 'sinds ${formatDate(widget.person.boards![0].installation)}'
+                    : formatDateSpan(widget.person.boards![0].installation, widget.person.boards![0].discharge!),
+                  style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(height: 2)),
+                ),
+
+                const SizedBox(height: innerPaddingSize/2),
+
+                Text(
+                  '${boardMember!.functionNumber}. ${boardMember!.functionName}'.replaceFirst('&', '\n&'),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+
+                // Text(userProfile.boards![0].adjective, style: const TextStyle(
+                //   fontStyle: FontStyle.italic,
+                //   height: 1.8,
+                // )),
+
+                // Text(
+                //   '"${userProfile.boards![0].motto}"',
+                //   style: Theme.of(context).textTheme.subtitle1,
+                // ),
+              ]
+            )
+          ],
+        ),
+      ),
+    ],
+
+    if (widget.person.boards != null && !(widget.person.committees?.isEmpty ?? true))
+      const SizedBox(height: outerPaddingSize),
+
+    /* Committees */
+    if (!(widget.person.committees?.isEmpty ?? true)) ...[
+      Table(
+        columnWidths: const {
+          0: FixedColumnWidth(28),
+        },
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+
+        children: widget.person.committees!.map((committee) => TableRow(
+          children: [
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.top,
+              child: Container(
+                margin: const EdgeInsets.only(top: innerPaddingSize*1.6),
+                padding: const EdgeInsets.only(top: 4, right: 8),
+
+                child: Icon(
+                  Feather.users,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 20,
+                ),
+              ),
+            ),
+
+            /* Committee entry */
+            Container(
+              margin: const EdgeInsets.only(top: innerPaddingSize*1.6, left: 3),
+
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+
                 children: [
-                  /* Board picture */
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(innerBorderRadius),
-                    child: LoadedNetworkImage(
-                      buildPictureUrl(PictureType.board, person.boards![0].id),
-                      baseColor: person.boards![0].color
-                    ),
-                  ),
-
-                  const SizedBox(height: innerPaddingSize),
-
+                  /* Committee name */
                   Text(
-                    'Het ${person.boards![0].number}ste Bestuur der Electrotechnische Vereeniging',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline5?.merge(TextStyle(
-                      color: person.boards![0].color,
-                    )),
-                  ),
-
-                  const SizedBox(height: innerPaddingSize/4),
-
-                  Text(
-                    person.boards![0].discharge == null
-                      ? 'sinds ${formatDate(person.boards![0].installation)}'
-                      : formatDateSpan(person.boards![0].installation, person.boards![0].discharge!),
-                    style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(height: 2)),
-                  ),
-
-                  const SizedBox(height: innerPaddingSize/2),
-
-                  Text(
-                    '${boardMember!.functionNumber}. ${boardMember.functionName}'.replaceFirst('&', '\n&'),
-                    textAlign: TextAlign.center,
+                    committee.committeeName,
                     style: Theme.of(context).textTheme.headline6,
                   ),
 
-                  // Text(userProfile.boards![0].adjective, style: const TextStyle(
-                  //   fontStyle: FontStyle.italic,
-                  //   height: 1.8,
-                  // )),
-
-                  // Text(
-                  //   '"${userProfile.boards![0].motto}"',
-                  //   style: Theme.of(context).textTheme.subtitle1,
-                  // ),
-                ]
-              )
-            ],
-          ),
-        ),
-
-        const SizedBox(height: outerPaddingSize),
-      ])
-
-      /* Committees */
-      + (summary || person.committees == null ? [] : [
-        Table(
-          columnWidths: const {
-            0: FixedColumnWidth(28),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-
-          children: person.committees!.map((committee) => TableRow(
-            children: [
-              TableCell(
-                verticalAlignment: TableCellVerticalAlignment.top,
-                child: Container(
-                  margin: const EdgeInsets.only(top: innerPaddingSize*1.6),
-                  padding: const EdgeInsets.only(top: 4, right: 8),
-
-                  child: Icon(
-                    Feather.users,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 20,
+                  Visibility(
+                    visible: committee.functionName?.isNotEmpty == true,
+                    child: Text(
+                      committee.functionName ?? '',
+                      style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(
+                        height: 1.25,
+                      )),
+                    ),
                   ),
-                ),
+
+                  /* Committee participation period */
+                  Visibility(
+                    visible: committee.installation != null || committee.discharge != null,
+                    child: Text(
+                      committee.discharge == null
+                        ? committee.installation != null ? 'sinds ${formatDate(committee.installation!)}' : ''
+                        : committee.installation != null
+                          ? formatDateSpan(committee.installation!, committee.discharge!)
+                          : 'onbekend - ${formatDate(committee.discharge!)}',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ),
+                ],
               ),
-
-              /* Committee entry */
-              Container(
-                margin: const EdgeInsets.only(top: innerPaddingSize*1.6, left: 3),
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                  children: [
-                    /* Committee name */
-                    Text(
-                      committee.committeeName,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-
-                    Visibility(
-                      visible: committee.functionName?.isNotEmpty == true,
-                      child: Text(
-                        committee.functionName ?? '',
-                        style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(
-                          height: 1.25,
-                        )),
-                      ),
-                    ),
-
-                    /* Committee participation period */
-                    Visibility(
-                      visible: committee.installation != null || committee.discharge != null,
-                      child: Text(
-                        committee.discharge == null
-                          ? committee.installation != null ? 'sinds ${formatDate(committee.installation!)}' : ''
-                          : committee.installation != null
-                            ? formatDateSpan(committee.installation!, committee.discharge!)
-                            : 'onbekend - ${formatDate(committee.discharge!)}',
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ]
-          )).toList()
-        ),
-      ])
-    );
-  }
+            ),
+          ]
+        )).toList()
+      ),
+    ],
+  ];
 }
