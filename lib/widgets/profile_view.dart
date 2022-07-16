@@ -146,20 +146,13 @@ class _ProfileViewState extends State<ProfileView> {
             title: Text(
               [
                 if (widget.person.boards != null) 'Bestuur',
-                if (!(widget.person.committees?.isEmpty ?? true)) 'commissies'
+                if (!(widget.person.committees?.isEmpty ?? true)) '${widget.person.committees!.length} commissies'
               ]
               .join(', '),
               style: Theme.of(context).textTheme.subtitle1,
             ),
 
-            tilePadding: const EdgeInsets.only(),
-
-            // subtitle: const Text('Custom expansion arrow icon'),
-            trailing: Icon(
-              activitiesExpanded
-                  ? Icons.arrow_drop_up_rounded
-                  : Icons.arrow_drop_down_rounded,
-            ),
+            tilePadding: const EdgeInsets.all(0),
 
             onExpansionChanged: (bool expanded) {
               setState(() => activitiesExpanded = expanded);

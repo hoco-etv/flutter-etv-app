@@ -107,7 +107,7 @@ class ActivityPage extends StatelessWidget {
                   child: HtmlWidget(
                     activity.description ?? '',
 
-                    onTapUrl: (url) => launch(url),
+                    onTapUrl: (url) => launchUrl(Uri.parse(url)),
                     customWidgetBuilder: (element) {
                       if (element.localName == 'img' && element.attributes.containsKey('src')) {
                         return Image.network(element.attributes['src']!);
