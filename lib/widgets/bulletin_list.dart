@@ -38,7 +38,7 @@ class BulletinList extends StatelessWidget {
                 AppScaffold(
                   children: [
                     const DashboardRoute(),
-                    NewsTab(children: [ BulletinRoute(bulletin: ni) ]),
+                    NewsTab(children: [ const NewsRoute(), BulletinRoute(bulletin: ni) ]),
                   ],
                 ),
               );

@@ -40,7 +40,7 @@ class ActivityList extends StatelessWidget {
                   AppScaffold(
                     children: [
                       const DashboardRoute(),
-                      ActivitiesTab(children: [ ActivityRoute(activity: e), ]),
+                      ActivitiesTab(children: [ const ActivitiesRoute(), ActivityRoute(activity: e), ]),
                     ],
                   ),
                 );

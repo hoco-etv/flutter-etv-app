@@ -54,7 +54,7 @@ class AppScaffoldState extends State<AppScaffold> {
           onTap: (int index) {
             if (
               index == tabsRouter.activeIndex
-              && tabsRouter.topRoute.breadcrumbs.length > 3
+              && tabsRouter.topRoute.breadcrumbs.last.path == ':id'
             ) {
               tabsRouter.popTop();
             }

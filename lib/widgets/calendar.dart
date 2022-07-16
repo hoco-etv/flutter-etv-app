@@ -47,7 +47,7 @@ class CalendarState extends State<Calendar> {
           Visibility(
             visible: (_activities?.length ?? 0) > 3,
             child: GestureDetector(
-              onTap: () { context.navigateTo(const ActivitiesTab()); },
+              onTap: () { context.navigateTo(const ActivitiesTab(children: [ ActivitiesRoute() ])); },
 
               child: Container(
                 alignment: Alignment.center,

@@ -13,7 +13,7 @@
 import 'package:auto_route/auto_route.dart' as _i3;
 import 'package:flutter/material.dart' as _i10;
 
-import 'data_source/api_client/main.dart' as _i11;
+import 'data_source/objects.dart' as _i11;
 import 'layouts/app_scaffold.dart' as _i1;
 import 'pages/activities.dart' as _i5;
 import 'pages/activity.dart' as _i6;
