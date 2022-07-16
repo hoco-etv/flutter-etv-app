@@ -127,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final githubNewIssueUrl = Uri(
       scheme: 'https',
       host: 'github.com',
-      path: 'hoco-etv/fluttere-etv-app/issues/new'
+      path: 'hoco-etv/flutter-etv-app/issues/new'
     );
 
     final feedbackWidget = RichText(
