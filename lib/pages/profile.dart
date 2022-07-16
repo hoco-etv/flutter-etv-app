@@ -77,14 +77,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Color get _balanceColor
   {
-    return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0 ? etvRed.shade200 : barelyBlack;
+    return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0
+      ? etvRed.shade200
+      : Theme.of(context).colorScheme.onSurface;
   }
 
   String get _balanceText
   {
     return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0
       ? 'Kom het eens een keer aanvullen bij de balie en maak de Thesau heel blij :)'
-      : 'Goed bezig ;)';
+      : '';
   }
 
   @override
@@ -272,10 +274,9 @@ class _ProfilePageState extends State<ProfilePage> {
               // Text('Body text 2', style: Theme.of(context).textTheme.bodyText2),
               // Text('Overline', style: Theme.of(context).textTheme.overline),
 
-              Visibility(
-                visible: userProfile?.person?.digidebBalance != null,
-
-                child: Card(child: Container(
+              if (userProfile?.person?.digidebBalance != null) ...[
+                Card(
+                  child: Container(
                   padding: outerPadding.copyWith(top: innerPaddingSize),
 
                   child: Column(
@@ -289,7 +290,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
 
                           Text(
-                            '€ -${userProfile?.person?.digidebBalance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
+                            '€ ${(-userProfile!.person!.digidebBalance!).toStringAsFixed(2).replaceFirst('.', ',')}',
                             style: TextStyle(
                               fontSize: 30,
                               fontFamily: 'RobotoSlab',
@@ -302,19 +303,21 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
 
-                      const SizedBox(height: innerPaddingSize/2),
+                      if (userProfile!.person!.digidebBalance! > 0) ...[
+                        const SizedBox(height: innerPaddingSize/2),
 
-                      Text(
-                        _balanceText,
-                        style: Theme.of(context).textTheme.subtitle1,
-                        textAlign: TextAlign.center,
-                      )
+                        Text(
+                          _balanceText,
+                          style: Theme.of(context).textTheme.subtitle1,
+                          textAlign: TextAlign.center,
+                        )
+                      ],
                     ],
                   ),
                 )),
-              ),
 
-              const SizedBox(height: outerPaddingSize),
+                const SizedBox(height: outerPaddingSize),
+              ],
 
               Card(child: Container(
                 padding: outerPadding,

@@ -57,7 +57,7 @@ class CalendarState extends State<Calendar> {
 
                   children: [
                     Text(
-                      'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) > 1 ? 'en' : ''}',
+                      'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) -3 == 1 ? '' : 'en'}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,

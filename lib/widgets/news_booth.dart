@@ -56,7 +56,7 @@ class NewsBoothState extends State<NewsBooth> {
 
                   children: [
                     Text(
-                      'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) > 1 ? 'en' : ''}',
+                      'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) -3 == 1 ? '' : 'en'}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
