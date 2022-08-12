@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import './api_client/_config.dart';
 
 class User {
@@ -143,6 +142,21 @@ class Person {
   String get pictureUrl
   {
     return baseUrl + '/members/$personId/picture';
+  }
+}
+
+class EtvCoffee {
+  final String time;
+
+  const EtvCoffee({
+    required this.time,
+  });
+
+  factory EtvCoffee.fromJson(String time)
+  {
+    return EtvCoffee(
+      time: time,
+    );
   }
 }
 

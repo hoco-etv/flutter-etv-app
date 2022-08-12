@@ -46,7 +46,7 @@ No idea, this is a `//TODO`.
   - [ ] Periodic background fetching / push message support (TBD)
   - [ ] Notification bubble
   - [ ] Toggle for notifications
-- [ ] Koffietimer connection
+- [x] Koffietimer connection
 - [x] Ledensearch
 - [x] More profile info
 - [ ] Quotes
