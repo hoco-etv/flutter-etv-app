@@ -47,7 +47,7 @@ class CalendarState extends State<Calendar> {
           Visibility(
             visible: (_activities?.length ?? 0) > 3,
             child: GestureDetector(
-              onTap: () { context.navigateTo(const ActivitiesTab()); },
+              onTap: () { context.navigateTo(const ActivitiesTab(children: [ ActivitiesRoute() ])); },
 
               child: Container(
                 alignment: Alignment.center,
@@ -57,7 +57,7 @@ class CalendarState extends State<Calendar> {
 
                   children: [
                     Text(
-                      'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) > 1 ? 'en' : ''}',
+                      'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) -3 == 1 ? '' : 'en'}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,

@@ -19,7 +19,7 @@ class EtvApp extends StatelessWidget {
 
   ThemeData get theme
   {
-    return getTheme(SchedulerBinding.instance!.window.platformBrightness);
+    return getTheme(SchedulerBinding.instance.window.platformBrightness);
   }
 
   @override

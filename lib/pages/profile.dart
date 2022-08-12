@@ -1,10 +1,11 @@
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
 import '/widgets/profile_view.dart';
-import '/widgets/utils/switcher.dart';
 import '/data_source/store.dart';
 import '/data_source/objects.dart';
 import '/data_source/api_client/endpoints.dart' as etv;
@@ -76,14 +77,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Color get _balanceColor
   {
-    return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0 ? etvRed.shade200 : barelyBlack;
+    return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0
+      ? etvRed.shade200
+      : Theme.of(context).colorScheme.onSurface;
   }
 
   String get _balanceText
   {
     return userProfile?.person?.digidebBalance != null && userProfile!.person!.digidebBalance! > 0
       ? 'Kom het eens een keer aanvullen bij de balie en maak de Thesau heel blij :)'
-      : 'Goed bezig ;)';
+      : '';
   }
 
   @override
@@ -113,148 +116,194 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context)
   {
+    final emailUrl = Uri(
+      scheme: 'mailto',
+      path: 'HoCo-ETV@tudelft.nl',
+      queryParameters: {
+        'subject': '[HoCo] Suggestie voor de ETV-app',
+        'body': 'Hoi HoCo,\n\nIk heb een suggestie voor / klacht over de ETV-app: \n\n'
+      }
+    );
+    final githubNewIssueUrl = Uri(
+      scheme: 'https',
+      host: 'github.com',
+      path: 'hoco-etv/flutter-etv-app/issues/new'
+    );
+
+    final feedbackWidget = RichText(
+      textAlign: TextAlign.center,
+      textScaleFactor: 1.2,
+      text: TextSpan(
+        style: Theme.of(context).textTheme.bodyText1,
+        children: [
+          const TextSpan(text: 'Heb je ideeën of verbeterpunten voor deze app? Stuur dan een '),
+          TextSpan(
+            text: 'e-mail',
+            style: linkStyle,
+            recognizer: TapGestureRecognizer()..onTap = () { launchUrl(emailUrl); },
+          ),
+          const TextSpan(text: ', of '),
+          TextSpan(
+            text: 'maak een issue op GitHub',
+            style: linkStyle,
+            recognizer: TapGestureRecognizer()..onTap = () async {
+              if (await canLaunchUrl(githubNewIssueUrl)) launchUrl(githubNewIssueUrl);
+            },
+          ),
+          const TextSpan(text: '.'),
+        ]
+      ),
+    );
+
     return DefaultLayout(
       title: _loggedIn ? 'Profiel' : 'Log in',
       pageContent: ListView(children: [
-        Switcher(
-          condition: _loggedIn,
 
-          /* *** LOGIN PAGE *** */
-          childIfFalse: Container(
-            padding: outerPadding,
-            alignment: Alignment.center,
+        /* *** LOGIN PAGE *** */
+        if (!_loggedIn) Container(
+          padding: outerPadding,
+          alignment: Alignment.center,
 
-            child: Card(
-              child: Container(
-                padding: outerPadding,
+          child: Card(
+            child: Container(
+              padding: outerPadding.copyWith(bottom: 0),
 
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
 
-                  children: [
-                    FractionallySizedBox(
-                      widthFactor: 1/4,
-                      child: Image.asset('assets/etv_schild.png'),
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: 1/4,
+                    child: Image.asset('assets/etv_schild.png'),
+                  ),
+
+                  SizedBox(height: _loginFailedMessage == null ? outerPaddingSize : innerPaddingSize),
+
+                  Visibility(
+                    visible: _loginFailedMessage != null,
+                    child: Text(
+                      _loginFailedMessage ?? '',
+                      style: const TextStyle(color: Colors.red),
                     ),
+                  ),
 
-                    SizedBox(height: _loginFailedMessage == null ? outerPaddingSize : innerPaddingSize),
+                  const SizedBox(height: innerPaddingSize),
 
-                    Visibility(
-                      visible: _loginFailedMessage != null,
-                      child: Text(
-                        _loginFailedMessage ?? '',
-                        style: const TextStyle(color: Colors.red),
+                  AutofillGroup(
+                    child: Column(children: [
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'e-mail'),
+                        onChanged: (newValue) { username = newValue; },
+                        autofillHints: const [ AutofillHints.username ],
+                        textInputAction: TextInputAction.next,
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       ),
-                    ),
 
-                    const SizedBox(height: innerPaddingSize),
+                      const SizedBox(height: outerPaddingSize),
 
-                    AutofillGroup(
-                      child: Column(children: [
-                        TextFormField(
-                          decoration: const InputDecoration(labelText: 'e-mail'),
-                          onChanged: (newValue) { username = newValue; },
-                          autofillHints: const [ AutofillHints.username ],
-                          textInputAction: TextInputAction.next,
-                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                      TextFormField(
+                        obscureText: true,
+                        decoration: const InputDecoration(labelText: 'wachtwoord'),
+                        onChanged: (newValue) { password = newValue; },
+                        autofillHints: const [ AutofillHints.password ],
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (value) { login(); },
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                    ]),
+                  ),
+
+                  const SizedBox(height: outerPaddingSize),
+
+                  ElevatedButton(
+                    onPressed: !_loginRequestPending ? login : null,
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Log in',
+                          style: Theme.of(context).textTheme.button?.merge(const TextStyle(fontSize: 21)),
                         ),
 
-                        const SizedBox(height: outerPaddingSize),
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 3),
 
-                        TextFormField(
-                          obscureText: true,
-                          decoration: const InputDecoration(labelText: 'wachtwoord'),
-                          onChanged: (newValue) { password = newValue; },
-                          autofillHints: const [ AutofillHints.password ],
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_value) { login(); },
-                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                          child: Icon(
+                            Feather.log_in,
+                            size: (Theme.of(context).textTheme.button?.fontSize ?? 0)*2,
+                          ),
                         ),
-                      ]),
+                      ],
                     ),
+                  ),
 
-                    const SizedBox(height: outerPaddingSize),
+                  ExpansionTile(
+                    title: const Text('Feedback'),
+                    tilePadding: const EdgeInsets.symmetric(horizontal: innerPaddingSize/4),
+                    childrenPadding: const EdgeInsets.only(bottom: outerPaddingSize),
+                    children: [
+                      feedbackWidget,
+                    ],
+                  ),
+                ]
+              ),
+            )
 
-                    ElevatedButton(
-                      onPressed: !_loginRequestPending ? login : null,
+          ),
+        ),
 
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+        /* *** PROFILE *** */
+        if (_loggedIn) Container(
+          padding: outerPadding,
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: [
+              // Text('Heading 1', style: Theme.of(context).textTheme.headline1),
+              // Text('Heading 2', style: Theme.of(context).textTheme.headline2),
+              // Text('Heading 3', style: Theme.of(context).textTheme.headline3),
+              // Text('Heading 4', style: Theme.of(context).textTheme.headline4),
+              // Text('Heading 5', style: Theme.of(context).textTheme.headline5),
+              // Text('Heading 6', style: Theme.of(context).textTheme.headline6),
+              // Text('Subtitle 1', style: Theme.of(context).textTheme.subtitle1),
+              // Text('Subtitle 2', style: Theme.of(context).textTheme.subtitle2),
+              // Text('Body text 1', style: Theme.of(context).textTheme.bodyText1),
+              // Text('Body text 2', style: Theme.of(context).textTheme.bodyText2),
+              // Text('Overline', style: Theme.of(context).textTheme.overline),
+
+              if (userProfile?.person?.digidebBalance != null) ...[
+                Card(
+                  child: Container(
+                  padding: outerPadding.copyWith(top: innerPaddingSize),
+
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            'Log in',
-                            style: Theme.of(context).textTheme.button?.merge(const TextStyle(fontSize: 21)),
+                            'ETVermogen:',
+                            style: Theme.of(context).textTheme.headline4?.merge(const TextStyle(fontFamily: 'RobotoSlab')),
                           ),
 
-                          Container(
-                            padding: const EdgeInsets.only(bottom: 3),
-
-                            child: Icon(
-                              Feather.log_in,
-                              size: (Theme.of(context).textTheme.button?.fontSize ?? 0)*2,
+                          Text(
+                            '€ ${(-userProfile!.person!.digidebBalance!).toStringAsFixed(2).replaceFirst('.', ',')}',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontFamily: 'RobotoSlab',
+                              letterSpacing: 1.25,
+                              fontWeight: FontWeight.w500,
+                              color: _balanceColor,
+                              height: 1.5,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ]
-                ),
-              )
 
-            ),
-          ),
-
-
-          /* *** PROFILE *** */
-          childIfTrue: Container(
-            padding: outerPadding,
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-
-              children: [
-                // Text('Heading 1', style: Theme.of(context).textTheme.headline1),
-                // Text('Heading 2', style: Theme.of(context).textTheme.headline2),
-                // Text('Heading 3', style: Theme.of(context).textTheme.headline3),
-                // Text('Heading 4', style: Theme.of(context).textTheme.headline4),
-                // Text('Heading 5', style: Theme.of(context).textTheme.headline5),
-                // Text('Heading 6', style: Theme.of(context).textTheme.headline6),
-                // Text('Subtitle 1', style: Theme.of(context).textTheme.subtitle1),
-                // Text('Subtitle 2', style: Theme.of(context).textTheme.subtitle2),
-                // Text('Body text 1', style: Theme.of(context).textTheme.bodyText1),
-                // Text('Body text 2', style: Theme.of(context).textTheme.bodyText2),
-                // Text('Overline', style: Theme.of(context).textTheme.overline),
-
-                Visibility(
-                  visible: userProfile?.person?.digidebBalance != null,
-
-                  child: Card(child: Container(
-                    padding: outerPadding.copyWith(top: innerPaddingSize),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              'ETVermogen:',
-                              style: Theme.of(context).textTheme.headline4?.merge(const TextStyle(fontFamily: 'RobotoSlab')),
-                            ),
-
-                            Text(
-                              '€ -${userProfile?.person?.digidebBalance?.toStringAsFixed(2).replaceFirst('.', ',') ?? '[bedrag?]'}',
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontFamily: 'RobotoSlab',
-                                letterSpacing: 1.25,
-                                fontWeight: FontWeight.w500,
-                                color: _balanceColor,
-                                height: 1.5,
-                              ),
-                            ),
-                          ],
-                        ),
-
+                      if (userProfile!.person!.digidebBalance! > 0) ...[
                         const SizedBox(height: innerPaddingSize/2),
 
                         Text(
@@ -263,49 +312,61 @@ class _ProfilePageState extends State<ProfilePage> {
                           textAlign: TextAlign.center,
                         )
                       ],
-                    ),
-                  )),
-                ),
-
-                const SizedBox(height: outerPaddingSize),
-
-                Card(child: Container(
-                  padding: outerPadding,
-
-                  child: userProfile?.person != null ? ProfileView(userProfile!.person!) : Container(),
-                )),
-
-                const SizedBox(height: outerPaddingSize),
-
-                Card(child: Container(
-                  padding: outerPadding,
-
-                  child: ElevatedButton(
-                    onPressed: logout,
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Log uit',
-                          style: Theme.of(context).textTheme.button?.merge(const TextStyle(fontSize: 21)),
-                        ),
-
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 3),
-
-                          child: Icon(
-                            Feather.log_out,
-                            size: (Theme.of(context).textTheme.button?.fontSize ?? 0)*2,
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 )),
+
+                const SizedBox(height: outerPaddingSize),
               ],
-            )
-          ),
+
+              Card(child: Container(
+                padding: outerPadding,
+
+                child: userProfile?.person != null ? ProfileView(userProfile!.person!) : Container(),
+              )),
+
+              const SizedBox(height: outerPaddingSize),
+
+              Card(child: Container(
+                padding: outerPadding,
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: logout,
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Log uit',
+                            style: Theme.of(context).textTheme.button?.merge(const TextStyle(fontSize: 21)),
+                          ),
+
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 3),
+
+                            child: Icon(
+                              Feather.log_out,
+                              size: (Theme.of(context).textTheme.button?.fontSize ?? 0)*2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.only(
+                        top: outerPaddingSize,
+                        left: innerPaddingSize/2,
+                        right: innerPaddingSize/2,
+                      ),
+                      child: feedbackWidget,
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          )
         ),
       ]),
     );

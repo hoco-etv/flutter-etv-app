@@ -56,7 +56,7 @@ class BulletinPage extends StatelessWidget {
           HtmlWidget(
             bulletin.description,
 
-            onTapUrl: (url) => launch(url),
+            onTapUrl: (url) => launchUrl(Uri.parse(url)),
             customStylesBuilder: (e) {
               if (e.localName == 'p') {
                 return {

@@ -46,7 +46,7 @@ class NewsBoothState extends State<NewsBooth> {
           Visibility(
             visible: (_newsItems?.length ?? 0) > 3,
             child: GestureDetector(
-              onTap: () { context.navigateTo(const NewsTab()); },
+              onTap: () { context.navigateTo(const NewsTab(children: [ NewsRoute() ])); },
 
               child: Container(
                 alignment: Alignment.center,
@@ -56,7 +56,7 @@ class NewsBoothState extends State<NewsBooth> {
 
                   children: [
                     Text(
-                      'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) > 1 ? 'en' : ''}',
+                      'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) -3 == 1 ? '' : 'en'}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,

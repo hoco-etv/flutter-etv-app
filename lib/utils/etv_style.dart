@@ -28,6 +28,11 @@ const etvRed = MaterialColor(
   }
 );
 
+const linkStyle = TextStyle(
+  color: etvRed,
+  decoration: TextDecoration.underline,
+);
+
 // https://coolors.co/b41f21-5bc0eb-fde74c-9bc53d-fa7921
 const greenPrimary = 0xFF8BD53D;
 const bluePrimary = 0xFF5BC0EB;
@@ -129,6 +134,8 @@ ThemeData getTheme(Brightness brightness)
     cardTheme: CardTheme(
       shape: borderShape,
     ),
+
+    dividerColor: Colors.transparent,
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
