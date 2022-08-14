@@ -127,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final githubNewIssueUrl = Uri(
       scheme: 'https',
       host: 'github.com',
-      path: 'hoco-etv/flutter-etv-app/issues/new'
+      path: 'hoco-etv/flutter-etv-app/issues'
     );
 
     final feedbackWidget = RichText(
@@ -147,7 +147,9 @@ class _ProfilePageState extends State<ProfilePage> {
             text: 'maak een issue op GitHub',
             style: linkStyle,
             recognizer: TapGestureRecognizer()..onTap = () async {
-              if (await canLaunchUrl(githubNewIssueUrl)) launchUrl(githubNewIssueUrl);
+              if (await canLaunchUrl(githubNewIssueUrl)) {
+                launchUrl(githubNewIssueUrl, mode: LaunchMode.externalApplication);
+              }
             },
           ),
           const TextSpan(text: '.'),
