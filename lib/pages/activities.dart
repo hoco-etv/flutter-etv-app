@@ -45,6 +45,8 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
     return DefaultLayout(
       title: 'Activiteiten',
       pageContent: RefreshIndicator(
+        onRefresh: refresh,
+
         child: ListView(
           padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
@@ -52,8 +54,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
             ActivityList(_activities!),
           ] : [],
         ),
-
-        onRefresh: refresh,
       ),
     );
   }

@@ -15,7 +15,7 @@ Map<String, String> authHeader()
 
 String buildPictureUrl(PictureType type, int id)
 {
-  return baseUrl + '/$type/$id/picture';
+  return '$baseUrl/$type/$id/picture';
 }
 
 

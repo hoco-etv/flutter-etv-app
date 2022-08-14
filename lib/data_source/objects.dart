@@ -142,7 +142,7 @@ class Person {
 
   String get pictureUrl
   {
-    return baseUrl + '/members/$personId/picture';
+    return '$baseUrl/members/$personId/picture';
   }
 }
 
