@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import 'package:flutter/material.dart';
+>>>>>>> ee56fc7 (fix light/dark theme switching)
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter/foundation.dart';
@@ -31,7 +35,11 @@ void main() async {
 class EtvApp extends StatelessWidget {
   const EtvApp({required this.router, Key? key}) : super(key: key);
 
+<<<<<<< HEAD
   final AppRouter router;
+=======
+  final appRouter = AppRouter();
+>>>>>>> ee56fc7 (fix light/dark theme switching)
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +50,13 @@ class EtvApp extends StatelessWidget {
       theme: getTheme(Brightness.light),
       darkTheme: getTheme(Brightness.dark),
 
+<<<<<<< HEAD
       routerDelegate: router.delegate(),
       routeInformationParser: router.defaultRouteParser(),
+=======
+      routerDelegate: appRouter.delegate(),
+      routeInformationParser: appRouter.defaultRouteParser(),
+>>>>>>> ee56fc7 (fix light/dark theme switching)
     );
   }
 }
