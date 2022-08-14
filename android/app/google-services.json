@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "637164035487",
+    "project_id": "etv-ecosystem",
+    "storage_bucket": "etv-ecosystem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637164035487:android:d780b14814d46f175fb1aa",
+        "android_client_info": {
+          "package_name": "nl.tudelft.etv.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "637164035487-tl3636k9c1a4oo598go67gd6cd6rmmq9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9A2me99_K5CTwxIfF3XimkB09fvGmtPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "637164035487-tl3636k9c1a4oo598go67gd6cd6rmmq9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '/utils/etv_style.dart';
+import 'firebase_options.dart';
 import '/router.gr.dart';
 
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('user');
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(EtvApp());
 }
