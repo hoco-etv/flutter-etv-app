@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/utils/etv_style.dart';
@@ -17,18 +16,15 @@ class EtvApp extends StatelessWidget {
 
   final appRouter = AppRouter();
 
-  ThemeData get theme
-  {
-    return getTheme(SchedulerBinding.instance.window.platformBrightness);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'ETV',
       color: etvRed,
 
-      theme: theme,
+      theme: getTheme(Brightness.light),
+      darkTheme: getTheme(Brightness.dark),
+
       routerDelegate: appRouter.delegate(),
       routeInformationParser: appRouter.defaultRouteParser(),
     );
