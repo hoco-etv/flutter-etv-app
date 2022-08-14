@@ -26,10 +26,10 @@ String formatDateSpan(DateTime startDate, DateTime endDate)
     && endDate.hour == 0 && endDate.minute == 0;
 
   return formatDate(startDate, startDate.year != endDate.year)
-    + (!excludeTime ? ' ' + startDate.toIso8601String().substring(11, 16) : '')
+    + (!excludeTime ? ' ${startDate.toIso8601String().substring(11, 16)}' : '')
     + (!startDate.isAtSameMomentAs(endDate) ? ' -' : '')
-    + (startDate.day != endDate.day || endDate.difference(startDate).inDays >= 1 ? ' ' + formatDate(endDate, startDate.year != endDate.year) : '')
-    + (!excludeTime ? ' ' + endDate.toIso8601String().substring(11, 16) : '');
+    + (startDate.day != endDate.day || endDate.difference(startDate).inDays >= 1 ? ' ${formatDate(endDate, startDate.year != endDate.year)}' : '')
+    + (!excludeTime ? ' ${endDate.toIso8601String().substring(11, 16)}' : '');
 }
 
 String timeAgoSinceDate(DateTime date, {bool short = false})

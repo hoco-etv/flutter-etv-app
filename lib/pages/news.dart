@@ -45,6 +45,8 @@ class _NewsPageState extends State<NewsPage> {
     return DefaultLayout(
       title: 'Nieuwsberichten',
       pageContent: RefreshIndicator(
+        onRefresh: refresh,
+
         child: ListView(
           padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
@@ -52,8 +54,6 @@ class _NewsPageState extends State<NewsPage> {
             BulletinList(_bulletins!),
           ] : [],
         ),
-
-        onRefresh: refresh,
       ),
     );
   }

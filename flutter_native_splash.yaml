@@ -1,8 +1,15 @@
 flutter_native_splash:
-  color: "#FFFFFF"
-  #background_image: "assets/background.png"
-  image: assets/4x/etv_schild_met_woordmerk.png
+  color: "#FCFDFE"
+  image: assets/4x/etv_schild.png
 
-  color_dark: "#B41F21"
-  #background_image_dark: "assets/dark-background.png"
-  image_dark: assets/4x/etv_schild_met_woordmerk_wit.png
+  color_dark: "#212121"
+  image_dark: assets/4x/etv_schild.png
+
+  android_12:
+    color: "#FCFDFE"
+    image: assets/splash_icon.png
+    icon_background_color: "#FCFDFE"
+
+    color_dark: "#212121"
+    image_dark: assets/splash_icon.png
+    icon_background_color_dark: "#212121"

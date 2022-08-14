@@ -34,8 +34,6 @@ class DefaultLayout extends StatelessWidget {
           : Colors.white,
 
       body: Container(
-        child: pageContent,
-
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.contain,
@@ -47,6 +45,8 @@ class DefaultLayout extends StatelessWidget {
             ),
           ),
         ),
+
+        child: pageContent,
       ),
     );
   }

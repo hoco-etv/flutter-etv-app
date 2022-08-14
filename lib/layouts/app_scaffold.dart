@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'components/bottom_navigation_bar.dart' as etv_app;
 import '/data_source/store.dart';
-import '/router.gr.dart' as Router;
+import '/router.gr.dart' as router;
 
 class AppScaffold extends StatefulWidget {
   const AppScaffold([Key? key]) : super(key: key);
@@ -30,10 +30,11 @@ class AppScaffoldState extends State<AppScaffold> {
   Widget build(BuildContext context)
   {
     return WillPopScope(
+      // prevent closing app on "back" event & return to dashboard instead
       onWillPop: () {
         final route = context.router;
-        if (route.topRoute.name != Router.DashboardRoute.name) {
-          route.navigate(const Router.AppScaffold());
+        if (route.topRoute.name != router.DashboardRoute.name) {
+          route.navigate(const router.AppScaffold());
           return Future.value(false);
         }
 
@@ -42,11 +43,11 @@ class AppScaffoldState extends State<AppScaffold> {
 
       child: AutoTabsScaffold(
         routes: const [
-          Router.DashboardRoute(),
-          Router.ActivitiesTab(),
-          Router.NewsTab(),
-          Router.MembersTab(),
-          Router.ProfileRoute(),
+          router.DashboardRoute(),
+          router.ActivitiesTab(),
+          router.NewsTab(),
+          router.MembersTab(),
+          router.ProfileRoute(),
         ],
 
         bottomNavigationBuilder: (_, tabsRouter) => etv_app.BottomNavigationBar(
@@ -63,32 +64,32 @@ class AppScaffoldState extends State<AppScaffold> {
 
           navButtons: <etv_app.NavButtonData>[
             const etv_app.NavButtonData(
-              destination: Router.DashboardRoute(),
+              destination: router.DashboardRoute(),
               label: 'Huis',
               icon: Feather.home,
             ),
 
             const etv_app.NavButtonData(
-              destination: Router.ActivitiesRoute(),
+              destination: router.ActivitiesRoute(),
               label: 'Activiteiten',
               icon: Feather.calendar,
             ),
 
             const etv_app.NavButtonData(
-              destination: Router.NewsRoute(),
+              destination: router.NewsRoute(),
               label: 'Nieuws',
               icon: Feather.bell,
             ),
 
             etv_app.NavButtonData(
               visible: loggedIn,
-              destination: const Router.MemberSearchRoute(),
+              destination: const router.MemberSearchRoute(),
               label: 'Leden',
               icon: Feather.search,
             ),
 
             const etv_app.NavButtonData(
-              destination: Router.ProfileRoute(),
+              destination: router.ProfileRoute(),
               label: 'Profiel',
               icon: Feather.user,
             ),
