@@ -8,13 +8,14 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('user');
 
-  runApp(EtvApp());
+  final appRouter = AppRouter();
+  runApp(EtvApp(router: appRouter));
 }
 
 class EtvApp extends StatelessWidget {
-  EtvApp({Key? key}) : super(key: key);
+  const EtvApp({required this.router, Key? key}) : super(key: key);
 
-  final appRouter = AppRouter();
+  final AppRouter router;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,8 @@ class EtvApp extends StatelessWidget {
       theme: getTheme(Brightness.light),
       darkTheme: getTheme(Brightness.dark),
 
-      routerDelegate: appRouter.delegate(),
-      routeInformationParser: appRouter.defaultRouteParser(),
+      routerDelegate: router.delegate(),
+      routeInformationParser: router.defaultRouteParser(),
     );
   }
 }

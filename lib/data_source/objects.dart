@@ -375,7 +375,7 @@ class EtvActivity {
     this.subscriptionReason,
   });
 
-  factory EtvActivity.fromJson(Map<String, dynamic> json)
+  factory EtvActivity.fromMap(Map<String, dynamic> json)
   {
     return EtvActivity(
       id:           json['id'],
@@ -390,6 +390,26 @@ class EtvActivity {
       subscriptionEnabled:  json['subscribe']['enabled'],
       subscriptionReason:   json['subscribe']['reason'],
     );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':       id,
+      'link':     link,
+      'image':    image,
+      'location': location,
+      'start_at': startAt,
+      'end_at':   endAt,
+      'name':        { 'nl-NL': name }, // FIXME: technical debt
+      'summary':     { 'nl-NL': summary },
+      'description': { 'nl-NL': description },
+
+      'subscribe': {
+        'enabled': subscriptionEnabled,
+        'reason':  subscriptionReason,
+      },
+    };
   }
 }
 
@@ -406,7 +426,7 @@ class EtvBoardroomState {
     this.closedUntil,
   });
 
-  factory EtvBoardroomState.fromJson(Map json)
+  factory EtvBoardroomState.fromMap(Map json)
   {
     return EtvBoardroomState(
       open: !json['is_closed'],
@@ -419,28 +439,39 @@ class EtvBoardroomState {
 
 class EtvBulletin {
   final int id;
-  final String author;
   final String name;
+  final String author;
   final String description;
   final DateTime createdAt;
 
   const EtvBulletin({
     required this.id,
-    required this.author,
     required this.name,
+    required this.author,
     required this.description,
     required this.createdAt,
   });
 
-  factory EtvBulletin.fromJson(Map<String, dynamic> json)
+  factory EtvBulletin.fromMap(Map<String, dynamic> json)
   {
     return EtvBulletin(
       id:           json['id'],
-      author:       json['author'],
       name:         json['name'],
+      author:       json['author'],
       description:  json['description'],
       createdAt:    DateTime.parse(json['created_at']),
     );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':           id,
+      'name':         name,
+      'author':       author,
+      'description':  description,
+      'created_at':   createdAt.toString(),
+    };
   }
 }
 

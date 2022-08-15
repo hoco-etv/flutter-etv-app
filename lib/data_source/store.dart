@@ -1,6 +1,8 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import './objects.dart';
 
+/* *** USER *** */
+
 void storeUser(User user)
 {
   final userBox = Hive.box('user');
@@ -9,7 +11,7 @@ void storeUser(User user)
 }
 
 /// @returns `User | null`
-dynamic getUser()
+User? getUser()
 {
   final userBox = Hive.box('user');
   final storedUser = userBox.get('userInfo');
@@ -24,7 +26,7 @@ void storeToken(String token)
 }
 
 /// @returns `String | null`
-dynamic getToken()
+String? getToken()
 {
   final userBox = Hive.box('user');
   return userBox.get('accessToken');

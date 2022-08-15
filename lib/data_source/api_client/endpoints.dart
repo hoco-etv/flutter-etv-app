@@ -5,13 +5,13 @@ import '_http.dart';
 Future<List<EtvActivity>> fetchActivities() async
 {
   return (await get('/activities') as List<dynamic>)
-    .map((e) => EtvActivity.fromJson(e))
+    .map((e) => EtvActivity.fromMap(e))
     .toList();
 }
 
 Future<EtvBoardroomState> fetchBoardroomState() async
 {
-  return EtvBoardroomState.fromJson(
+  return EtvBoardroomState.fromMap(
     await get('/boardroom')
   );
 }
@@ -19,7 +19,7 @@ Future<EtvBoardroomState> fetchBoardroomState() async
 Future<List<EtvBulletin>> fetchNews() async
 {
   return (await get('/news') as List<dynamic>)
-    .map((e) => EtvBulletin.fromJson(e))
+    .map((e) => EtvBulletin.fromMap(e))
     .toList();
 }
 
