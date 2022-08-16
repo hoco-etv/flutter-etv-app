@@ -2,15 +2,6 @@ import '../objects.dart';
 import '../store.dart';
 import '_http.dart';
 
-// Coffee data:
-Future<EtvCoffee> fetchCoffeeState() async
-{
-  return EtvCoffee.fromJson(
-    await get('/coffee/get')
-  );
-}
-
-
 Future<List<EtvActivity>> fetchActivities() async
 {
   return (await get('/activities') as List<dynamic>)
@@ -21,7 +12,7 @@ Future<List<EtvActivity>> fetchActivities() async
 Future<EtvBoardroomState> fetchBoardroomState() async
 {
   return EtvBoardroomState.fromJson(
-    await get('/boardroom')
+    await get('/boardroom'), await get('/coffee/get')
   );
 }
 

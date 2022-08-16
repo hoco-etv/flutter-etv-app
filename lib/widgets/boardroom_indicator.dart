@@ -14,20 +14,10 @@ class BoardroomIndicatorState extends State<BoardroomStateIndicator> {
   EtvBoardroomState? _boardroomState;
 
   final _lineHeight = 24.0;
-  var _koffietime = "-";
 
   @override
-  Widget build(BuildContext context) {
-    fetchCoffeeState().then((value) {
-      // for fetching coffee :)
-      setState(() {
-        _koffietime = DateTime.now()
-            .difference(DateTime.parse(value.time))
-            .inMinutes
-            .toString();
-      });
-    });
-
+  Widget build(BuildContext context)
+  {
     return GestureDetector(
       onTap: () {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -82,37 +72,40 @@ class BoardroomIndicatorState extends State<BoardroomStateIndicator> {
                   ),
                   SizedBox(width: 1.618 * _lineHeight),
                 ]),
-            Container(
-                padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                    // borderRadius: BorderRadius.circular(borderRadius),
-                    child: Container(
-                        height: _lineHeight,
-                        width: 1.618 * _lineHeight,
-                        // color: const Color(greenPrimary),
-                        child: Center ( child: Text(
-                          "☕",
-                          style: TextStyle(
-                            fontSize: _lineHeight / 1.18,
-                            height: 1,
+            Visibility(
+              visible: _boardroomState?.open == true && (_boardroomState!.timesincecoffee < 180),
+              child: Container(
+                  padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 1),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          child: Container(
+                            height: _lineHeight,
+                            width: 1.618 * _lineHeight,
+                            child: Center(
+                              child: Text(
+                                "☕",
+                                style: TextStyle(
+                                  fontSize: _lineHeight / 1.18,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
                           ),
-                        ), ),
                         ),
-                  ),
-                  SizedBox(width: 1.618 * _lineHeight),
-                  Center(
-                    child: Text(
-                      "Laatst gezet: $_koffietime min",
-                      style: TextStyle(
-                        fontSize: _lineHeight / 1.5,
-                        height: 1,
-                      ),
-                    ),
-                  ),
-                ])),
+                        SizedBox(width: 1.618 * _lineHeight),
+                        Center(
+                          child: Text(
+                            "Laatst gezet: ${_boardroomState?.timesincecoffee} min",
+                            style: TextStyle(
+                              fontSize: _lineHeight / 1.5,
+                              height: 1,
+                            ),
+                          ),
+                        ),
+                      ])),
+            ),
           ]),
         ),
       ),

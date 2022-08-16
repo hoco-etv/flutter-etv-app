@@ -145,21 +145,6 @@ class Person {
   }
 }
 
-class EtvCoffee {
-  final String time;
-
-  const EtvCoffee({
-    required this.time,
-  });
-
-  factory EtvCoffee.fromJson(String time)
-  {
-    return EtvCoffee(
-      time: time,
-    );
-  }
-}
-
 class PersonAddress {
   final String type;
   final String address;
@@ -412,21 +397,24 @@ class EtvBoardroomState {
   final String? closedReason;
   final DateTime? closedSince;
   final DateTime? closedUntil;
+  final int timesincecoffee; // in minutes
 
   const EtvBoardroomState({
     required this.open,
     this.closedReason,
     this.closedSince,
     this.closedUntil,
+    this.timesincecoffee=999,
   });
 
-  factory EtvBoardroomState.fromJson(Map json)
+  factory EtvBoardroomState.fromJson(Map bsjson, String lstctime)
   {
     return EtvBoardroomState(
-      open: !json['is_closed'],
-      closedReason: json['closure']?['description'],
-      closedSince: json.containsKey('closure') ? DateTime.parse(json['closure']?['closed_begin']) : null,
-      closedUntil: json.containsKey('closure') ? DateTime.parse(json['closure']?['closed_end']) : null,
+      open: !bsjson['is_closed'],
+      closedReason: bsjson['closure']?['description'],
+      closedSince: bsjson.containsKey('closure') ? DateTime.parse(bsjson['closure']?['closed_begin']) : null,
+      closedUntil: bsjson.containsKey('closure') ? DateTime.parse(bsjson['closure']?['closed_end']) : null,
+      timesincecoffee: DateTime.now().difference(DateTime.parse(lstctime)).inMinutes,
     );
   }
 }
