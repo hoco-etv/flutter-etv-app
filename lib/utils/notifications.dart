@@ -13,7 +13,7 @@ Future<void> initPlugin([AppRouter? appRouter]) async
     : null;
 
   if (_notificationsPluginInstance == null) {
-    const androidSettings = AndroidInitializationSettings('@mipmap/etv_schild');
+    const androidSettings = AndroidInitializationSettings('@mipmap/etv_schild_offset_transparent');
     const iosSettings = IOSInitializationSettings();
     const settings = InitializationSettings(
       android: androidSettings,
