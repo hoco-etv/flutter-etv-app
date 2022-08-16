@@ -2,10 +2,12 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
+import '/utils/notifications.dart';
 import '/data_source/objects.dart';
-import '/layouts/default.dart';
-import '/utils/etv_style.dart';
+import '/data_source/store.dart';
 import '/utils/time_formats.dart';
+import '/utils/etv_style.dart';
+import '/layouts/default.dart';
 
 class BulletinPage extends StatelessWidget {
   final EtvBulletin bulletin;
@@ -18,6 +20,9 @@ class BulletinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context)
   {
+    cancelBulletinNotification(bulletin.id);  // TODO: verify that this fires once on page load
+    markCachedBulletinAsRead(bulletin.id);
+
     return DefaultLayout(
       title: 'Nieuwsbericht',
       textBackground: true,

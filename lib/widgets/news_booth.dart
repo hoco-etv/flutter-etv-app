@@ -1,11 +1,13 @@
 import 'dart:math';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '/router.gr.dart';
 import '/utils/etv_style.dart';
 import '/widgets/bulletin_list.dart';
+import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
 
 class NewsBooth extends StatefulWidget {
@@ -78,17 +80,25 @@ class NewsBoothState extends State<NewsBooth> {
     ));
   }
 
-  refresh()
-  {
-    return fetchNews()
-    .then((n) => setState(() { _newsItems = n; }));
-  }
-
   @override
   initState()
   {
     super.initState();
+    _newsItems = getCachedBulletins().toList().reversed.toList();
+  }
 
-    refresh();
+  Future<void> refresh()
+  {
+    if (kDebugMode) print('refreshing dashboard news booth');
+
+    return fetchNews()
+    .then((bulletins) {
+      setState(() { _newsItems = bulletins; });
+
+      updateBulletinCache(
+        [...bulletins],
+        markNewBulletinsAsRead: getCachedBulletinKeys().isEmpty
+      );
+    });
   }
 }

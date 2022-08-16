@@ -444,12 +444,16 @@ class EtvBulletin {
   final String description;
   final DateTime createdAt;
 
-  const EtvBulletin({
+  bool read;
+
+  EtvBulletin({
     required this.id,
     required this.name,
     required this.author,
     required this.description,
     required this.createdAt,
+
+    this.read = false,
   });
 
   factory EtvBulletin.fromMap(Map<String, dynamic> json)
@@ -460,6 +464,8 @@ class EtvBulletin {
       author:       json['author'],
       description:  json['description'],
       createdAt:    DateTime.parse(json['created_at']),
+
+      read:         json['read'] ?? false,
     );
   }
 
@@ -471,6 +477,8 @@ class EtvBulletin {
       'author':       author,
       'description':  description,
       'created_at':   createdAt.toString(),
+
+      'read':         read,
     };
   }
 }
