@@ -84,10 +84,10 @@ EtvActivity? getCachedActivity(String key)
 Iterable<String> getCachedActivityKeys()
 {
   final cacheBox = Hive.box('cache');
+
   return cacheBox.keys
     .whereType<String>()
-    .skipWhile((key) => !key.startsWith('activity-'))
-    .takeWhile((key) => key.startsWith('activity-'));
+    .where((key) => key.startsWith('activity-'));
 }
 
 Iterable<EtvActivity> getCachedActivities()
@@ -173,10 +173,10 @@ EtvBulletin? getCachedBulletin(String key)
 Iterable<String> getCachedBulletinKeys()
 {
   final cacheBox = Hive.box('cache');
+
   return cacheBox.keys
     .whereType<String>()
-    .skipWhile((key) => !key.startsWith('bulletin-'))
-    .takeWhile((key) => key.startsWith('bulletin-'));
+    .where((key) => key.startsWith('bulletin-'));
 }
 
 Iterable<EtvBulletin> getCachedBulletins()
