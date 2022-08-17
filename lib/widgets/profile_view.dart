@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:native_contact_dialog/native_contact_dialog.dart';
 
 import '/utils/etv_style.dart';
 import '/utils/time_formats.dart';
@@ -68,9 +69,32 @@ class _ProfileViewState extends State<ProfileView> {
 
         /*** Person info ***/
         /* Name */
-        Text(
-          widget.person.name,
-          style: Theme.of(context).textTheme.headline3,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.person.name,
+              style: Theme.of(context).textTheme.headline3,
+            ),
+
+            GestureDetector(
+              onTap: () => NativeContactDialog.addContact(Contact(
+                givenName: widget.person.name.split(' ')[0],
+                familyName: widget.person.name.split(' ').skip(1).join(' '),
+                phones: [
+                  Item(label: 'Mobiel', value: widget.person.phoneNumber),
+                ],
+                // TODO: add avatar
+              )),
+
+              child: Icon(
+                Feather.user_plus,
+                color: Theme.of(context).colorScheme.primary,
+                size: 20,
+                semanticLabel: 'Toevoegen aan contacten',
+              ),
+            ),
+          ],
         ),
 
         const SizedBox(height: innerPaddingSize),
