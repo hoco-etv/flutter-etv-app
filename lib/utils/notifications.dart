@@ -78,6 +78,31 @@ FlutterLocalNotificationsPlugin getPlugin()
 }
 
 
+Future<void> notifyActivity(EtvActivity activity)
+{
+  final notifications = getPlugin();
+
+  return notifications.show(
+    activity.id,
+    'Nieuwe activiteit gepland!',
+    '${activity.name}\n\n${activity.summary}'.trim(),
+    NotificationDetails(
+      android: AndroidNotificationDetails(
+        'activity-announcements',
+        'activity-announcements',
+        tag: 'activity',
+        channelDescription: 'Activity announcements',
+        // icon: // TODO: add icon for activity notifications,
+        when: activity.startAt.millisecondsSinceEpoch,
+      ),
+      iOS: const IOSNotificationDetails(
+        threadIdentifier: 'activity-announcements',
+      ),
+    ),
+    payload: 'activity-${activity.id}',
+  );
+}
+
 Future<void> notifyBulletin(EtvBulletin bulletin)
 {
   final notifications = getPlugin();
@@ -104,13 +129,18 @@ Future<void> notifyBulletin(EtvBulletin bulletin)
 }
 
 
-Future<void> cancelNotification(int id, String tag) async
+Future<void> cancelActivityNotification(int activityId)
 {
-  final notifications = getPlugin();
-  await notifications.cancel(id, tag: tag);
+  return _cancelNotification(activityId, 'activity');
 }
 
 Future<void> cancelBulletinNotification(int bulletinId)
 {
-  return cancelNotification(bulletinId, 'bulletin');
+  return _cancelNotification(bulletinId, 'bulletin');
+}
+
+Future<void> _cancelNotification(int id, String tag) async
+{
+  final notifications = getPlugin();
+  await notifications.cancel(id, tag: tag);
 }

@@ -97,13 +97,23 @@ Iterable<EtvActivity> getCachedActivities()
     .whereType<EtvActivity>();
 }
 
+void markCachedActivityAsSeen(int activityId)
+{
+  final stored = getCachedActivity('activity-$activityId');
+
+  if (stored != null && !stored.seen) {
+    cacheActivity(stored..seen = true);
+  }
+}
+
 /// Updates the activity cache
 ///
 /// **Warning:** sorts the provided `activities`.
 Future<void> updateActivityCache(
   List<EtvActivity> activities,
   {
-    Function(EtvActivity)? onNewActivity,
+    bool markNewActivitiesAsSeen = false,
+    Function(EtvActivity newActivity, [EtvActivity? cachedVersion])? onNewNotifiableActivity,
   }
 )
 async {
@@ -123,20 +133,30 @@ async {
 
     if (!cacheEntryAvailable || cacheKeyCursor.current.compareTo(key) > 0) {
       // fetched activity not yet in cache OR has lower ID than next item in cache
-      cacheActivity(activity);
-      if (onNewActivity != null) await onNewActivity(activity);
+      cacheActivity(activity..seen = markNewActivitiesAsSeen);
+      if (onNewNotifiableActivity != null) await onNewNotifiableActivity(activity);
     }
     else if (cacheKeyCursor.current == key) {
       final cachedActivity = getCachedActivity(key)!;
 
       if (!mapEquals(
-        activity.toMap()..remove('read'),
-        cachedActivity.toMap()..remove('read')
+        activity.toMap()
+          ..remove('seen')
+          ..remove('link')
+          ..remove('image')
+          ..remove('subscriptionReason'),
+        cachedActivity.toMap()
+          ..remove('seen')
+          ..remove('link')
+          ..remove('image')
+          ..remove('subscriptionReason')
       )) {
         // activity was changed online
-        // -> update cached entry
-        cacheActivity(activity);
-        if (onNewActivity != null) await onNewActivity(activity);
+        // -> update cached entry & run callback
+        cacheActivity(activity..seen = markNewActivitiesAsSeen);
+        if (onNewNotifiableActivity != null) {
+          await onNewNotifiableActivity(activity, cachedActivity);
+        }
       }
 
       cacheEntryAvailable = cacheKeyCursor.moveNext();
@@ -202,7 +222,7 @@ Future<void> updateBulletinCache(
   List<EtvBulletin> bulletins,
   {
     bool markNewBulletinsAsRead = false,
-    Function(EtvBulletin)? onNewBulletin,
+    Function(EtvBulletin newBulletin, [EtvBulletin? cachedVersion])? onNewBulletin,
   }
 )
 async {
@@ -235,7 +255,7 @@ async {
         // bulletin was changed online
         // -> update cached entry & reset "read" state
         cacheBulletin(bulletin..read = markNewBulletinsAsRead);
-        if (onNewBulletin != null) await onNewBulletin(bulletin);
+        if (onNewBulletin != null) await onNewBulletin(bulletin, cachedBulletin);
       }
 
       cacheEntryAvailable = cacheKeyCursor.moveNext();

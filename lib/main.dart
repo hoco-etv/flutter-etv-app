@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '/utils/notifications.dart' as notifications;
-import '/data_source/store.dart';
 import '/utils/etv_style.dart';
 import '/background.dart';
 import '/router.gr.dart';
@@ -14,15 +13,17 @@ void main() async {
   await Hive.openBox('user');
   await Hive.openBox('cache');
 
-  final appRouter = AppRouter();
-  await notifications.initPlugin(appRouter);
-
-  await Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
-  if (getCachedBulletinKeys().isEmpty) {
+  await Workmanager().initialize(
+    backgroundTaskDispatcher,
+    isInDebugMode: kDebugMode
+  );
+  if (Hive.box('cache').isEmpty) {
     await scheduleBackgroundFetch(const Duration(hours: 2));
   }
-
   if (kDebugMode) await scheduleTestBackgroundTask();
+
+  final appRouter = AppRouter();
+  await notifications.initPlugin(appRouter);
 
   runApp(EtvApp(router: appRouter));
 }

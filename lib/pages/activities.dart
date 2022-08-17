@@ -20,8 +20,8 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   {
     return fetchActivities()
     .then((activities) {
-      setState(() { _activities = activities.where((a) => DateTime.now().isBefore(a.endAt)).toList(); });
-      updateActivityCache([..._activities!]);
+      setState(() { _activities = activities; });
+      updateActivityCache([...activities]);
     })
     .catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(

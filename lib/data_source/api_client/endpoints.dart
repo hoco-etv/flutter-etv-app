@@ -2,11 +2,16 @@ import '../objects.dart';
 import '../store.dart';
 import '_http.dart';
 
-Future<List<EtvActivity>> fetchActivities() async
+Future<List<EtvActivity>> fetchActivities([bool futureOnly = true]) async
 {
-  return (await get('/activities') as List<dynamic>)
-    .map((e) => EtvActivity.fromMap(e))
-    .toList();
+  final activities = (await get('/activities') as List<dynamic>)
+    .map((e) => EtvActivity.fromMap(e));
+
+  return (
+    futureOnly
+      ? activities.where((a) => DateTime.now().isBefore(a.endAt))
+      : activities
+  ).toList();
 }
 
 Future<EtvBoardroomState> fetchBoardroomState() async

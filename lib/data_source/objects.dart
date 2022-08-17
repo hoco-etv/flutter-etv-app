@@ -360,8 +360,10 @@ class EtvActivity {
   final DateTime endAt;
   final bool subscriptionEnabled;
   final String? subscriptionReason;
+  final bool shouldNotify;
+  bool seen;
 
-  const EtvActivity({
+  EtvActivity({
     required this.id,
     required this.name,
     this.summary,
@@ -371,8 +373,10 @@ class EtvActivity {
     this.location,
     required this.startAt,
     required this.endAt,
+    required this.shouldNotify,
     required this.subscriptionEnabled,
     this.subscriptionReason,
+    this.seen = false,
   });
 
   factory EtvActivity.fromMap(Map<String, dynamic> json)
@@ -382,11 +386,13 @@ class EtvActivity {
       name:         collapseLocalizedString(Map.from(json['name'])),
       summary:      collapseLocalizedString(Map.from(json['summary'])),
       description:  collapseLocalizedString(Map.from(json['description'])),
+      shouldNotify: json['app_notification'] ?? false,
       link:         json['link'],
       image:        json['image'],
       location:     json['location'] != '' ? json['location'] : null,
       startAt:      DateTime.parse(json['start_at']),
       endAt:        DateTime.parse(json['end_at']),
+      seen:         json['seen'] ?? false,
       subscriptionEnabled:  json['subscribe']['enabled'],
       subscriptionReason:   json['subscribe']['reason'],
     );
@@ -401,9 +407,11 @@ class EtvActivity {
       'location': location,
       'start_at': startAt.toString(),
       'end_at':   endAt.toString(),
+      'seen':     seen,
       'name':        { 'nl-NL': name }, // FIXME: technical debt
       'summary':     { 'nl-NL': summary },
       'description': { 'nl-NL': description },
+      'app_notification': shouldNotify,
 
       'subscribe': {
         'enabled': subscriptionEnabled,

@@ -93,12 +93,15 @@ class CalendarState extends State<Calendar> {
   Future<void> refresh()
   {
     return fetchActivities()
-    .then((a) {
+    .then((activities) {
       setState(() {
-        _activities = a.where((a) => DateTime.now().isBefore(a.endAt)).toList();
+        _activities = activities;
       });
 
-      updateActivityCache([..._activities!]);
+      updateActivityCache(
+        [...activities],
+        markNewActivitiesAsSeen: getCachedActivityKeys().isEmpty
+      );
     });
   }
 }

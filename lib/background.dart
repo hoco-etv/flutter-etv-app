@@ -7,6 +7,9 @@ import '/data_source/store.dart';
 
 bool _initialized = false;
 
+const fetchActivitiesTask = 'fetch-activities';
+const fetchActivitiesTaskId = 'etv-activities-background-fetch';
+
 const fetchBulletinsTask = 'fetch-bulletins';
 const fetchBulletinsTaskId = 'etv-bulletin-background-fetch';
 
@@ -23,19 +26,33 @@ init() async
   _initialized = true;
 }
 
-callbackDispatcher()
+backgroundTaskDispatcher()
 {
   Workmanager().executeTask((task, inputData) async {
     await init();
 
     switch (task) {
+      case fetchActivitiesTask:
+        final fetchedActivities = await fetchActivities();
+        updateActivityCache(
+          fetchedActivities,
+          onNewNotifiableActivity: (newA, [cachedA]) async {
+            if (newA.shouldNotify && cachedA?.shouldNotify != true) {
+              await notifications.notifyActivity(newA);
+            }
+          },
+        );
+        return true;
+
       case fetchBulletinsTask:
         final fetchedBulletins = await fetchNews();
         updateBulletinCache(
           fetchedBulletins,
-          onNewBulletin: (b) => notifications.notifyBulletin(b),
+          onNewBulletin: (newB, [cachedB]) async {
+            if (cachedB != null) return;
+            await notifications.notifyBulletin(newB);
+          },
         );
-
         return true;
 
       // TODO: remove
@@ -54,7 +71,7 @@ callbackDispatcher()
                   createdAt: DateTime(2022, 9, 14),
                 )
               ] + bulletins,
-              onNewBulletin: (b) => notifications.notifyBulletin(b),
+              onNewBulletin: (newB, [cachedB]) => notifications.notifyBulletin(newB),
             );
           });
 
@@ -74,14 +91,24 @@ callbackDispatcher()
 
 Future<void> scheduleBackgroundFetch(Duration interval)
 {
-  return Workmanager().registerPeriodicTask(
-    fetchBulletinsTaskId,
-    fetchBulletinsTask,
-    frequency: interval,
-    initialDelay: interval,
-    constraints: Constraints(networkType: NetworkType.connected),
-    existingWorkPolicy: ExistingWorkPolicy.replace,
-  );
+  return Future.wait([
+    Workmanager().registerPeriodicTask(
+      fetchActivitiesTaskId,
+      fetchActivitiesTask,
+      frequency: interval,
+      initialDelay: interval,
+      constraints: Constraints(networkType: NetworkType.connected),
+      existingWorkPolicy: ExistingWorkPolicy.replace,
+    ),
+    Workmanager().registerPeriodicTask(
+      fetchBulletinsTaskId,
+      fetchBulletinsTask,
+      frequency: interval,
+      initialDelay: interval,
+      constraints: Constraints(networkType: NetworkType.connected),
+      existingWorkPolicy: ExistingWorkPolicy.replace,
+    ),
+  ]);
 }
 
 
