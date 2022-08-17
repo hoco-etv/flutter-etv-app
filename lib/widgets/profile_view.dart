@@ -47,6 +47,8 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(context)
   {
+    final nCommittees = widget.person.committees?.length ?? 0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -146,7 +148,8 @@ class _ProfileViewState extends State<ProfileView> {
             title: Text(
               [
                 if (widget.person.boards != null) 'Bestuur',
-                if (!(widget.person.committees?.isEmpty ?? true)) '${widget.person.committees!.length} commissies'
+                if (!(widget.person.committees?.isEmpty ?? true))
+                  '$nCommittees commissie${nCommittees == 1 ? '' : 's'}'
               ]
               .join(', '),
               style: Theme.of(context).textTheme.subtitle1,
