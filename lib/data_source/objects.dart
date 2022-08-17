@@ -385,8 +385,8 @@ class EtvActivity {
       link:         json['link'],
       image:        json['image'],
       location:     json['location'] != '' ? json['location'] : null,
-      startAt:      DateTime.parse(json['start_at'] as String),
-      endAt:        DateTime.parse(json['end_at'] as String),
+      startAt:      DateTime.parse(json['start_at']),
+      endAt:        DateTime.parse(json['end_at']),
       subscriptionEnabled:  json['subscribe']['enabled'],
       subscriptionReason:   json['subscribe']['reason'],
     );
@@ -399,8 +399,8 @@ class EtvActivity {
       'link':     link,
       'image':    image,
       'location': location,
-      'start_at': startAt,
-      'end_at':   endAt,
+      'start_at': startAt.toString(),
+      'end_at':   endAt.toString(),
       'name':        { 'nl-NL': name }, // FIXME: technical debt
       'summary':     { 'nl-NL': summary },
       'description': { 'nl-NL': description },
@@ -483,7 +483,7 @@ class EtvBulletin {
   }
 }
 
-dynamic collapseLocalizedString(Map<String, String> map)
+dynamic collapseLocalizedString(Map<String, String?> map)
 {
   final content = map.entries.firstWhere((e) => e.key.startsWith('nl-NL'), orElse: () => map.entries.first).value;
   return content != '' ? content : null;

@@ -17,12 +17,9 @@ void main() async {
   final appRouter = AppRouter();
   await notifications.initPlugin(appRouter);
 
-  await Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: kDebugMode,
-  );
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
   if (getCachedBulletinKeys().isEmpty) {
-    await scheduleBackgroundFetchBulletins(const Duration(hours: 2));
+    await scheduleBackgroundFetch(const Duration(hours: 2));
   }
 
   if (kDebugMode) await scheduleTestBackgroundTask();

@@ -85,6 +85,8 @@ class NewsBoothState extends State<NewsBooth> {
   {
     super.initState();
     _newsItems = getCachedBulletins().toList().reversed.toList();
+
+    refresh();
   }
 
   Future<void> refresh()

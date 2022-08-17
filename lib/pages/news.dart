@@ -37,6 +37,7 @@ class _NewsPageState extends State<NewsPage> {
   initState()
   {
     super.initState();
+    if (kDebugMode) print('initializing news page state');
     _bulletins = getCachedBulletins().toList().reversed.toList();
 
     refresh();

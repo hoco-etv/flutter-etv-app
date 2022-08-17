@@ -61,9 +61,100 @@ Future<void> resetAuthState() async
   await userBox.clear();
 }
 
-/* *** CACHE *** */
 
-void storeCachedBulletin(EtvBulletin bulletin)
+/* *** CACHE - Activities *** */
+// TODO: deduplicate caching code for activities & bulletins
+
+void cacheActivity(EtvActivity activity)
+{
+  final cacheBox = Hive.box('cache');
+  cacheBox.put('activity-${activity.id}', activity.toMap());
+}
+
+EtvActivity? getCachedActivity(String key)
+{
+  final cacheBox = Hive.box('cache');
+  final stored = cacheBox.get(key);
+
+  return stored != null
+    ? EtvActivity.fromMap(Map<String, dynamic>.from(stored))
+    : null;
+}
+
+Iterable<String> getCachedActivityKeys()
+{
+  final cacheBox = Hive.box('cache');
+  return cacheBox.keys
+    .whereType<String>()
+    .skipWhile((key) => !key.startsWith('activity-'))
+    .takeWhile((key) => key.startsWith('activity-'));
+}
+
+Iterable<EtvActivity> getCachedActivities()
+{
+  return getCachedActivityKeys()
+    .map((key) => getCachedActivity(key))
+    .whereType<EtvActivity>();
+}
+
+/// Updates the activity cache
+///
+/// **Warning:** sorts the provided `activities`.
+Future<void> updateActivityCache(
+  List<EtvActivity> activities,
+  {
+    Function(EtvActivity)? onNewActivity,
+  }
+)
+async {
+  final cacheBox = Hive.box('cache');
+  final cacheKeyCursor = getCachedActivityKeys().iterator;
+  bool cacheEntryAvailable = cacheKeyCursor.moveNext();
+
+  activities.sort((a, b) => a.id.compareTo(b.id));
+
+  for (final activity in activities) {
+    final key = 'activity-${activity.id}';
+
+    while (cacheEntryAvailable && cacheKeyCursor.current.compareTo(key) < 0) {
+      cacheBox.delete(cacheKeyCursor.current);
+      cacheEntryAvailable = cacheKeyCursor.moveNext();
+    }
+
+    if (!cacheEntryAvailable || cacheKeyCursor.current.compareTo(key) > 0) {
+      // fetched activity not yet in cache OR has lower ID than next item in cache
+      cacheActivity(activity);
+      if (onNewActivity != null) await onNewActivity(activity);
+    }
+    else if (cacheKeyCursor.current == key) {
+      final cachedActivity = getCachedActivity(key)!;
+
+      if (!mapEquals(
+        activity.toMap()..remove('read'),
+        cachedActivity.toMap()..remove('read')
+      )) {
+        // activity was changed online
+        // -> update cached entry
+        cacheActivity(activity);
+        if (onNewActivity != null) await onNewActivity(activity);
+      }
+
+      cacheEntryAvailable = cacheKeyCursor.moveNext();
+    }
+  }
+
+  return cacheBox.flush();
+}
+
+void clearActivityCache() async
+{
+  final cacheBox = Hive.box('cache');
+  await cacheBox.deleteAll(getCachedActivityKeys());
+}
+
+/* *** CACHE - Bulletins *** */
+
+void cacheBulletin(EtvBulletin bulletin)
 {
   final cacheBox = Hive.box('cache');
   cacheBox.put('bulletin-${bulletin.id}', bulletin.toMap());
@@ -84,6 +175,7 @@ Iterable<String> getCachedBulletinKeys()
   final cacheBox = Hive.box('cache');
   return cacheBox.keys
     .whereType<String>()
+    .skipWhile((key) => !key.startsWith('bulletin-'))
     .takeWhile((key) => key.startsWith('bulletin-'));
 }
 
@@ -99,7 +191,7 @@ void markCachedBulletinAsRead(int bulletinId)
   final stored = getCachedBulletin('bulletin-$bulletinId');
 
   if (stored != null && !stored.read) {
-    storeCachedBulletin(stored..read = true);
+    cacheBulletin(stored..read = true);
   }
 }
 
@@ -130,7 +222,7 @@ async {
 
     if (!cacheEntryAvailable || cacheKeyCursor.current.compareTo(key) > 0) {
       // fetched bulletin not yet in cache OR has lower ID than next item in cache
-      storeCachedBulletin(bulletin..read = markNewBulletinsAsRead);
+      cacheBulletin(bulletin..read = markNewBulletinsAsRead);
       if (onNewBulletin != null) await onNewBulletin(bulletin);
     }
     else if (cacheKeyCursor.current == key) {
@@ -142,7 +234,7 @@ async {
       )) {
         // bulletin was changed online
         // -> update cached entry & reset "read" state
-        storeCachedBulletin(bulletin..read = markNewBulletinsAsRead);
+        cacheBulletin(bulletin..read = markNewBulletinsAsRead);
         if (onNewBulletin != null) await onNewBulletin(bulletin);
       }
 
@@ -156,10 +248,5 @@ async {
 void clearBulletinCache() async
 {
   final cacheBox = Hive.box('cache');
-  final cacheKeys = (
-    cacheBox.keys
-    .takeWhile((key) => (key as String).startsWith('bulletin-'))
-    as Iterable<String>);
-
-  await cacheBox.deleteAll(cacheKeys);
+  await cacheBox.deleteAll(getCachedBulletinKeys());
 }

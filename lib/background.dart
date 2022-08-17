@@ -72,7 +72,7 @@ callbackDispatcher()
   });
 }
 
-Future<void> scheduleBackgroundFetchBulletins(Duration interval)
+Future<void> scheduleBackgroundFetch(Duration interval)
 {
   return Workmanager().registerPeriodicTask(
     fetchBulletinsTaskId,
