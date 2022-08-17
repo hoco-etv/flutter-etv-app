@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
 import '/widgets/bulletin_list.dart';
+import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
 
 class NewsPage extends StatefulWidget {
@@ -17,9 +19,12 @@ class _NewsPageState extends State<NewsPage> {
 
   Future refresh()
   {
+    if (kDebugMode) print('refreshing news page');
+
     return fetchNews()
     .then((bulletins) {
       setState(() { _bulletins = bulletins; });
+      updateBulletinCache([...bulletins]);
     })
     .catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -29,19 +34,18 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   @override
+  initState()
+  {
+    super.initState();
+    if (kDebugMode) print('initializing news page state');
+    _bulletins = getCachedBulletins().toList().reversed.toList();
+
+    refresh();
+  }
+
+  @override
   Widget build(BuildContext context)
   {
-    if (_bulletins == null) {
-      if (ModalRoute.of(context)?.settings.arguments != null) {
-        setState(() {
-          _bulletins = ModalRoute.of(context)?.settings.arguments as List<EtvBulletin>;
-        });
-      }
-      else {
-        refresh();
-      }
-    }
-
     return DefaultLayout(
       title: 'Nieuwsberichten',
       pageContent: RefreshIndicator(

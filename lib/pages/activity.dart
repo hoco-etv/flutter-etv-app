@@ -4,10 +4,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 import '/data_source/objects.dart';
-import '/widgets/utils/loaded_network_image.dart';
+import '/data_source/store.dart';
 import '/layouts/default.dart';
 import '/utils/etv_style.dart';
+import '/utils/notifications.dart';
 import '/utils/time_formats.dart';
+import '/widgets/utils/loaded_network_image.dart';
 
 class ActivityPage extends StatelessWidget {
   final EtvActivity activity;
@@ -20,6 +22,9 @@ class ActivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context)
   {
+    cancelActivityNotification(activity.id);
+    markCachedActivityAsSeen(activity.id);
+
     return DefaultLayout(
       title: 'Activiteit',
       textBackground: true,

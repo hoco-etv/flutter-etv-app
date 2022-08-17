@@ -1,20 +1,37 @@
-import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
+import '/utils/notifications.dart' as notifications;
 import '/utils/etv_style.dart';
+import '/background.dart';
 import '/router.gr.dart';
 
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('user');
+  await Hive.openBox('cache');
 
-  runApp(EtvApp());
+  await Workmanager().initialize(
+    backgroundTaskDispatcher,
+    isInDebugMode: kDebugMode
+  );
+  if (Hive.box('cache').isEmpty) {
+    await scheduleBackgroundFetch(const Duration(hours: 2));
+  }
+  if (kDebugMode) await scheduleTestBackgroundTask();
+
+  final appRouter = AppRouter();
+  await notifications.initPlugin(appRouter);
+
+  runApp(EtvApp(router: appRouter));
 }
 
 class EtvApp extends StatelessWidget {
-  EtvApp({Key? key}) : super(key: key);
+  const EtvApp({required this.router, Key? key}) : super(key: key);
 
-  final appRouter = AppRouter();
+  final AppRouter router;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +42,8 @@ class EtvApp extends StatelessWidget {
       theme: getTheme(Brightness.light),
       darkTheme: getTheme(Brightness.dark),
 
-      routerDelegate: appRouter.delegate(),
-      routeInformationParser: appRouter.defaultRouteParser(),
+      routerDelegate: router.delegate(),
+      routeInformationParser: router.defaultRouteParser(),
     );
   }
 }

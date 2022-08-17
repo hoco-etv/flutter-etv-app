@@ -6,6 +6,7 @@ import 'package:flutter_font_icons/flutter_font_icons.dart';
 import '/router.gr.dart';
 import '/utils/etv_style.dart';
 import '/widgets/activity_list.dart';
+import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
 
 
@@ -79,17 +80,28 @@ class CalendarState extends State<Calendar> {
     ));
   }
 
-  refresh()
-  {
-    return fetchActivities()
-    .then((a) => setState(() { _activities = a.where((a) => DateTime.now().isBefore(a.endAt)).toList(); }));
-  }
-
   @override
   initState()
   {
     super.initState();
+    _activities = getCachedActivities().toList()
+      ..sort((a, b) => a.startAt.compareTo(b.startAt));
 
     refresh();
+  }
+
+  Future<void> refresh()
+  {
+    return fetchActivities()
+    .then((activities) {
+      setState(() {
+        _activities = activities;
+      });
+
+      updateActivityCache(
+        [...activities],
+        markNewActivitiesAsSeen: getCachedActivityKeys().isEmpty
+      );
+    });
   }
 }

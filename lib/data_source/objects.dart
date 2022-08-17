@@ -360,8 +360,10 @@ class EtvActivity {
   final DateTime endAt;
   final bool subscriptionEnabled;
   final String? subscriptionReason;
+  final bool shouldNotify;
+  bool seen;
 
-  const EtvActivity({
+  EtvActivity({
     required this.id,
     required this.name,
     this.summary,
@@ -371,25 +373,51 @@ class EtvActivity {
     this.location,
     required this.startAt,
     required this.endAt,
+    required this.shouldNotify,
     required this.subscriptionEnabled,
     this.subscriptionReason,
+    this.seen = false,
   });
 
-  factory EtvActivity.fromJson(Map<String, dynamic> json)
+  factory EtvActivity.fromMap(Map<String, dynamic> json)
   {
     return EtvActivity(
       id:           json['id'],
       name:         collapseLocalizedString(Map.from(json['name'])),
       summary:      collapseLocalizedString(Map.from(json['summary'])),
       description:  collapseLocalizedString(Map.from(json['description'])),
+      shouldNotify: json['app_notification'] ?? false,
       link:         json['link'],
       image:        json['image'],
       location:     json['location'] != '' ? json['location'] : null,
-      startAt:      DateTime.parse(json['start_at'] as String),
-      endAt:        DateTime.parse(json['end_at'] as String),
+      startAt:      DateTime.parse(json['start_at']),
+      endAt:        DateTime.parse(json['end_at']),
+      seen:         json['seen'] ?? false,
       subscriptionEnabled:  json['subscribe']['enabled'],
       subscriptionReason:   json['subscribe']['reason'],
     );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':       id,
+      'link':     link,
+      'image':    image,
+      'location': location,
+      'start_at': startAt.toString(),
+      'end_at':   endAt.toString(),
+      'seen':     seen,
+      'name':        { 'nl-NL': name }, // FIXME: technical debt
+      'summary':     { 'nl-NL': summary },
+      'description': { 'nl-NL': description },
+      'app_notification': shouldNotify,
+
+      'subscribe': {
+        'enabled': subscriptionEnabled,
+        'reason':  subscriptionReason,
+      },
+    };
   }
 }
 
@@ -406,7 +434,7 @@ class EtvBoardroomState {
     this.closedUntil,
   });
 
-  factory EtvBoardroomState.fromJson(Map json)
+  factory EtvBoardroomState.fromMap(Map json)
   {
     return EtvBoardroomState(
       open: !json['is_closed'],
@@ -419,32 +447,51 @@ class EtvBoardroomState {
 
 class EtvBulletin {
   final int id;
-  final String author;
   final String name;
+  final String author;
   final String description;
   final DateTime createdAt;
 
-  const EtvBulletin({
+  bool read;
+
+  EtvBulletin({
     required this.id,
-    required this.author,
     required this.name,
+    required this.author,
     required this.description,
     required this.createdAt,
+
+    this.read = false,
   });
 
-  factory EtvBulletin.fromJson(Map<String, dynamic> json)
+  factory EtvBulletin.fromMap(Map<String, dynamic> json)
   {
     return EtvBulletin(
       id:           json['id'],
-      author:       json['author'],
       name:         json['name'],
+      author:       json['author'],
       description:  json['description'],
       createdAt:    DateTime.parse(json['created_at']),
+
+      read:         json['read'] ?? false,
     );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':           id,
+      'name':         name,
+      'author':       author,
+      'description':  description,
+      'created_at':   createdAt.toString(),
+
+      'read':         read,
+    };
   }
 }
 
-dynamic collapseLocalizedString(Map<String, String> map)
+dynamic collapseLocalizedString(Map<String, String?> map)
 {
   final content = map.entries.firstWhere((e) => e.key.startsWith('nl-NL'), orElse: () => map.entries.first).value;
   return content != '' ? content : null;

@@ -36,10 +36,10 @@ class DashboardPage extends StatelessWidget {
         ),
 
         onRefresh: () {
-          return Future.wait(<Future>[
-            boardroomIndicatorState.currentState?.refresh(),
-            newsBoothState.currentState?.refresh(),
-            calendarState.currentState?.refresh(),
+          return Future.wait(<Future<void>>[
+            boardroomIndicatorState.currentState!.refresh(),
+            newsBoothState.currentState!.refresh(),
+            calendarState.currentState!.refresh(),
           ]);
         }
       ),
