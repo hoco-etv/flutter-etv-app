@@ -84,8 +84,8 @@ Future<void> notifyActivity(EtvActivity activity)
 
   return notifications.show(
     activity.id,
-    'Nieuwe activiteit gepland!',
-    '${activity.name}\n\n${activity.summary}'.trim(),
+    'Nieuwe geplande activiteit',
+    activity.name,
     NotificationDetails(
       android: AndroidNotificationDetails(
         'activity-announcements',
