@@ -85,11 +85,9 @@ class NewsBoothState extends State<NewsBooth> {
   {
     super.initState();
     _newsItems = getCachedBulletins().toList().reversed.toList();
-
-    refresh();
   }
 
-  Future<void> refresh()
+  Future<bool> refresh()
   {
     if (kDebugMode) print('refreshing dashboard news booth');
 
@@ -101,6 +99,9 @@ class NewsBoothState extends State<NewsBooth> {
         [...bulletins],
         markNewBulletinsAsRead: getCachedBulletinKeys().isEmpty
       );
-    });
+
+      return true;
+    })
+    .catchError((error) => false);
   }
 }

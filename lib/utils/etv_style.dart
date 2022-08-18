@@ -48,6 +48,7 @@ final _lightColorScheme = ColorScheme.light(
 
   background: Colors.grey.shade100,
   surface: almostWhite,
+  onPrimary: almostWhite,
 );
 
 final _darkColorScheme = ColorScheme.dark(
@@ -131,6 +132,16 @@ ThemeData getTheme(Brightness brightness)
   );
 
   return baseTheme.copyWith(
+    appBarTheme: AppBarTheme(
+      backgroundColor: brightness == Brightness.light
+        ? colorScheme.primary
+        : colorScheme.surface,
+
+      iconTheme: IconThemeData(
+        color: colorScheme.onPrimary,
+      ),
+    ),
+
     cardTheme: CardTheme(
       shape: borderShape,
     ),

@@ -86,11 +86,9 @@ class CalendarState extends State<Calendar> {
     super.initState();
     _activities = getCachedActivities().toList()
       ..sort((a, b) => a.startAt.compareTo(b.startAt));
-
-    refresh();
   }
 
-  Future<void> refresh()
+  Future<bool> refresh()
   {
     return fetchActivities()
     .then((activities) {
@@ -102,6 +100,9 @@ class CalendarState extends State<Calendar> {
         [...activities],
         markNewActivitiesAsSeen: getCachedActivityKeys().isEmpty
       );
-    });
+
+      return true;
+    })
+    .catchError((error) => false);
   }
 }

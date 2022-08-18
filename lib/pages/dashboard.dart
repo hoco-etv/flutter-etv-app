@@ -18,31 +18,32 @@ class DashboardPage extends StatelessWidget {
 
     return DefaultLayout(
       title: 'Electrotechnische Vereeniging',
-      pageContent: RefreshIndicator(
-        child: ListView(
-          padding: outerPadding,
 
-          children: <Widget>[
-            BoardroomStateIndicator(key: boardroomIndicatorState),
+      onRefresh: () {
+        return Future.wait<bool>([
+          boardroomIndicatorState.currentState!.refresh(),
+          newsBoothState.currentState!.refresh(),
+          calendarState.currentState!.refresh(),
+        ])
+        .then((value) => value.every((refreshSucceeded) => refreshSucceeded));
+      },
+      refreshOnLoad: true,
 
-            const SizedBox(height: outerPaddingSize),
+      pageContent: ListView(
+        padding: outerPadding,
 
-            Calendar(key: calendarState),
+        children: <Widget>[
+          BoardroomStateIndicator(key: boardroomIndicatorState),
 
-            const SizedBox(height: outerPaddingSize),
+          const SizedBox(height: outerPaddingSize),
 
-            NewsBooth(key: newsBoothState),
-          ],
-        ),
+          Calendar(key: calendarState),
 
-        onRefresh: () {
-          return Future.wait(<Future<void>>[
-            boardroomIndicatorState.currentState!.refresh(),
-            newsBoothState.currentState!.refresh(),
-            calendarState.currentState!.refresh(),
-          ]);
-        }
-      ),
+          const SizedBox(height: outerPaddingSize),
+
+          NewsBooth(key: newsBoothState),
+        ],
+      )
     );
   }
 }

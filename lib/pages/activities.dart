@@ -16,17 +16,19 @@ class ActivitiesPage extends StatefulWidget {
 class _ActivitiesPageState extends State<ActivitiesPage> {
   List<EtvActivity>? _activities;
 
-  Future refresh()
+  Future<bool> refresh()
   {
     return fetchActivities()
     .then((activities) {
       setState(() { _activities = activities; });
       updateActivityCache([...activities]);
+      return true;
     })
     .catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Fetching activities failed :('))
       );
+      return false;
     });
   }
 
@@ -45,17 +47,15 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   {
     return DefaultLayout(
       title: 'Activiteiten',
-      pageContent: RefreshIndicator(
-        onRefresh: refresh,
+      onRefresh: refresh,
 
-        child: ListView(
-          padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
+      pageContent: ListView(
+        padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
-          children: _activities != null ? <Widget>[
-            ActivityList(_activities!),
-          ] : [],
-        ),
-      ),
+        children: _activities != null ? <Widget>[
+          ActivityList(_activities!),
+        ] : [],
+      )
     );
   }
 }

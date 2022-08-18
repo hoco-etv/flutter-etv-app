@@ -37,6 +37,8 @@ dependencies:
 
   dotted_border: ^2.0.0+2
 
+  easy_refresh: ^3.0.4+2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

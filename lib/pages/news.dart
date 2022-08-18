@@ -17,7 +17,7 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   List<EtvBulletin>? _bulletins;
 
-  Future refresh()
+  Future<bool> refresh()
   {
     if (kDebugMode) print('refreshing news page');
 
@@ -25,11 +25,13 @@ class _NewsPageState extends State<NewsPage> {
     .then((bulletins) {
       setState(() { _bulletins = bulletins; });
       updateBulletinCache([...bulletins]);
+      return true;
     })
     .catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Fetching news bulletins failed :('))
       );
+      return false;
     });
   }
 
@@ -48,16 +50,13 @@ class _NewsPageState extends State<NewsPage> {
   {
     return DefaultLayout(
       title: 'Nieuwsberichten',
-      pageContent: RefreshIndicator(
-        onRefresh: refresh,
+      onRefresh: refresh,
+      pageContent: ListView(
+        padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
-        child: ListView(
-          padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
-
-          children: _bulletins != null ? <Widget>[
-            BulletinList(_bulletins!),
-          ] : [],
-        ),
+        children: _bulletins != null ? <Widget>[
+          BulletinList(_bulletins!),
+        ] : [],
       ),
     );
   }

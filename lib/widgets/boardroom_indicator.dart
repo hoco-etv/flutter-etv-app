@@ -78,17 +78,13 @@ class BoardroomIndicatorState extends State<BoardroomStateIndicator> {
     );
   }
 
-  refresh()
+  Future<bool> refresh()
   {
     return fetchBoardroomState()
-    .then((bs) => setState(() { _boardroomState = bs; }));
-  }
-
-  @override
-  initState()
-  {
-    super.initState();
-
-    refresh();
+    .then((bs) {
+      setState(() { _boardroomState = bs; });
+      return true;
+    })
+    .catchError((error) => false);
   }
 }
