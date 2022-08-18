@@ -42,8 +42,8 @@ No idea, this is a `//TODO`.
 - [x] Upcoming activities
   - [ ] Better view on the activities page
 - [x] Cool splash screen
-- [ ] Notification for new activities
-  - [ ] Periodic background fetching / push message support (TBD)
+- [x] Notification for new activities
+  - [x] Periodic background fetching
   - [ ] Notification bubble
   - [ ] Toggle for notifications
 - [ ] Koffietimer connection

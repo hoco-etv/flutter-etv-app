@@ -44,7 +44,25 @@ void Function(String?) selectNotificationCallbackFactory(AppRouter appRouter)
       return;
     }
 
-    if (payload.startsWith('bulletin-')) {
+    if (payload.startsWith('activity-')) {
+      final activity = getCachedActivity(payload);
+      if (activity == null) {
+        return;
+      }
+
+      appRouter.navigate(
+        AppScaffold(
+          children: [
+            const DashboardRoute(),
+            ActivitiesTab(children: [
+              const ActivitiesRoute(),
+              ActivityRoute(activity: activity)
+            ]),
+          ],
+        ),
+      );
+    }
+    else if (payload.startsWith('bulletin-')) {
       final bulletin = getCachedBulletin(payload);
       if (bulletin == null) {
         return;
