@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+import 'package:etv_app/push_notifications.dart';
 import 'package:flutter/material.dart';
 >>>>>>> ee56fc7 (fix light/dark theme switching)
 import 'package:hive_flutter/hive_flutter.dart';
@@ -33,7 +32,8 @@ void main() async {
   final appRouter = AppRouter();
   await notifications.initPlugin(appRouter);
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
+  await PushNotificationsManager().init();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
