@@ -1,3 +1,4 @@
+import 'package:etv_app/push_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +11,8 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('user');
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
+  await PushNotificationsManager().init();
 
   runApp(EtvApp());
 }
