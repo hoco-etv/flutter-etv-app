@@ -1,4 +1,5 @@
 import 'package:etv_app/push_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 >>>>>>> ee56fc7 (fix light/dark theme switching)
 import 'package:hive_flutter/hive_flutter.dart';
@@ -14,6 +15,13 @@ import 'firebase_options.dart';
 import '/background.dart';
 import 'firebase_options.dart';
 import '/router.gr.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
   await Hive.initFlutter();
@@ -33,6 +41,7 @@ void main() async {
   await notifications.initPlugin(appRouter);
 
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await PushNotificationsManager().init();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
