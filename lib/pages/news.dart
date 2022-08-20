@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
 import '/widgets/bulletin_list.dart';
-<<<<<<< HEAD
 import '/data_source/store.dart';
-=======
->>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 import '/data_source/api_client/main.dart';
 
 class NewsPage extends StatefulWidget {

@@ -2,19 +2,12 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-<<<<<<< HEAD
 import '/utils/notifications.dart';
 import '/data_source/objects.dart';
 import '/data_source/store.dart';
 import '/utils/time_formats.dart';
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
-=======
-import '/data_source/objects.dart';
-import '/layouts/default.dart';
-import '/utils/etv_style.dart';
-import '/utils/time_formats.dart';
->>>>>>> 1f645d0 (enhance(members): improve member search & profile view)
 
 class BulletinPage extends StatelessWidget {
   final EtvBulletin bulletin;
