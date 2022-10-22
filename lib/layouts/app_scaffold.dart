@@ -78,7 +78,7 @@ class AppScaffoldState extends State<AppScaffold> {
             const etv_app.NavButtonData(
               destination: router.NewsRoute(),
               label: 'Nieuws',
-              icon: Feather.bell,
+              icon: Feather.inbox,
             ),
 
             etv_app.NavButtonData(

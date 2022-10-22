@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
@@ -61,6 +62,14 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
     return DefaultLayout(
       title: 'Activiteiten',
       onRefresh: refresh,
+      appBarActions: [
+        if (_activities.any((a) => !a.seen)) IconButton(
+          onPressed: () {
+            _activities.forEach((a) { markCachedActivityAsSeen(a.id); });
+          },
+          icon: const Icon(Feather.eye_off, size: 20),
+        ),
+      ],
 
       pageContent: ListView(
         padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),

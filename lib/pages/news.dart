@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
@@ -64,6 +65,15 @@ class _NewsPageState extends State<NewsPage> {
     return DefaultLayout(
       title: 'Nieuwsberichten',
       onRefresh: refresh,
+      appBarActions: [
+        if (_bulletins.any((b) => !b.read)) IconButton(
+          onPressed: () {
+            _bulletins.forEach((b) { markCachedBulletinAsRead(b.id); });
+          },
+          icon: const Icon(Feather.eye_off, size: 20),
+        ),
+      ],
+
       pageContent: ListView(
         padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
