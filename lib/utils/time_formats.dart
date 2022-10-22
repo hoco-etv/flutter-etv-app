@@ -1,23 +1,26 @@
 import 'package:intl/intl.dart';
 
-String formatDate(DateTime date, {bool includeYear = false, bool includeTime = false})
+String formatDate(DateTime date, {
+  bool includeDay = false,
+  bool includeTime = false,
+  bool includeYear = false,
+})
 {
   final dateFormatter = includeYear || date.year != DateTime.now().year
-    ? DateFormat.yMMMMd()
-    : DateFormat.MMMMd();
+    ? (includeDay ? DateFormat.yMMMMEEEEd() : DateFormat.yMMMMd())
+    : (includeDay ? DateFormat.MMMMEEEEd() : DateFormat.MMMMd());
 
   return dateFormatter.format(date)
     + (includeTime ? ' ${DateFormat.Hm().format(date)}' : '');
 }
 
-String formatDateSpan(DateTime startDate, DateTime endDate)
+String formatDateSpan(DateTime startDate, DateTime endDate, {bool includeDay = false})
 {
   final excludeTime =
     startDate.hour == 0 && startDate.minute == 0
     && endDate.hour == 0 && endDate.minute == 0;
 
-  return formatDate(startDate, includeYear: startDate.year != endDate.year)
-    + (!excludeTime ? ' ${DateFormat.Hm().format(startDate)}' : '')
+  return formatDate(startDate, includeDay: includeDay, includeTime: !excludeTime, includeYear: startDate.year != endDate.year)
     + (!startDate.isAtSameMomentAs(endDate) ? ' -' : '')
     + (startDate.day != endDate.day || endDate.difference(startDate).inDays >= 1
         ? ' ${formatDate(endDate, includeYear: startDate.year != endDate.year)}'

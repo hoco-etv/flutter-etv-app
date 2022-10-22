@@ -67,7 +67,7 @@ class ActivityList extends StatelessWidget {
                       /* Date */
                       Row(children: [
                         Text(
-                          formatDate(e.startAt, includeTime: true),
+                          formatDate(e.startAt, includeDay: true, includeTime: true),
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
 

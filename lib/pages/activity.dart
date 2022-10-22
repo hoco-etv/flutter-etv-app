@@ -77,7 +77,7 @@ class ActivityPage extends StatelessWidget {
                   ),
                   const SizedBox(width: innerPaddingSize),
                   Text(
-                    formatDateSpan(activity.startAt, activity.endAt),
+                    formatDateSpan(activity.startAt, activity.endAt, includeDay: true),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ]),
