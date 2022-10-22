@@ -100,16 +100,6 @@ class _ProfilePageState extends State<ProfilePage> {
         userProfile = u;
         _loggedIn = true;
       });
-
-      etv.fetchProfile()
-      .then((p) {
-        if (_disposed) return;
-        if (p == null) {
-          logout();
-          return;
-        }
-        setState(() { userProfile = p; });
-      });
     }
   }
 
@@ -159,6 +149,19 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return DefaultLayout(
       title: _loggedIn ? 'Profiel' : 'Log in',
+      onRefresh: !_loggedIn ? null : () {
+        return etv.fetchProfile()
+        .then((p) {
+          if (_disposed) return false;
+          if (p == null) {
+            logout();
+            return false;
+          }
+          setState(() { userProfile = p; });
+          return true;
+        });
+      },
+      refreshOnLoad: true,
       pageContent: ListView(children: [
 
         /* *** LOGIN PAGE *** */
