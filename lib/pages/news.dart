@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,8 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  List<EtvBulletin>? _bulletins;
+  late List<EtvBulletin> _bulletins;
+  late StreamSubscription _bulletinCacheSubscription;
 
   Future<bool> refresh()
   {
@@ -23,7 +25,6 @@ class _NewsPageState extends State<NewsPage> {
 
     return fetchNews()
     .then((bulletins) {
-      setState(() { _bulletins = bulletins; });
       updateBulletinCache([...bulletins]);
       return true;
     })
@@ -42,7 +43,19 @@ class _NewsPageState extends State<NewsPage> {
     if (kDebugMode) print('initializing news page state');
     _bulletins = getCachedBulletins().toList().reversed.toList();
 
+    _bulletinCacheSubscription = subscribeToBulletinCache(
+      target: _bulletins,
+      callback: (e) { setState(() {}); },
+    );
+
     refresh();
+  }
+
+  @override
+  dispose()
+  {
+    _bulletinCacheSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -54,9 +67,9 @@ class _NewsPageState extends State<NewsPage> {
       pageContent: ListView(
         padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
-        children: _bulletins != null ? <Widget>[
-          BulletinList(_bulletins!),
-        ] : [],
+        children: <Widget>[
+          BulletinList(_bulletins),
+        ],
       ),
     );
   }

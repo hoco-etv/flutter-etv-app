@@ -190,7 +190,7 @@ StreamSubscription<BoxEvent> subscribeToActivityCache({
         target.removeWhere((a) => 'activity-${a.id}' == event.key);
       }
       else {
-        EtvActivity newActivity = EtvActivity.fromMap(event.value);
+        final newActivity = EtvActivity.fromMap(event.value);
         int index = target.indexWhere((a) => 'activity-${a.id}' == event.key);
         if (index != -1) {
           target[index] = newActivity;
@@ -304,4 +304,36 @@ void clearBulletinCache() async
 {
   final cacheBox = Hive.box('cache');
   await cacheBox.deleteAll(getCachedBulletinKeys());
+}
+
+StreamSubscription<BoxEvent> subscribeToBulletinCache({
+  List<EtvBulletin>? target,
+  void Function(BoxEvent)? callback,
+})
+{
+  final cacheBox = Hive.box('cache');
+  final cacheEventStream = cacheBox.watch()
+    .where((event) => event.key.toString().startsWith('bulletin-'));
+
+  return cacheEventStream.listen((event) {
+    if (target != null) {
+      if (event.deleted) {
+        target.removeWhere((b) => 'bulletin-${b.id}' == event.key);
+      }
+      else {
+        final newBulletin = EtvBulletin.fromMap(event.value);
+        int index = target.indexWhere((b) => 'bulletin-${b.id}' == event.key);
+        if (index != -1) {
+          target[index] = newBulletin;
+        }
+        else {
+          target.insert(0, newBulletin);
+        }
+      }
+    }
+
+    if (callback != null) {
+      callback(event);
+    }
+  });
 }

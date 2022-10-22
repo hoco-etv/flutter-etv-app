@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:auto_route/auto_route.dart';
@@ -18,7 +19,8 @@ class NewsBooth extends StatefulWidget {
 }
 
 class NewsBoothState extends State<NewsBooth> {
-  List<EtvBulletin>? _newsItems;
+  late List<EtvBulletin> _newsItems;
+  late StreamSubscription _bulletinCacheSubscription;
 
   @override
   Widget build(BuildContext context)
@@ -41,12 +43,12 @@ class NewsBoothState extends State<NewsBooth> {
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-            child: _newsItems != null ? BulletinList(_newsItems!.sublist(0, min(_newsItems!.length, 3)), compact: true) : null,
+            child: BulletinList(_newsItems.sublist(0, min(_newsItems.length, 3)), compact: true),
           ),
 
           /* Link to news page */
           Visibility(
-            visible: (_newsItems?.length ?? 0) > 3,
+            visible: _newsItems.length > 3,
             child: GestureDetector(
               onTap: () { context.navigateTo(const NewsTab(children: [ NewsRoute() ])); },
 
@@ -58,7 +60,7 @@ class NewsBoothState extends State<NewsBooth> {
 
                   children: [
                     Text(
-                      'nog ${(_newsItems?.length ?? 0) - 3} nieuwsbericht${(_newsItems?.length ?? 0) -3 == 1 ? '' : 'en'}',
+                      'nog ${_newsItems.length - 3} nieuwsbericht${_newsItems.length -3 == 1 ? '' : 'en'}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -85,6 +87,18 @@ class NewsBoothState extends State<NewsBooth> {
   {
     super.initState();
     _newsItems = getCachedBulletins().toList().reversed.toList();
+
+    _bulletinCacheSubscription = subscribeToBulletinCache(
+      target: _newsItems,
+      callback: (e) { setState(() {}); },
+    );
+  }
+
+  @override
+  dispose()
+  {
+    _bulletinCacheSubscription.cancel();
+    super.dispose();
   }
 
   Future<bool> refresh()
@@ -93,8 +107,6 @@ class NewsBoothState extends State<NewsBooth> {
 
     return fetchNews()
     .then((bulletins) {
-      setState(() { _newsItems = bulletins; });
-
       updateBulletinCache(
         [...bulletins],
         markNewBulletinsAsRead: getCachedBulletinKeys().isEmpty

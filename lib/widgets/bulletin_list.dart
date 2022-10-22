@@ -32,60 +32,77 @@ class BulletinList extends StatelessWidget {
         child: ClipPath(
           clipper: ShapeBorderClipper(shape: innerBorderShape),
 
-          child: InkWell(
-            onTap: () {
-              context.navigateTo(
-                AppScaffold(
+          child: Stack(children: [
+              InkWell(
+              onTap: () {
+                context.navigateTo(
+                  AppScaffold(
+                    children: [
+                      const DashboardRoute(),
+                      NewsTab(children: [ const NewsRoute(), BulletinRoute(bulletin: ni) ]),
+                    ],
+                  ),
+                );
+              },
+
+              borderRadius: BorderRadius.circular(innerBorderRadius),
+
+              child: Container(
+                padding: const EdgeInsets.all(innerPaddingSize),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                  /* Card content */
                   children: [
-                    const DashboardRoute(),
-                    NewsTab(children: [ const NewsRoute(), BulletinRoute(bulletin: ni) ]),
+                    Text(
+                      ni.name,
+
+                      style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(height: 1.3)),
+                      softWrap: true,
+                      overflow: TextOverflow.clip,
+                    ),
+
+                    const SizedBox(height: 2),
+
+                    /* Author + date */
+                    Wrap(
+                      children: [
+                        Text(
+                          '${ni.author}  •  ',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                          ),
+                        ),
+
+                        Text(
+                          formatDate(ni.createdAt),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                          ),
+                        ),
+                      ]
+                    ),
                   ],
                 ),
-              );
-            },
-
-            borderRadius: BorderRadius.circular(innerBorderRadius),
-
-            child: Container(
-              padding: const EdgeInsets.all(innerPaddingSize),
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                /* Card content */
-                children: [
-                  Text(
-                    ni.name,
-
-                    style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(height: 1.3)),
-                    softWrap: true,
-                    overflow: TextOverflow.clip,
-                  ),
-
-                  const SizedBox(height: 2),
-
-                  /* Author + date */
-                  Wrap(
-                    children: [
-                      Text(
-                        '${ni.author}  •  ',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                        ),
-                      ),
-
-                      Text(
-                        formatDate(ni.createdAt),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                        ),
-                      ),
-                    ]
-                  ),
-                ],
               ),
             ),
-          ),
+
+            if (!ni.read) Positioned(
+              right: innerBorderRadius,
+              top: innerBorderRadius,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: etvRed.shade100,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                constraints: const BoxConstraints(
+                  minHeight: 8,
+                  minWidth: 8,
+                ),
+              ),
+            ),
+          ]),
         ),
       ))
       .toList()
