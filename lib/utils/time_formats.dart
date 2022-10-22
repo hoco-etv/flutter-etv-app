@@ -1,22 +1,13 @@
-const months = {
-  1: 'januari',
-  2: 'februari',
-  3: 'maart',
-  4: 'april',
-  5: 'mei',
-  6: 'juni',
-  7: 'juli',
-  8: 'augustus',
-  9: 'september',
-  10: 'oktober',
-  11: 'november',
-  12: 'december'
-};
+import 'package:intl/intl.dart';
 
-String formatDate(DateTime date, [bool includeYear = false])
+String formatDate(DateTime date, {bool includeYear = false, bool includeTime = false})
 {
-  return '${date.day} ${months[date.month]}'
-    + (includeYear || date.year != DateTime.now().year ? ' ${date.year}' : '');
+  final dateFormatter = includeYear || date.year != DateTime.now().year
+    ? DateFormat.yMMMMd()
+    : DateFormat.MMMMd();
+
+  return dateFormatter.format(date)
+    + (includeTime ? ' ${DateFormat.Hm().format(date)}' : '');
 }
 
 String formatDateSpan(DateTime startDate, DateTime endDate)
@@ -25,11 +16,13 @@ String formatDateSpan(DateTime startDate, DateTime endDate)
     startDate.hour == 0 && startDate.minute == 0
     && endDate.hour == 0 && endDate.minute == 0;
 
-  return formatDate(startDate, startDate.year != endDate.year)
-    + (!excludeTime ? ' ${startDate.toIso8601String().substring(11, 16)}' : '')
+  return formatDate(startDate, includeYear: startDate.year != endDate.year)
+    + (!excludeTime ? ' ${DateFormat.Hm().format(startDate)}' : '')
     + (!startDate.isAtSameMomentAs(endDate) ? ' -' : '')
-    + (startDate.day != endDate.day || endDate.difference(startDate).inDays >= 1 ? ' ${formatDate(endDate, startDate.year != endDate.year)}' : '')
-    + (!excludeTime ? ' ${endDate.toIso8601String().substring(11, 16)}' : '');
+    + (startDate.day != endDate.day || endDate.difference(startDate).inDays >= 1
+        ? ' ${formatDate(endDate, includeYear: startDate.year != endDate.year)}'
+        : '')
+    + (!excludeTime ? ' ${DateFormat.Hm().format(endDate)}' : '');
 }
 
 String timeAgoSinceDate(DateTime date, {bool short = false})

@@ -1,5 +1,7 @@
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,9 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('user');
   await Hive.openBox('cache');
+
+  await findSystemLocale();
+  await initializeDateFormatting();
 
   await Workmanager().initialize(
     backgroundTaskDispatcher,

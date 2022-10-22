@@ -65,12 +65,20 @@ class ActivityList extends StatelessWidget {
 
                     children: [
                       /* Date */
-                      Text(
-                        DateTime.now().isBefore(e.startAt) ? timeLeftBeforeDate(e.startAt) : 'nu',
-                        style: e.startAt.difference(DateTime.now()).inDays <= 7
-                          ? Theme.of(context).textTheme.bodyText1
-                          : Theme.of(context).textTheme.bodyText2,
-                      ),
+                      Row(children: [
+                        Text(
+                          formatDate(e.startAt, includeTime: true),
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+
+                        if (e.startAt.difference(DateTime.now()).inDays < 1) ...[
+                          const Text('  •  '),
+                          Text(
+                            timeLeftBeforeDate(e.startAt),
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ],
+                      ]),
 
                       /* Title */
                       Text(

@@ -48,7 +48,7 @@ class BulletinPage extends StatelessWidget {
                 ),
 
                 Text(
-                  formatDate(bulletin.createdAt),
+                  formatDate(bulletin.createdAt, includeTime: true),
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
               ]

@@ -99,7 +99,7 @@ class _ProfileViewState extends State<ProfileView> {
             {
               'label': 'Verjaardag',
               'icon': Feather.gift,
-              'text': formatDate(widget.person.birthDate!, true),
+              'text': formatDate(widget.person.birthDate!, includeYear: true),
             },
           ]
           .where((element) => element['text'] != null)
