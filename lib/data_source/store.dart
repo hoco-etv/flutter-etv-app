@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import './objects.dart';
 
@@ -139,17 +142,17 @@ async {
     else if (cacheKeyCursor.current == key) {
       final cachedActivity = getCachedActivity(key)!;
 
-      if (!mapEquals(
+      if (!const DeepCollectionEquality().equals(
         activity.toMap()
           ..remove('seen')
           ..remove('link')
           ..remove('image')
-          ..remove('subscriptionReason'),
+          ..update('subscribe', (s) => (s as Map)..remove('reason')),
         cachedActivity.toMap()
           ..remove('seen')
           ..remove('link')
           ..remove('image')
-          ..remove('subscriptionReason')
+          ..update('subscribe', (s) => (s as Map)..remove('reason')),
       )) {
         // activity was changed online
         // -> update cached entry & run callback
@@ -170,6 +173,38 @@ void clearActivityCache() async
 {
   final cacheBox = Hive.box('cache');
   await cacheBox.deleteAll(getCachedActivityKeys());
+}
+
+StreamSubscription<BoxEvent> subscribeToActivityCache({
+  List<EtvActivity>? target,
+  void Function(BoxEvent)? callback,
+})
+{
+  final cacheBox = Hive.box('cache');
+  final cacheEventStream = cacheBox.watch()
+    .where((event) => event.key.toString().startsWith('activity-'));
+
+  return cacheEventStream.listen((event) {
+    if (target != null) {
+      if (event.deleted) {
+        target.removeWhere((a) => 'activity-${a.id}' == event.key);
+      }
+      else {
+        EtvActivity newActivity = EtvActivity.fromMap(event.value);
+        int index = target.indexWhere((a) => 'activity-${a.id}' == event.key);
+        if (index != -1) {
+          target[index] = newActivity;
+        }
+        else {
+          target.insert(0, newActivity);
+        }
+      }
+    }
+
+    if (callback != null) {
+      callback(event);
+    }
+  });
 }
 
 /* *** CACHE - Bulletins *** */

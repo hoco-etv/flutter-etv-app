@@ -34,61 +34,78 @@ class ActivityList extends StatelessWidget {
           child: ClipPath(
             clipper: ShapeBorderClipper(shape: innerBorderShape),
 
-            child: InkWell(
-              onTap: () {
-                context.navigateTo(
-                  AppScaffold(
-                    children: [
-                      const DashboardRoute(),
-                      ActivitiesTab(children: [ const ActivitiesRoute(), ActivityRoute(activity: e), ]),
-                    ],
-                  ),
-                );
-              },
-
-              borderRadius: BorderRadius.circular(innerBorderRadius),
-
-              child: Container(
-                padding: innerPadding,
-                decoration: BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: innerBorderRadius
+            child: Stack(children: [
+              InkWell(
+                onTap: () {
+                  context.navigateTo(
+                    AppScaffold(
+                      children: [
+                        const DashboardRoute(),
+                        ActivitiesTab(children: [ const ActivitiesRoute(), ActivityRoute(activity: e), ]),
+                      ],
                     ),
-                  ),
-                ),
+                  );
+                },
 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                borderRadius: BorderRadius.circular(innerBorderRadius),
 
-                  children: [
-                    /* Date */
-                    Text(
-                      DateTime.now().isBefore(e.startAt) ? timeLeftBeforeDate(e.startAt) : 'nu',
-                      style: e.startAt.difference(DateTime.now()).inDays <= 7
-                        ? Theme.of(context).textTheme.bodyText1
-                        : Theme.of(context).textTheme.bodyText2,
-                    ),
-
-                    /* Title */
-                    Text(
-                      e.name,
-                      style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(fontFamily: 'Roboto')),
-                    ),
-
-                    /* Subtitle */
-                    Visibility(
-                      visible: e.summary != null,
-                      child: Text(
-                        e.summary ?? '',
-                        style: Theme.of(context).textTheme.subtitle2,
+                child: Container(
+                  padding: innerPadding,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: innerBorderRadius
                       ),
                     ),
-                  ],
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                    children: [
+                      /* Date */
+                      Text(
+                        DateTime.now().isBefore(e.startAt) ? timeLeftBeforeDate(e.startAt) : 'nu',
+                        style: e.startAt.difference(DateTime.now()).inDays <= 7
+                          ? Theme.of(context).textTheme.bodyText1
+                          : Theme.of(context).textTheme.bodyText2,
+                      ),
+
+                      /* Title */
+                      Text(
+                        e.name,
+                        style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(fontFamily: 'Roboto')),
+                      ),
+
+                      /* Subtitle */
+                      Visibility(
+                        visible: e.summary != null,
+                        child: Text(
+                          e.summary ?? '',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+
+              if (!e.seen) Positioned(
+                right: innerBorderRadius,
+                top: innerBorderRadius,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: etvRed.shade100,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  constraints: const BoxConstraints(
+                    minHeight: 8,
+                    minWidth: 8,
+                  ),
+                ),
+              ),
+            ]),
           ),
         );
       })

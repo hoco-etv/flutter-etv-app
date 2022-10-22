@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '/utils/etv_style.dart';
@@ -14,13 +15,13 @@ class ActivitiesPage extends StatefulWidget {
 }
 
 class _ActivitiesPageState extends State<ActivitiesPage> {
-  List<EtvActivity>? _activities;
+  late List<EtvActivity> _activities;
+  late StreamSubscription _activityStoreSubscription;
 
   Future<bool> refresh()
   {
     return fetchActivities()
     .then((activities) {
-      setState(() { _activities = activities; });
       updateActivityCache([...activities]);
       return true;
     })
@@ -39,7 +40,19 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
     _activities = getCachedActivities().toList()
       ..sort((a, b) => a.startAt.compareTo(b.startAt));
 
+    _activityStoreSubscription = subscribeToActivityCache(
+      target: _activities,
+      callback: (e) { setState(() {}); },
+    );
+
     refresh();
+  }
+
+  @override
+  dispose()
+  {
+    _activityStoreSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -52,9 +65,9 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       pageContent: ListView(
         padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
-        children: _activities != null ? <Widget>[
-          ActivityList(_activities!),
-        ] : [],
+        children: <Widget>[
+          ActivityList(_activities),
+        ],
       )
     );
   }

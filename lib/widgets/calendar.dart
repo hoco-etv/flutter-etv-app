@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
@@ -18,7 +19,8 @@ class Calendar extends StatefulWidget {
 }
 
 class CalendarState extends State<Calendar> {
-  List<EtvActivity>? _activities;
+  late List<EtvActivity> _activities;
+  late StreamSubscription _activityStoreSubscription;
 
   @override
   Widget build(BuildContext context)
@@ -41,12 +43,12 @@ class CalendarState extends State<Calendar> {
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-            child: _activities != null ? ActivityList(_activities!.sublist(0, min(_activities!.length, 3))) : null,
+            child: ActivityList(_activities.sublist(0, min(_activities.length, 3))),
           ),
 
           /* Link to activities page */
           Visibility(
-            visible: (_activities?.length ?? 0) > 3,
+            visible: _activities.length > 3,
             child: GestureDetector(
               onTap: () { context.navigateTo(const ActivitiesTab(children: [ ActivitiesRoute() ])); },
 
@@ -58,7 +60,7 @@ class CalendarState extends State<Calendar> {
 
                   children: [
                     Text(
-                      'nog ${(_activities?.length ?? 0) - 3} activiteit${(_activities?.length ?? 0) -3 == 1 ? '' : 'en'}',
+                      'nog ${_activities.length - 3} activiteit${_activities.length -3 == 1 ? '' : 'en'}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -86,16 +88,24 @@ class CalendarState extends State<Calendar> {
     super.initState();
     _activities = getCachedActivities().toList()
       ..sort((a, b) => a.startAt.compareTo(b.startAt));
+
+    _activityStoreSubscription = subscribeToActivityCache(
+      target: _activities,
+      callback: (e) { setState(() {}); },
+    );
+  }
+
+  @override
+  dispose()
+  {
+    _activityStoreSubscription.cancel();
+    super.dispose();
   }
 
   Future<bool> refresh()
   {
     return fetchActivities()
     .then((activities) {
-      setState(() {
-        _activities = activities;
-      });
-
       updateActivityCache(
         [...activities],
         markNewActivitiesAsSeen: getCachedActivityKeys().isEmpty
