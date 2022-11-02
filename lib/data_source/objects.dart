@@ -451,6 +451,7 @@ class EtvBulletin {
   final String author;
   final String description;
   final DateTime createdAt;
+  final String? image;
 
   bool read;
 
@@ -460,6 +461,7 @@ class EtvBulletin {
     required this.author,
     required this.description,
     required this.createdAt,
+    this.image,
 
     this.read = false,
   });
@@ -469,6 +471,7 @@ class EtvBulletin {
     return EtvBulletin(
       id:           json['id'],
       name:         json['name'],
+      image:        json['image'],
       author:       json['author'],
       description:  json['description'],
       createdAt:    DateTime.parse(json['created_at']),
@@ -482,6 +485,7 @@ class EtvBulletin {
     return {
       'id':           id,
       'name':         name,
+      'image':        image,
       'author':       author,
       'description':  description,
       'created_at':   createdAt.toString(),

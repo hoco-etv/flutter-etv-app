@@ -2,6 +2,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
+import '/widgets/utils/loaded_network_image.dart';
 import '/utils/notifications.dart';
 import '/data_source/objects.dart';
 import '/data_source/store.dart';
@@ -20,7 +21,7 @@ class BulletinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context)
   {
-    cancelBulletinNotification(bulletin.id);  // TODO: verify that this fires once on page load
+    cancelBulletinNotification(bulletin.id);
     markCachedBulletinAsRead(bulletin.id);
 
     return DefaultLayout(
@@ -30,6 +31,16 @@ class BulletinPage extends StatelessWidget {
       pageContent: ListView(
         padding: outerPadding,
         children: <Widget>[
+          /* Image */
+          if (bulletin.image != null) ...[
+            LoadedNetworkImage(
+              bulletin.image ?? '',
+              defaultAspectRatio: 4/3,
+            ),
+
+            const SizedBox(height: innerPaddingSize), // extra margin
+          ],
+
           /* Title */
           Text(
             bulletin.name,
