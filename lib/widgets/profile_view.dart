@@ -60,7 +60,7 @@ class _ProfileViewState extends State<ProfileView> {
             child: LoadedNetworkImage(
               widget.person.pictureUrl,
               httpHeaders: authHeader(),
-              aspectRatio: 1,
+              defaultAspectRatio: 1,
               fit: BoxFit.cover,
             ),
           ),
@@ -279,27 +279,23 @@ class _ProfileViewState extends State<ProfileView> {
                     style: Theme.of(context).textTheme.headline6,
                   ),
 
-                  Visibility(
-                    visible: committee.functionName?.isNotEmpty == true,
-                    child: Text(
-                      committee.functionName ?? '',
-                      style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(
-                        height: 1.25,
-                      )),
-                    ),
+                  if (committee.functionName?.isNotEmpty == true)
+                  Text(
+                    committee.functionName ?? '',
+                    style: Theme.of(context).textTheme.subtitle1?.merge(const TextStyle(
+                      height: 1.25,
+                    )),
                   ),
 
                   /* Committee participation period */
-                  Visibility(
-                    visible: committee.installation != null || committee.discharge != null,
-                    child: Text(
-                      committee.discharge == null
-                        ? committee.installation != null ? 'sinds ${formatDate(committee.installation!)}' : ''
-                        : committee.installation != null
-                          ? formatDateSpan(committee.installation!, committee.discharge!)
-                          : 'onbekend - ${formatDate(committee.discharge!)}',
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
+                  if (committee.installation != null || committee.discharge != null)
+                  Text(
+                    committee.discharge == null
+                      ? committee.installation != null ? 'sinds ${formatDate(committee.installation!)}' : ''
+                      : committee.installation != null
+                        ? formatDateSpan(committee.installation!, committee.discharge!)
+                        : 'onbekend - ${formatDate(committee.discharge!)}',
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ],
               ),

@@ -184,12 +184,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   SizedBox(height: _loginFailedMessage == null ? outerPaddingSize : innerPaddingSize),
 
-                  Visibility(
-                    visible: _loginFailedMessage != null,
-                    child: Text(
-                      _loginFailedMessage ?? '',
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                  if (_loginFailedMessage != null)
+                  Text(
+                    _loginFailedMessage!,
+                    style: const TextStyle(color: Colors.red),
                   ),
 
                   const SizedBox(height: innerPaddingSize),

@@ -5,7 +5,7 @@ import '/widgets/utils/shimmer_box.dart';
 class LoadedNetworkImage extends StatelessWidget {
   final String url;
   final Color? baseColor;
-  final double? aspectRatio;
+  final double? defaultAspectRatio;
   final BoxFit? fit;
   final double? height;
   final double? width;
@@ -15,7 +15,7 @@ class LoadedNetworkImage extends StatelessWidget {
     this.url,
     {
       this.baseColor,
-      this.aspectRatio,
+      this.defaultAspectRatio,
       this.fit,
       this.height,
       this.width,
@@ -27,7 +27,7 @@ class LoadedNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context)
   {
-    final image = Image.network(
+    return Image.network(
       url,
       fit: fit,
       height: height,
@@ -36,12 +36,7 @@ class LoadedNetworkImage extends StatelessWidget {
       frameBuilder: (context, image, frame, loadedSynchronously) =>
         frame != null || loadedSynchronously
           ? image
-          : ShimmerBox(aspectRatio: aspectRatio ?? 3/2, baseColor: baseColor),
-    );
-
-    return aspectRatio == null ? image : AspectRatio(
-      aspectRatio: aspectRatio!,
-      child: image,
+          : ShimmerBox(aspectRatio: defaultAspectRatio ?? 3/2, baseColor: baseColor),
     );
   }
 }

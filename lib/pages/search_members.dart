@@ -58,15 +58,13 @@ class _MemberSearchPageState extends State<MemberSearchPage> {
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
 
-          Visibility(
-            visible: results != null,
-            child: Container(
-              margin: const EdgeInsets.only(top: 5, left: 5),
+          if (results != null)
+          Container(
+            margin: const EdgeInsets.only(top: 5, left: 5),
 
-              child: Text(
-                '${results?.length} ${results?.length == 1 ? 'lid' : 'leden'} gevonden',
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
+            child: Text(
+              '${results?.length} ${results?.length == 1 ? 'lid' : 'leden'} gevonden',
+              style: Theme.of(context).textTheme.subtitle2,
             ),
           ),
 

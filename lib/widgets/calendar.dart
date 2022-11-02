@@ -47,33 +47,31 @@ class CalendarState extends State<Calendar> {
           ),
 
           /* Link to activities page */
-          Visibility(
-            visible: _activities.length > 3,
-            child: GestureDetector(
-              onTap: () { context.navigateTo(const ActivitiesTab(children: [ ActivitiesRoute() ])); },
+          if (_activities.length > 3)
+          GestureDetector(
+            onTap: () { context.navigateTo(const ActivitiesTab(children: [ ActivitiesRoute() ])); },
 
-              child: Container(
-                alignment: Alignment.center,
+            child: Container(
+              alignment: Alignment.center,
 
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
 
-                  children: [
-                    Text(
-                      'nog ${_activities.length - 3} activiteit${_activities.length -3 == 1 ? '' : 'en'}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                      ),
-                    ),
-
-                    Icon(
-                      Feather.arrow_right,
+                children: [
+                  Text(
+                    'nog ${_activities.length - 3} activiteit${_activities.length -3 == 1 ? '' : 'en'}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
-                  ],
-                ),
+                  ),
+
+                  Icon(
+                    Feather.arrow_right,
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                ],
               ),
             ),
           ),

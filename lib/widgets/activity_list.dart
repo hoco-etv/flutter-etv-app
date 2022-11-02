@@ -87,12 +87,10 @@ class ActivityList extends StatelessWidget {
                       ),
 
                       /* Subtitle */
-                      Visibility(
-                        visible: e.summary != null,
-                        child: Text(
-                          e.summary ?? '',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
+                      if (e.summary != null)
+                      Text(
+                        e.summary ?? '',
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                     ],
                   ),

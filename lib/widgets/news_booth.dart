@@ -47,33 +47,31 @@ class NewsBoothState extends State<NewsBooth> {
           ),
 
           /* Link to news page */
-          Visibility(
-            visible: _newsItems.length > 3,
-            child: GestureDetector(
-              onTap: () { context.navigateTo(const NewsTab(children: [ NewsRoute() ])); },
+          if (_newsItems.length > 3)
+          GestureDetector(
+            onTap: () { context.navigateTo(const NewsTab(children: [ NewsRoute() ])); },
 
-              child: Container(
-                alignment: Alignment.center,
+            child: Container(
+              alignment: Alignment.center,
 
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
 
-                  children: [
-                    Text(
-                      'nog ${_newsItems.length - 3} nieuwsbericht${_newsItems.length -3 == 1 ? '' : 'en'}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                      ),
-                    ),
-
-                    Icon(
-                      Feather.arrow_right,
+                children: [
+                  Text(
+                    'nog ${_newsItems.length - 3} nieuwsbericht${_newsItems.length -3 == 1 ? '' : 'en'}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
-                  ],
-                ),
+                  ),
+
+                  Icon(
+                    Feather.arrow_right,
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                ],
               ),
             ),
           ),

@@ -32,12 +32,10 @@ class ActivityPage extends StatelessWidget {
       pageContent: ListView(
         children: <Widget>[
           /* Image */
-          Visibility(
-            visible: activity.image != null,
-            child: LoadedNetworkImage(
-              activity.image ?? '',
-              aspectRatio: 4/3,
-            ),
+          if (activity.image != null)
+          LoadedNetworkImage(
+            activity.image ?? '',
+            defaultAspectRatio: 4/3,
           ),
 
           /* Content */
@@ -55,15 +53,13 @@ class ActivityPage extends StatelessWidget {
                 ),
 
                 /* Subtitle */
-                Visibility(
-                  visible: activity.summary != null,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: innerPaddingSize/2),
+                if (activity.summary != null)
+                Container(
+                  margin: const EdgeInsets.only(top: innerPaddingSize/2),
 
-                    child: Text(
-                      activity.summary ?? 'samenvatting',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
+                  child: Text(
+                    activity.summary ?? 'samenvatting',
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
 
@@ -83,43 +79,39 @@ class ActivityPage extends StatelessWidget {
                 ]),
 
                 /* Where */
-                Visibility(
-                  visible: activity.location != null,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: innerPaddingSize/2),
+                if (activity.location != null)
+                Container(
+                  margin: const EdgeInsets.only(top: innerPaddingSize/2),
 
-                    child: Row(
-                      children: [
-                        Icon(
-                          Feather.map_pin,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(width: innerPaddingSize),
-                        Text(
-                          activity.location ?? '',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                      ],
-                    ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Feather.map_pin,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: innerPaddingSize),
+                      Text(
+                        activity.location ?? '',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
                   ),
                 ),
 
                 const SizedBox(height: innerPaddingSize),
 
                 /* Description */
-                Visibility(
-                  visible: activity.description != null,
-                  child: HtmlWidget(
-                    activity.description ?? '',
+                if (activity.description != null)
+                HtmlWidget(
+                  activity.description ?? '',
 
-                    onTapUrl: (url) => launchUrl(Uri.parse(url)),
-                    customWidgetBuilder: (element) {
-                      if (element.localName == 'img' && element.attributes.containsKey('src')) {
-                        return Image.network(element.attributes['src']!);
-                      }
-                      return null;
-                    },
-                  ),
+                  onTapUrl: (url) => launchUrl(Uri.parse(url)),
+                  customWidgetBuilder: (element) {
+                    if (element.localName == 'img' && element.attributes.containsKey('src')) {
+                      return Image.network(element.attributes['src']!);
+                    }
+                    return null;
+                  },
                 ),
               ],
             ),
