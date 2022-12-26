@@ -27,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String username = '';
   String password = '';
+  bool showPassword = false;
 
   login() async
   {
@@ -64,15 +65,15 @@ class _ProfilePageState extends State<ProfilePage> {
   {
     if (!_loggedIn) return;
 
+    ScaffoldMessenger.of(context)
+    .showSnackBar(const SnackBar(content: Text('Je wordt uitgelogd')));
+
     await resetAuthState();
 
     setState(() {
       userProfile = null;
       _loggedIn = false;
     });
-
-    ScaffoldMessenger.of(context)
-    .showSnackBar(const SnackBar(content: Text('Je bent uitgelogd')));
   }
 
   Color get _balanceColor
@@ -196,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(children: [
                       TextFormField(
                         decoration: const InputDecoration(labelText: 'e-mail'),
-                        onChanged: (newValue) { username = newValue; },
+                        onChanged: (newValue) => setState(() { username = newValue; }),
                         autofillHints: const [ AutofillHints.username ],
                         textInputAction: TextInputAction.next,
                         style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
@@ -205,9 +206,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(height: outerPaddingSize),
 
                       TextFormField(
-                        obscureText: true,
-                        decoration: const InputDecoration(labelText: 'wachtwoord'),
-                        onChanged: (newValue) { password = newValue; },
+                        obscureText: !showPassword,
+                        decoration: InputDecoration(
+                          labelText: 'wachtwoord',
+                          suffixIcon: IconButton(
+                            onPressed: () => setState(() { showPassword = !showPassword; }),
+                            icon: Icon(showPassword ? Feather.eye_off : Feather.eye),
+                          ),
+                        ),
+                        onChanged: (newValue) => setState(() { password = newValue; }),
                         autofillHints: const [ AutofillHints.password ],
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (value) { login(); },
@@ -265,18 +272,6 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
 
             children: [
-              // Text('Heading 1', style: Theme.of(context).textTheme.headline1),
-              // Text('Heading 2', style: Theme.of(context).textTheme.headline2),
-              // Text('Heading 3', style: Theme.of(context).textTheme.headline3),
-              // Text('Heading 4', style: Theme.of(context).textTheme.headline4),
-              // Text('Heading 5', style: Theme.of(context).textTheme.headline5),
-              // Text('Heading 6', style: Theme.of(context).textTheme.headline6),
-              // Text('Subtitle 1', style: Theme.of(context).textTheme.subtitle1),
-              // Text('Subtitle 2', style: Theme.of(context).textTheme.subtitle2),
-              // Text('Body text 1', style: Theme.of(context).textTheme.bodyText1),
-              // Text('Body text 2', style: Theme.of(context).textTheme.bodyText2),
-              // Text('Overline', style: Theme.of(context).textTheme.overline),
-
               if (userProfile?.person?.digidebBalance != null) ...[
                 Card(
                   child: Container(
