@@ -2,7 +2,8 @@
     package="nl.tudelft.etv.app">
     <application
         android:label="ETV"
-        android:icon="@mipmap/etv_schild_offset">
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round">
         <activity
             android:name=".MainActivity"
             android:exported="true"

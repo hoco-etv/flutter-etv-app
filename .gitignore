@@ -33,13 +33,13 @@
 /build/
 
 # splash screen files are generated on pull so can be omitted from repo
-/android/app/src/main/res/drawable*/
-/android/app/src/main/res/values*/
+/android/app/src/main/res/drawable*/*splash.png
+/android/app/src/main/res/drawable*/background.png
+/android/app/src/main/res/drawable*/launch_background.xml
+/android/app/src/main/res/values*/styles.xml
 /ios/Runner/Assets.xcassets/LaunchBackground.imageset/
 /ios/Runner/Assets.xcassets/LaunchImage.imageset/
 /web/splash/
-/assets/*/etv_*_met_woordmerk*.png
-!/assets/4x/etv_*_met_woordmerk*.png
 
 # Web related
 lib/generated_plugin_registrant.dart
