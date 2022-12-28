@@ -17,12 +17,23 @@
 			"type": "flutter",
 			"command": "flutter",
 			"args": [
-				"pub",
-				"run",
-				"flutter_native_splash:create",
+				"build",
+				"appbundle"
 			],
 			"group": "build",
-			"label": "flutter: build splash",
+			"problemMatcher": [],
+			"label": "flutter: flutter build appbundle"
+		},
+		{
+			"type": "flutter",
+			"command": "flutter",
+			"args": [
+				"pub",
+				"run",
+				"flutter_native_splash:create"
+			],
+			"group": "build",
+			"label": "flutter: build splash"
 		},
 		{
 			"type": "flutter",
@@ -34,7 +45,7 @@
 				"build"
 			],
 			"group": "build",
-			"label": "flutter: route builder",
+			"label": "flutter: route builder"
 		},
 		{
 			"type": "flutter",
@@ -46,7 +57,7 @@
 				"watch"
 			],
 			"group": "build",
-			"label": "flutter: route builder (watch)",
-		},
+			"label": "flutter: route builder (watch)"
+		}
 	]
 }

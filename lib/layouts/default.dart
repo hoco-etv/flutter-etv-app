@@ -73,7 +73,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         controller: _controller,
         header: ListenerHeader(
           listenable: indicatorState,
-          triggerOffset: 120,
+          triggerOffset: 110,
         ),
 
         onRefresh: widget.onRefresh == null ? null : () async {
@@ -83,24 +83,26 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         refreshOnStart: widget.refreshOnLoad,
 
         child: Container(
+          // ETV logo background
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.contain,
               alignment: Alignment.bottomCenter,
               image: const AssetImage('assets/etv_background_light.png'),
               colorFilter: ColorFilter.mode(
-                Colors.grey.withOpacity(!widget.textBackground ? 0.4 : 0.1),
+                Colors.grey.withOpacity(!widget.textBackground ? 0.4 : 0.1),  // better contrast for when text is directly on the background
                 BlendMode.srcIn,
               ),
             ),
           ),
 
-          child: widget.pageContent,
+          child: widget.pageContent
         ),
       ),
     );
   }
 
+  // Build the indicator widget that appears in the top AppBar
   Widget _buildRefreshIndicator(BuildContext context)
   {
     return ValueListenableBuilder<IndicatorState?>(

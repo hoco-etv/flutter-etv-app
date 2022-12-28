@@ -21,19 +21,21 @@ class _ProfilePageState extends State<ProfilePage> {
   User? userProfile;
 
   bool _loggedIn = false;
-  String? _loginFailedMessage;
   bool _loginRequestPending = false;
+  String? _loginFailedMessage;
+
+  bool showPassword = false;
+
   bool _disposed = false;
 
-  String username = '';
-  String password = '';
-  bool showPassword = false;
+  final TextEditingController username = TextEditingController();
+  final TextEditingController password = TextEditingController();
 
   login() async
   {
     if (_loggedIn) return;
 
-    if (username == '' || password == '') {
+    if (username.text == '' || password.text == '') {
       setState(() {
         _loginFailedMessage = 'E-mail en wachtwoord zijn vereist';
       });
@@ -42,14 +44,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
     _loginRequestPending = true;
 
-    final result = await etv.login(username.trim(), password);
+    final result = await etv.login(username.text.trim(), password.text);
     if (result.runtimeType == User) {
       setState(() {
         userProfile = result;
         _loggedIn = true;
         _loginFailedMessage = null;
-        username = '';
-        password = '';
+        username.clear();
+        password.clear();
       });
     }
     else {
@@ -195,17 +197,19 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   AutofillGroup(
                     child: Column(children: [
-                      TextFormField(
+                      TextField(
+                        controller: username,
                         decoration: const InputDecoration(labelText: 'e-mail'),
-                        onChanged: (newValue) => setState(() { username = newValue; }),
-                        autofillHints: const [ AutofillHints.username ],
+                        keyboardType: TextInputType.emailAddress,
+                        autofillHints: const [ AutofillHints.email, AutofillHints.username ],
                         textInputAction: TextInputAction.next,
                         style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       ),
 
                       const SizedBox(height: outerPaddingSize),
 
-                      TextFormField(
+                      TextField(
+                        controller: password,
                         obscureText: !showPassword,
                         decoration: InputDecoration(
                           labelText: 'wachtwoord',
@@ -214,10 +218,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             icon: Icon(showPassword ? Feather.eye_off : Feather.eye),
                           ),
                         ),
-                        onChanged: (newValue) => setState(() { password = newValue; }),
+                        onSubmitted: (value) { login(); },
+                        keyboardType: TextInputType.visiblePassword,
                         autofillHints: const [ AutofillHints.password ],
                         textInputAction: TextInputAction.done,
-                        onFieldSubmitted: (value) { login(); },
                         style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       ),
                     ]),

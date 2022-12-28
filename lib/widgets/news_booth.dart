@@ -1,13 +1,12 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '/router.gr.dart';
 import '/utils/etv_style.dart';
-import '/widgets/bulletin_list.dart';
+import '/widgets/bulletin_listing.dart';
 import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
 
@@ -43,7 +42,12 @@ class NewsBoothState extends State<NewsBooth> {
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-            child: BulletinList(_newsItems.sublist(0, min(_newsItems.length, 3)), compact: true),
+            child: Column(
+              children: _newsItems
+                .sublist(0, min(_newsItems.length, 3))
+                .map((b) => BulletinListing(b, compact: true))
+                .toList(),
+            ),
           ),
 
           /* Link to news page */
@@ -101,8 +105,6 @@ class NewsBoothState extends State<NewsBooth> {
 
   Future<bool> refresh()
   {
-    if (kDebugMode) print('refreshing dashboard news booth');
-
     return fetchNews()
     .then((bulletins) {
       updateBulletinCache(

@@ -6,7 +6,7 @@ import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '/router.gr.dart';
 import '/utils/etv_style.dart';
-import '/widgets/activity_list.dart';
+import '/widgets/activity_listing.dart';
 import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
 
@@ -43,7 +43,12 @@ class CalendarState extends State<Calendar> {
           Container(
             padding: const EdgeInsets.only(bottom: innerPaddingSize),
 
-            child: ActivityList(_activities.sublist(0, min(_activities.length, 3))),
+            child: Column(
+              children: _activities
+                .sublist(0, min(_activities.length, 3))
+                .map((a) => ActivityListing(a))
+                .toList(),
+            ),
           ),
 
           /* Link to activities page */

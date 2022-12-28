@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
-import '/widgets/bulletin_list.dart';
+import '/widgets/bulletin_listing.dart';
 import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
 
@@ -22,8 +21,6 @@ class _NewsPageState extends State<NewsPage> {
 
   Future<bool> refresh()
   {
-    if (kDebugMode) print('refreshing news page');
-
     return fetchNews()
     .then((bulletins) {
       updateBulletinCache([...bulletins]);
@@ -41,7 +38,6 @@ class _NewsPageState extends State<NewsPage> {
   initState()
   {
     super.initState();
-    if (kDebugMode) print('initializing news page state');
     _bulletins = getCachedBulletins().toList().reversed.toList();
 
     _bulletinCacheSubscription = subscribeToBulletinCache(
@@ -77,9 +73,7 @@ class _NewsPageState extends State<NewsPage> {
       pageContent: ListView(
         padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
-        children: <Widget>[
-          BulletinList(_bulletins),
-        ],
+        children: _bulletins.map<Widget>((b) => BulletinListing(b)).toList(),
       ),
     );
   }

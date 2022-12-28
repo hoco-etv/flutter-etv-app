@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Add PR/issue to project(s)
     steps:
-    - name: Assign NEW issues and NEW pull requests to project ETV Member Platform
+    - name: Assign NEW issues and NEW pull requests to project ETV Core Platform
       uses: actions/add-to-project@v0.4.0
       if: github.event.action == 'opened'
       with:

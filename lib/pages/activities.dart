@@ -4,7 +4,7 @@ import 'package:flutter_font_icons/flutter_font_icons.dart';
 
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
-import '/widgets/activity_list.dart';
+import '/widgets/activity_listing.dart';
 import '/data_source/store.dart';
 import '/data_source/api_client/main.dart';
 
@@ -74,9 +74,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
       pageContent: ListView(
         padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
 
-        children: <Widget>[
-          ActivityList(_activities),
-        ],
+        children: _activities.map((a) => ActivityListing(a)).toList(),
       )
     );
   }
