@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '/data_source/store.dart';
 import '/utils/etv_style.dart';
 
 class NavButtonData {
@@ -37,21 +36,11 @@ class BottomNavigationBar extends StatefulWidget {
 }
 
 class _BottomNavigationBarState extends State<BottomNavigationBar> {
-  bool loggedIn = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    loggedIn = isLoggedIn();
-
-    onLogin(() { setState(() { loggedIn = true; }); });
-    onLogout(() { setState(() { loggedIn = false; }); });
-  }
 
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      // Navigation bar layout
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
@@ -66,6 +55,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
           return InkResponse(
             onTap: () => widget.onTap(entry.key),
 
+            // Navigation button layout
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: innerPaddingSize, vertical: innerPaddingSize/2),
 

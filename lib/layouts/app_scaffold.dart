@@ -88,11 +88,11 @@ class AppScaffoldState extends State<AppScaffold> {
               icon: Feather.search,
             ),
 
-            const etv_app.NavButtonData(
-              destination: router.ProfileRoute(),
-              label: 'Profiel',
-              icon: Feather.user,
-            ),
+            // etv_app.NavButtonData(
+            //   destination: const router.ProfileRoute(),
+            //   label: loggedIn ? 'Profiel' : 'Log in',
+            //   icon: loggedIn ? Feather.user : Feather.log_in,
+            // ),
           ],
         ),
       ),

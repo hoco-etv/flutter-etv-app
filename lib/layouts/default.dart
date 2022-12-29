@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import '/utils/etv_style.dart';
 
 class DefaultLayout extends StatefulWidget {
-  final String title;
+  final String? title;
   final Widget pageContent;
   final bool refreshOnLoad;
   final bool textBackground;
@@ -14,8 +14,8 @@ class DefaultLayout extends StatefulWidget {
 
 
   const DefaultLayout({
-    required this.title,
     required this.pageContent,
+    this.title,
     this.refreshOnLoad = false,
     this.textBackground = false,
     this.appBarActions,
@@ -52,12 +52,15 @@ class _DefaultLayoutState extends State<DefaultLayout> {
     return Scaffold(
       appBar: AppBar(
         leading: Image.asset('assets/etv_schild.png'),
-        title: Text(
-          widget.title,
+
+        title: widget.title == null ? null : Text(
+          widget.title!,
           style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(
             color: almostWhite,
           )),
         ),
+        centerTitle: true,
+
         actions: [
           if (widget.onRefresh != null) _buildRefreshIndicator(context),
           if (widget.appBarActions != null) ...widget.appBarActions!,

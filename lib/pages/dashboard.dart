@@ -1,5 +1,8 @@
+import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '/router.gr.dart';
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
 import '/widgets/calendar.dart';
@@ -17,7 +20,17 @@ class DashboardPage extends StatelessWidget {
     final newsBoothState = GlobalKey<NewsBoothState>();
 
     return DefaultLayout(
-      title: 'Electrotechnische Vereeniging',
+      title: 'ETV Home',
+      appBarActions: [
+        IconButton(
+          onPressed: () {
+            context.navigateTo(
+              const AppScaffold(children: [ DashboardRoute(), ProfileRoute() ]),
+            );
+          },
+          icon: const Icon(Feather.user, size: 24),
+        )
+      ],
 
       onRefresh: () {
         return Future.wait<bool>([
