@@ -495,6 +495,56 @@ class EtvBulletin {
   }
 }
 
+class PhotoAlbum {
+  final int id;
+  final String name;
+  final String coverPhoto;
+  final DateTime date;
+  final List<String> tags;
+  final List<String>? photos;
+
+  bool seen;
+
+  PhotoAlbum({
+    required this.id,
+    required this.name,
+    required this.date,
+    required this.tags,
+    required this.coverPhoto,
+    this.photos,
+
+    this.seen = false,
+  });
+
+  factory PhotoAlbum.fromMap(Map<String, dynamic> json)
+  {
+    return PhotoAlbum(
+      id:         json['id'],
+      name:       json['name'],
+      date:       json['date'],
+      tags:       json['tags'],
+      photos:     json['photos'],
+      coverPhoto: json['coverPhoto'],
+
+      seen:       json['seen'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':         id,
+      'name':       name,
+      'date':       date.toString(),
+      'tags':       tags,
+      'photos':     photos,
+      'coverPhoto': coverPhoto,
+
+      'seen':       seen,
+    };
+  }
+}
+
 dynamic collapseLocalizedString(Map<String, String?> map)
 {
   final content = map.entries.firstWhere((e) => e.key.startsWith('nl-NL'), orElse: () => map.entries.first).value;
