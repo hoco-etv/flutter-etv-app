@@ -16,7 +16,7 @@ class ActivitiesPage extends StatefulWidget {
 }
 
 class _ActivitiesPageState extends State<ActivitiesPage> {
-  late List<EtvActivity> _activities;
+  late List<EtvActivity> activities;
   late StreamSubscription _activityStoreSubscription;
 
   Future<bool> refresh()
@@ -38,11 +38,11 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   initState()
   {
     super.initState();
-    _activities = getCachedActivities().toList()
+    activities = getCachedActivities().toList()
       ..sort((a, b) => a.startAt.compareTo(b.startAt));
 
     _activityStoreSubscription = subscribeToActivityCache(
-      target: _activities,
+      target: activities,
       callback: (e) { setState(() {}); },
     );
 
@@ -61,20 +61,23 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   {
     return DefaultLayout(
       title: 'Activiteiten',
+
       onRefresh: refresh,
       appBarActions: [
-        if (_activities.any((a) => !a.seen)) IconButton(
+        if (activities.any((a) => !a.seen)) IconButton(
           onPressed: () {
-            _activities.forEach((a) { markCachedActivityAsSeen(a.id); });
+            for (var a in activities) { markCachedActivityAsSeen(a.id); }
           },
           icon: const Icon(Feather.eye_off, size: 20),
         ),
       ],
 
-      pageContent: ListView(
-        padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
+      pageContent: ListView.separated(
+        itemCount: activities.length,
+        itemBuilder: (context, i) => ActivityListing(activities[i]),
 
-        children: _activities.map((a) => ActivityListing(a)).toList(),
+        padding: outerPadding,
+        separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize*0.75),
       )
     );
   }

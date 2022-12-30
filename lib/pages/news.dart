@@ -16,7 +16,7 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  late List<EtvBulletin> _bulletins;
+  late List<EtvBulletin> bulletins;
   late StreamSubscription _bulletinCacheSubscription;
 
   Future<bool> refresh()
@@ -38,10 +38,10 @@ class _NewsPageState extends State<NewsPage> {
   initState()
   {
     super.initState();
-    _bulletins = getCachedBulletins().toList().reversed.toList();
+    bulletins = getCachedBulletins().toList().reversed.toList();
 
     _bulletinCacheSubscription = subscribeToBulletinCache(
-      target: _bulletins,
+      target: bulletins,
       callback: (e) { setState(() {}); },
     );
 
@@ -60,21 +60,24 @@ class _NewsPageState extends State<NewsPage> {
   {
     return DefaultLayout(
       title: 'Nieuwsberichten',
+
       onRefresh: refresh,
       appBarActions: [
-        if (_bulletins.any((b) => !b.read)) IconButton(
+        if (bulletins.any((b) => !b.read)) IconButton(
           onPressed: () {
-            _bulletins.forEach((b) { markCachedBulletinAsRead(b.id); });
+            for (var b in bulletins) { markCachedBulletinAsRead(b.id); }
           },
           icon: const Icon(Feather.eye_off, size: 20),
         ),
       ],
 
-      pageContent: ListView(
-        padding: outerPadding.copyWith(top: outerPaddingSize - innerPaddingSize),
+      pageContent: ListView.separated(
+        padding: outerPadding,
 
-        children: _bulletins.map<Widget>((b) => BulletinListing(b)).toList(),
-      ),
+        itemCount: bulletins.length,
+        itemBuilder: (context, i) => BulletinListing(bulletins[i], contentPreview: true),
+        separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize*1.25),
+      )
     );
   }
 }

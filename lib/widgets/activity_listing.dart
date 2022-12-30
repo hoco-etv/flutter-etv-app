@@ -18,11 +18,7 @@ class ActivityListing extends StatelessWidget {
   Widget build(BuildContext context)
   {
     return Card(
-      margin: const EdgeInsets.only(top: innerPaddingSize),
       shape: innerBorderShape,
-      color: Theme.of(context).brightness == Brightness.light
-        ? Colors.white
-        : Colors.grey.shade800.withOpacity(0.9),
 
       child: ClipPath(
         clipper: ShapeBorderClipper(shape: innerBorderShape),
