@@ -78,7 +78,7 @@ class ActivityListing extends StatelessWidget {
                   /* Subtitle */
                   if (activity.summary != null)
                   Text(
-                    activity.summary ?? '',
+                    activity.summary!,
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ],

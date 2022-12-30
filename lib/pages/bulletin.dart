@@ -34,7 +34,7 @@ class BulletinPage extends StatelessWidget {
           /* Image */
           if (bulletin.image != null) ...[
             LoadedNetworkImage(
-              bulletin.image ?? '',
+              bulletin.image!,
               defaultAspectRatio: 4/3,
             ),
 
@@ -47,23 +47,21 @@ class BulletinPage extends StatelessWidget {
             style: Theme.of(context).textTheme.headline2,
           ),
 
+          const SizedBox(height: innerPaddingSize/2),
+
           /* Author & date */
-          Container(
-            margin: const EdgeInsets.only(top: innerPaddingSize/2),
+          Wrap(
+            children: [
+              Text(
+                '${bulletin.author}  •  ',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
 
-            child: Wrap(
-              children: [
-                Text(
-                  '${bulletin.author}  •  ',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-
-                Text(
-                  formatDate(bulletin.createdAt, includeTime: true),
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ]
-            ),
+              Text(
+                formatDate(bulletin.createdAt, includeTime: true),
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ]
           ),
 
           const SizedBox(height: outerPaddingSize),

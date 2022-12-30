@@ -21,6 +21,7 @@ class ShimmerBox extends StatelessWidget {
   Widget build(BuildContext context)
   {
     final baseColor = this.baseColor ?? Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
+
     return SkeletonLoader(
       builder: Container(
         color: baseColor,
