@@ -12,13 +12,15 @@ import '/data_source/objects.dart';
 class BulletinListing extends StatelessWidget {
   final EtvBulletin bulletin;
   final bool contentPreview;
+  final bool quickViewLink;
   final int maxPreviewLines;
 
   const BulletinListing(
     this.bulletin, {
+      this.quickViewLink = false,
       this.contentPreview = false,
       this.maxPreviewLines = 5,
-      key,
+      Key? key,
     }
   ) : assert(!contentPreview || maxPreviewLines >= 2, "Bulletin preview must be at least 2 lines"),
       super(key: key);
@@ -40,12 +42,12 @@ class BulletinListing extends StatelessWidget {
           InkWell(
             onTap: () {
               context.navigateTo(
-                AppScaffold(
-                  children: [
-                    const DashboardRoute(),
-                    NewsTab(children: [ const NewsRoute(), BulletinRoute(bulletin: bulletin) ]),
-                  ],
-                ),
+                NewsTab(children: [
+                  const NewsRoute(),
+                  BulletinRoute(bulletin: bulletin).copyWith(
+                    queryParams: { 'quick-view': quickViewLink },
+                  )
+                ])
               );
             },
 

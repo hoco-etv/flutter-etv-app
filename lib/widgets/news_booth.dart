@@ -53,7 +53,11 @@ class NewsBoothState extends State<NewsBooth> {
               physics: const NeverScrollableScrollPhysics(),
 
               itemCount: min(widget.numberOfItems, newsItems.length),
-              itemBuilder: (context, i) => BulletinListing(newsItems[i], contentPreview: true),
+              itemBuilder: (context, i) => BulletinListing(
+                newsItems[i],
+                contentPreview: true,
+                quickViewLink: true,
+              ),
               separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize),
             )
           ),

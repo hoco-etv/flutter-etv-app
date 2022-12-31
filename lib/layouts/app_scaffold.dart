@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'components/bottom_navigation_bar.dart' as etv_app;
 import '/data_source/store.dart';
-import '/router.gr.dart' as router;
+import '/router.gr.dart' as app_router;
 
 class AppScaffold extends StatefulWidget {
   const AppScaffold([Key? key]) : super(key: key);
@@ -29,70 +29,68 @@ class AppScaffoldState extends State<AppScaffold> {
   @override
   Widget build(BuildContext context)
   {
+    const routes = [
+      app_router.DashboardRoute(),
+      app_router.ActivitiesTab(),
+      app_router.NewsTab(),
+      app_router.MembersTab(),
+      app_router.ProfileRoute(),
+    ];
+
     return WillPopScope(
       // prevent closing app on "back" event & return to dashboard instead
       onWillPop: () {
-        final route = context.router;
-        if (route.topRoute.name != router.DashboardRoute.name) {
-          route.navigate(const router.AppScaffold());
+        if (context.router.topRoute.name != app_router.DashboardRoute.name) {
+          context.router.navigate(const app_router.AppScaffold());
           return Future.value(false);
         }
 
-        return Future.value(true);
+        return Future.value(true);  // pop AppScaffold -> leave app
       },
 
       child: AutoTabsScaffold(
-        routes: const [
-          router.DashboardRoute(),
-          router.ActivitiesTab(),
-          router.NewsTab(),
-          router.MembersTab(),
-          router.ProfileRoute(),
-        ],
+        routes: routes,
 
         bottomNavigationBuilder: (_, tabsRouter) => etv_app.BottomNavigationBar(
           activeIndex: tabsRouter.activeIndex,
           onTap: (int index) {
             if (
               index == tabsRouter.activeIndex
-              && tabsRouter.topRoute.breadcrumbs.last.path == ':id'
+              && tabsRouter.topRoute.path == ':id'
             ) {
-              tabsRouter.popTop();
+              tabsRouter.navigate(
+                routes[index] // current tab route
+                .copyWith(queryParams: { 'ref': 'tab' })  // used in router.dart
+              );
             }
             tabsRouter.setActiveIndex(index);
           },
 
           navButtons: <etv_app.NavButtonData>[
             const etv_app.NavButtonData(
-              destination: router.DashboardRoute(),
+              destination: app_router.DashboardRoute(),
               label: 'Huis',
               icon: Feather.home,
             ),
 
             const etv_app.NavButtonData(
-              destination: router.ActivitiesRoute(),
+              destination: app_router.ActivitiesRoute(),
               label: 'Activiteiten',
               icon: Feather.calendar,
             ),
 
             const etv_app.NavButtonData(
-              destination: router.NewsRoute(),
+              destination: app_router.NewsRoute(),
               label: 'Nieuws',
               icon: Feather.inbox,
             ),
 
             etv_app.NavButtonData(
               visible: loggedIn,
-              destination: const router.MemberSearchRoute(),
+              destination: const app_router.MemberSearchRoute(),
               label: 'Leden',
               icon: Feather.search,
             ),
-
-            // etv_app.NavButtonData(
-            //   destination: const router.ProfileRoute(),
-            //   label: loggedIn ? 'Profiel' : 'Log in',
-            //   icon: loggedIn ? Feather.user : Feather.log_in,
-            // ),
           ],
         ),
       ),

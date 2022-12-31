@@ -1,3 +1,4 @@
+import 'package:auto_route/empty_router_widgets.dart';
 import 'package:auto_route/auto_route.dart';
 
 import '/layouts/app_scaffold.dart';
@@ -17,7 +18,7 @@ import '/pages/search_members.dart';
       path: '/',
 
       children: [
-        AutoRoute(page: DashboardPage, initial: true, ),
+        AutoRoute(page: DashboardPage, initial: true),
 
         AutoRoute(
           path: 'activities',
@@ -27,7 +28,7 @@ import '/pages/search_members.dart';
           children: [
             AutoRoute(
               page: ActivitiesPage,
-              path: '',
+              initial: true,
             ),
             AutoRoute(
               page: ActivityPage,
@@ -44,7 +45,7 @@ import '/pages/search_members.dart';
           children: [
             AutoRoute(
               page: NewsPage,
-              path: '',
+              initial: true,
             ),
             AutoRoute(
               page: BulletinPage,
@@ -79,3 +80,19 @@ import '/pages/search_members.dart';
   preferRelativeImports: true,
 )
 class $AppRouter {}
+
+class AppRouterObserver extends AutoRouterObserver {
+  @override
+  void didPop(route, previousRoute) {
+    final poppedRoute = (route.settings as AdaptivePage).routeData;
+    final newRoute = (previousRoute?.settings as AdaptivePage?)?.routeData;
+
+    // pop again (return to dashboard) if route was used for quick view (activity/bulletin)
+    if (
+      poppedRoute.queryParams.get('quick-view') == true
+      && newRoute?.parent?.queryParams.get('ref') != 'tab'  // exception: tab was clicked directly
+    ) {
+      poppedRoute.router.popTop();
+    }
+  }
+}

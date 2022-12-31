@@ -53,7 +53,10 @@ class CalendarState extends State<Calendar> {
               physics: const NeverScrollableScrollPhysics(),
 
               itemCount: numberOfItems,
-              itemBuilder: (context, i) => ActivityListing(activities[i]),
+              itemBuilder: (context, i) => ActivityListing(
+                activities[i],
+                quickViewLink: true
+              ),
               separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize/2),
             )
           ),

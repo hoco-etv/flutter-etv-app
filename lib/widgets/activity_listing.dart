@@ -8,10 +8,13 @@ import '/router.gr.dart';
 
 class ActivityListing extends StatelessWidget {
   final EtvActivity activity;
+  final bool quickViewLink;
 
   const ActivityListing(
-    this.activity,
-    [Key? key]
+    this.activity, {
+      this.quickViewLink = false,
+      Key? key
+    }
   ) : super(key: key);
 
   @override
@@ -27,12 +30,12 @@ class ActivityListing extends StatelessWidget {
           InkWell(
             onTap: () {
               context.navigateTo(
-                AppScaffold(
-                  children: [
-                    const DashboardRoute(),
-                    ActivitiesTab(children: [ const ActivitiesRoute(), ActivityRoute(activity: activity), ]),
-                  ],
-                ),
+                ActivitiesTab(children: [
+                  const ActivitiesRoute(),
+                  ActivityRoute(activity: activity).copyWith(
+                    queryParams: { 'quick-view': quickViewLink },
+                  )
+                ])
               );
             },
 
