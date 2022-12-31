@@ -28,78 +28,92 @@ class CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context)
   {
-    return Card(child: Container(
-      padding: innerPadding,
+    return GestureDetector(
+      onTap: () { context.navigateTo(const ActivitiesTab(children: [ ActivitiesRoute() ])); },
 
-      child: Column(
-        children: [
-          /* Title */
-          Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(bottom: innerPaddingSize),
+      child: Card(child: Container(
+        padding: innerPadding,
 
-            child: Text(
-              'Activiteiten',
-              style: Theme.of(context).textTheme.headline4,
-            )
-          ),
+        child: Column(
+          children: [
+            /* Title */
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: innerPaddingSize),
 
-          /* Activity list */
-          Theme(
-            data: Theme.of(context).copyWith(cardColor: lighten(Theme.of(context).colorScheme.surface)),
-
-            child: ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-
-              itemCount: numberOfItems,
-              itemBuilder: (context, i) => ActivityListing(
-                activities[i],
-                quickViewLink: true
-              ),
-              separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize/2),
-            )
-          ),
-
-          if (activities.isEmpty) ...[
-            const SizedBox(height: innerPaddingSize),
-
-            DottedBorder(
-              borderType: BorderType.RRect,
-              strokeWidth: 4,
-              strokeCap: StrokeCap.round,
-              dashPattern: const [10, 8, 5, 8],
-              radius: const Radius.circular(innerBorderRadius),
-
-              color: Theme.of(context).brightness == Brightness.light
-                ? Colors.white
-                : Colors.grey.shade800.withOpacity(0.6),
-
-              child: ClipPath(
-                clipper: ShapeBorderClipper(shape: innerBorderShape),
-
-                child: SizedBox(
-                  height: 60,
-                  child: Center(
-                    child: Text(
-                      "Geen activiteiten\nin de komende maand",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                        color: Colors.grey.shade500.withOpacity(0.8)
-                      ),
-                    )
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Feather.calendar,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 22
                   ),
-                )
+                  const SizedBox(width: innerPaddingSize),
+
+                  Text(
+                    'Activiteiten',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+
+                  const SizedBox(width: 22),  // add spacer to semi-center title
+                ]
               )
             ),
-          ],
 
-          /* Link to activities page */
-          if (activities.length > 3)
-          GestureDetector(
-            onTap: () { context.navigateTo(const ActivitiesTab(children: [ ActivitiesRoute() ])); },
+            /* Activity list */
+            Theme(
+              data: Theme.of(context).copyWith(cardColor: lighten(Theme.of(context).colorScheme.surface)),
 
-            child: Container(
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+
+                itemCount: numberOfItems,
+                itemBuilder: (context, i) => ActivityListing(
+                  activities[i],
+                  quickViewLink: true
+                ),
+                separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize/2),
+              )
+            ),
+
+            if (activities.isEmpty) ...[
+              const SizedBox(height: innerPaddingSize),
+
+              DottedBorder(
+                borderType: BorderType.RRect,
+                strokeWidth: 4,
+                strokeCap: StrokeCap.round,
+                dashPattern: const [10, 8, 5, 8],
+                radius: const Radius.circular(innerBorderRadius),
+
+                color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : Colors.grey.shade800.withOpacity(0.6),
+
+                child: ClipPath(
+                  clipper: ShapeBorderClipper(shape: innerBorderShape),
+
+                  child: SizedBox(
+                    height: 60,
+                    child: Center(
+                      child: Text(
+                        "Geen activiteiten\nin de komende maand",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                          color: Colors.grey.shade500.withOpacity(0.8)
+                        ),
+                      )
+                    )
+                  )
+                )
+              ),
+            ],
+
+            /* Link to activities page */
+            if (activities.length > 3)
+            Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.only(top: innerPaddingSize/2),
 
@@ -122,12 +136,12 @@ class CalendarState extends State<Calendar> {
                     size: 20,
                   ),
                 ],
-              ),
+              )
             ),
-          ),
-        ],
-      ),
-    ));
+          ],
+        )
+      ))
+    );
   }
 
   @override

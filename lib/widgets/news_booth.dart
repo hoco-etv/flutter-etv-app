@@ -28,46 +28,60 @@ class NewsBoothState extends State<NewsBooth> {
   @override
   Widget build(BuildContext context)
   {
-    return Card(child: Container(
-      padding: innerPadding,
+    return GestureDetector(
+      onTap: () { context.navigateTo(const NewsTab(children: [ NewsRoute() ])); },
 
-      child: Column(
-        children: [
-          /* Title */
-          Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(bottom: innerPaddingSize),
+      child: Card(child: Container(
+        padding: innerPadding,
 
-            child: Text(
-              'Nieuws',
-              style: Theme.of(context).textTheme.headline4,
-            )
-          ),
+        child: Column(
+          children: [
+            /* Title */
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: innerPaddingSize),
 
-          /* Bulletin list */
-          Theme(
-            data: Theme.of(context).copyWith(cardColor: lighten(Theme.of(context).colorScheme.surface)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Feather.inbox,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 22
+                  ),
+                  const SizedBox(width: innerPaddingSize),
 
-            child: ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+                  Text(
+                    'Nieuws',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
 
-              itemCount: min(widget.numberOfItems, newsItems.length),
-              itemBuilder: (context, i) => BulletinListing(
-                newsItems[i],
-                contentPreview: true,
-                quickViewLink: true,
-              ),
-              separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize),
-            )
-          ),
+                  const SizedBox(width: 22),  // add spacer to semi-center title
+                ]
+              )
+            ),
 
-          /* Link to news page */
-          if (newsItems.length > widget.numberOfItems)
-          GestureDetector(
-            onTap: () { context.navigateTo(const NewsTab(children: [ NewsRoute() ])); },
+            /* Bulletin list */
+            Theme(
+              data: Theme.of(context).copyWith(cardColor: lighten(Theme.of(context).colorScheme.surface)),
 
-            child: Container(
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+
+                itemCount: min(widget.numberOfItems, newsItems.length),
+                itemBuilder: (context, i) => BulletinListing(
+                  newsItems[i],
+                  contentPreview: true,
+                  quickViewLink: true,
+                ),
+                separatorBuilder: (context, i) => const SizedBox(height: innerPaddingSize),
+              )
+            ),
+
+            /* Link to news page */
+            if (newsItems.length > widget.numberOfItems)
+            Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.only(top: innerPaddingSize/2),
 
@@ -90,12 +104,12 @@ class NewsBoothState extends State<NewsBooth> {
                     size: 20,
                   ),
                 ],
-              ),
+              )
             ),
-          ),
-        ],
-      ),
-    ));
+          ],
+        )
+      ))
+    );
   }
 
   @override
