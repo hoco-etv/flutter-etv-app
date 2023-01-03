@@ -8,21 +8,20 @@ import '/router.gr.dart';
 
 class ActivityListing extends StatelessWidget {
   final EtvActivity activity;
+  final bool quickViewLink;
 
   const ActivityListing(
-    this.activity,
-    [Key? key]
+    this.activity, {
+      this.quickViewLink = false,
+      Key? key
+    }
   ) : super(key: key);
 
   @override
   Widget build(BuildContext context)
   {
     return Card(
-      margin: const EdgeInsets.only(top: innerPaddingSize),
       shape: innerBorderShape,
-      color: Theme.of(context).brightness == Brightness.light
-        ? Colors.white
-        : Colors.grey.shade800.withOpacity(0.9),
 
       child: ClipPath(
         clipper: ShapeBorderClipper(shape: innerBorderShape),
@@ -31,12 +30,12 @@ class ActivityListing extends StatelessWidget {
           InkWell(
             onTap: () {
               context.navigateTo(
-                AppScaffold(
-                  children: [
-                    const DashboardRoute(),
-                    ActivitiesTab(children: [ const ActivitiesRoute(), ActivityRoute(activity: activity), ]),
-                  ],
-                ),
+                ActivitiesTab(children: [
+                  const ActivitiesRoute(),
+                  ActivityRoute(activity: activity).copyWith(
+                    queryParams: { 'quick-view': quickViewLink },
+                  )
+                ])
               );
             },
 
@@ -82,7 +81,7 @@ class ActivityListing extends StatelessWidget {
                   /* Subtitle */
                   if (activity.summary != null)
                   Text(
-                    activity.summary ?? '',
+                    activity.summary!,
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                 ],

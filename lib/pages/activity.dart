@@ -34,7 +34,7 @@ class ActivityPage extends StatelessWidget {
           /* Image */
           if (activity.image != null)
           LoadedNetworkImage(
-            activity.image ?? '',
+            activity.image!,
             defaultAspectRatio: 4/3,
           ),
 
@@ -53,15 +53,14 @@ class ActivityPage extends StatelessWidget {
                 ),
 
                 /* Subtitle */
-                if (activity.summary != null)
-                Container(
-                  margin: const EdgeInsets.only(top: innerPaddingSize/2),
+                if (activity.summary != null) ...[
+                  const SizedBox(height: innerPaddingSize/2),
 
-                  child: Text(
-                    activity.summary ?? 'samenvatting',
+                  Text(
+                    activity.summary!,
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                ),
+                ],
 
                 const SizedBox(height: innerPaddingSize),
 
@@ -71,19 +70,21 @@ class ActivityPage extends StatelessWidget {
                     Feather.calendar,
                     color: Theme.of(context).colorScheme.primary,
                   ),
+
                   const SizedBox(width: innerPaddingSize),
-                  Text(
+
+                  Expanded(child: Text(
                     formatDateSpan(activity.startAt, activity.endAt, includeDay: true),
                     style: Theme.of(context).textTheme.headline6,
-                  ),
+                    softWrap: true,
+                  )),
                 ]),
 
                 /* Where */
-                if (activity.location != null)
-                Container(
-                  margin: const EdgeInsets.only(top: innerPaddingSize/2),
+                if (activity.location != null) ...[
+                  const SizedBox(height: innerPaddingSize/2),
 
-                  child: Row(
+                  Row(
                     children: [
                       Icon(
                         Feather.map_pin,
@@ -91,19 +92,19 @@ class ActivityPage extends StatelessWidget {
                       ),
                       const SizedBox(width: innerPaddingSize),
                       Text(
-                        activity.location ?? '',
+                        activity.location!,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
                   ),
-                ),
+                ],
 
                 const SizedBox(height: innerPaddingSize),
 
                 /* Description */
                 if (activity.description != null)
                 HtmlWidget(
-                  activity.description ?? '',
+                  activity.description!,
 
                   onTapUrl: (url) => launchUrl(Uri.parse(url)),
                   customWidgetBuilder: (element) {

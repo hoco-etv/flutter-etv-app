@@ -9,6 +9,7 @@ import '/utils/notifications.dart' as notifications;
 import '/utils/etv_style.dart';
 import '/background.dart';
 import '/router.gr.dart';
+import '/router.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -30,13 +31,13 @@ void main() async {
   final appRouter = AppRouter();
   await notifications.initPlugin(appRouter);
 
-  runApp(EtvApp(router: appRouter));
+  runApp(EtvApp(appRouter: appRouter));
 }
 
 class EtvApp extends StatelessWidget {
-  const EtvApp({required this.router, Key? key}) : super(key: key);
+  const EtvApp({required this.appRouter, Key? key}) : super(key: key);
 
-  final AppRouter router;
+  final AppRouter appRouter;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +48,10 @@ class EtvApp extends StatelessWidget {
       theme: getTheme(Brightness.light),
       darkTheme: getTheme(Brightness.dark),
 
-      routerDelegate: router.delegate(),
-      routeInformationParser: router.defaultRouteParser(),
+      routerDelegate: appRouter.delegate(
+        navigatorObservers: () => [ AppRouterObserver() ],
+      ),
+      routeInformationParser: appRouter.defaultRouteParser(),
     );
   }
 }

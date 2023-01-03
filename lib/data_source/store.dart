@@ -121,6 +121,12 @@ Future<void> updateActivityCache(
 )
 async {
   final cacheBox = Hive.box('cache');
+
+  // if (activities.isEmpty) {
+  //   for (var key in getCachedActivityKeys()) { cacheBox.delete(key); }
+  //   return cacheBox.flush();
+  // }
+
   final cacheKeyCursor = getCachedActivityKeys().iterator;
   bool cacheEntryAvailable = cacheKeyCursor.moveNext();
 
