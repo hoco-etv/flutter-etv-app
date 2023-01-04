@@ -89,7 +89,7 @@ class AppScaffoldState extends State<AppScaffold> {
 
             navbar.NavButtonData(
               visible: loggedIn,
-              destination: const app_router.MemberSearchRoute(),
+              destination: const app_router.MembersRoute(),
               label: 'Leden',
               icon: Feather.users,
             ),
@@ -121,7 +121,7 @@ class AppScaffoldState extends State<AppScaffold> {
               NavEntryData(
                 label: 'Leden',
                 icon: Feather.users,
-                destination: app_router.MembersTab(children: [ app_router.MemberSearchRoute() ])
+                destination: app_router.MembersTab(children: [ app_router.MembersRoute() ])
               ),
             ]
           ),

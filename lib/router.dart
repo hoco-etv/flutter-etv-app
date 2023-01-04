@@ -6,11 +6,11 @@ import '/pages/dashboard.dart';
 import '/pages/activity.dart';
 import '/pages/activities.dart';
 import '/pages/bulletin.dart';
+import '/pages/members.dart';
 import '/pages/news.dart';
 import '/pages/profile.dart';
 import '/pages/photo_album.dart';
 import '/pages/photo_albums.dart';
-import '/pages/search_members.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -63,8 +63,7 @@ import '/pages/search_members.dart';
 
           children: [
             AutoRoute(
-              page: MemberSearchPage,
-              path: 'search',
+              page: MembersPage,
               initial: true,
             ),
             // AutoRoute(

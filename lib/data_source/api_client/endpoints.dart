@@ -55,6 +55,16 @@ Future fetchProfile() async
   return profile;
 }
 
+Future<Iterable<MemberBirthday>> fetchBirthdays() async
+{
+  if (!isLoggedIn()) {
+    return [];
+  }
+
+  final results = await get('/members/birthdays') as List;
+  return results.map((result) => MemberBirthday.fromMap(result));
+}
+
 Future<Iterable<Person>> searchMembers(String query) async
 {
   if (!isLoggedIn() || query.isEmpty) {

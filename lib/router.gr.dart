@@ -21,11 +21,11 @@ import 'pages/activities.dart' as _i5;
 import 'pages/activity.dart' as _i6;
 import 'pages/bulletin.dart' as _i8;
 import 'pages/dashboard.dart' as _i2;
+import 'pages/members.dart' as _i9;
 import 'pages/news.dart' as _i7;
 import 'pages/photo_album.dart' as _i11;
 import 'pages/photo_albums.dart' as _i10;
 import 'pages/profile.dart' as _i4;
-import 'pages/search_members.dart' as _i9;
 
 class AppRouter extends _i12.RootStackRouter {
   AppRouter([_i13.GlobalKey<_i13.NavigatorState>? navigatorKey])
@@ -107,10 +107,10 @@ class AppRouter extends _i12.RootStackRouter {
         ),
       );
     },
-    MemberSearchRoute.name: (routeData) {
+    MembersRoute.name: (routeData) {
       return _i12.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i9.MemberSearchPage(),
+        child: const _i9.MembersPage(),
       );
     },
     PhotoAlbumsRoute.name: (routeData) {
@@ -182,17 +182,10 @@ class AppRouter extends _i12.RootStackRouter {
               parent: AppScaffold.name,
               children: [
                 _i12.RouteConfig(
-                  '#redirect',
+                  MembersRoute.name,
                   path: '',
                   parent: MembersTab.name,
-                  redirectTo: 'search',
-                  fullMatch: true,
-                ),
-                _i12.RouteConfig(
-                  MemberSearchRoute.name,
-                  path: 'search',
-                  parent: MembersTab.name,
-                ),
+                )
               ],
             ),
             _i12.RouteConfig(
@@ -404,15 +397,15 @@ class BulletinRouteArgs {
 }
 
 /// generated route for
-/// [_i9.MemberSearchPage]
-class MemberSearchRoute extends _i12.PageRouteInfo<void> {
-  const MemberSearchRoute()
+/// [_i9.MembersPage]
+class MembersRoute extends _i12.PageRouteInfo<void> {
+  const MembersRoute()
       : super(
-          MemberSearchRoute.name,
-          path: 'search',
+          MembersRoute.name,
+          path: '',
         );
 
-  static const String name = 'MemberSearchRoute';
+  static const String name = 'MembersRoute';
 }
 
 /// generated route for

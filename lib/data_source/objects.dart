@@ -188,6 +188,56 @@ class PersonAddress {
   }
 }
 
+class MemberBirthday {
+  final int id;
+  final String name;
+  final String nameWithTitle;
+  final DateTime dateOfBirth;
+  final int? pictureId;
+  final String? pictureUrl;
+  final String? mobilePhone;
+  final String? email;
+
+  const MemberBirthday({
+    required this.id,
+    required this.name,
+    required this.nameWithTitle,
+    required this.dateOfBirth,
+    this.pictureId,
+    this.pictureUrl,
+    this.mobilePhone,
+    this.email,
+  });
+
+  factory MemberBirthday.fromMap(Map map)
+  {
+    return MemberBirthday(
+      id:             map['id'],
+      name:           map['name'],
+      dateOfBirth:    DateTime.parse(map['date_of_birth']),
+      nameWithTitle:  map['name_with_title'],
+      pictureId:      map['picture_id'],
+      pictureUrl:     map['picture_url'],
+      mobilePhone:    map['mobile_phone'],
+      email:          map['email'],
+    );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':               id,
+      'name':             name,
+      'date_of_birth':    dateOfBirth.toString().substring(0, 10),
+      'name_with_title':  nameWithTitle,
+      'picture_id':       pictureId,
+      'picture_url':      pictureUrl,
+      'mobile_phone':     mobilePhone,
+      'email':            email,
+    };
+  }
+}
+
 class CommitteeParticipation {
   final int committeeId;
   final bool committeeHasActiveMembers;
