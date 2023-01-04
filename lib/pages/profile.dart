@@ -133,6 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
       refreshOnLoad: true,
 
       pageContent: ListView(children: [
+
         /* *** LOGIN PAGE *** */
         if (!_loggedIn) Container(
           alignment: Alignment.center,
@@ -347,7 +348,10 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Table(children: [
               TableRow(children: [
                 const Text('Token:'),
-                SelectableText(getToken().toString(), style: const TextStyle(fontFamily: 'RobotoMono')),
+                SelectableText(
+                  getToken().toString(),
+                  style: const TextStyle(fontFamily: 'RobotoMono')
+                ),
               ])
             ])
           )

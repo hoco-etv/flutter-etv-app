@@ -3,11 +3,11 @@ import 'package:auto_route/auto_route.dart';
 
 import '/layouts/app_scaffold.dart';
 import '/pages/dashboard.dart';
+import '/pages/activity.dart';
+import '/pages/activities.dart';
+import '/pages/bulletin.dart';
 import '/pages/news.dart';
 import '/pages/profile.dart';
-import '/pages/activity.dart';
-import '/pages/bulletin.dart';
-import '/pages/activities.dart';
 import '/pages/photo_album.dart';
 import '/pages/photo_albums.dart';
 import '/pages/search_members.dart';

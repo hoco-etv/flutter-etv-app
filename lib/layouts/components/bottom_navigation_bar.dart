@@ -37,7 +37,10 @@ class BottomNavigationBar extends StatefulWidget {
 }
 
 class _BottomNavigationBarState extends State<BottomNavigationBar> {
+  static const double appBarSize = 56;
+  static const double navButtonWidth = 64;
   static const double drawerButtonSize = 48;
+  static const Duration animationDuration = Duration(milliseconds: 149);
 
   @override
   Widget build(BuildContext context) {
@@ -67,33 +70,56 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
 
               /* Navigation button layout */
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: innerPaddingSize, vertical: innerPaddingSize/2),
+                height: appBarSize,
+                width: navButtonWidth,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: innerPaddingSize/2,
+                  vertical: innerPaddingSize/2
+                ),
 
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
 
                   children: [
-                    Icon(
-                      isActive && buttonData.activeIcon != null ? buttonData.activeIcon : buttonData.icon,
-                      semanticLabel: buttonData.label,
-                      color: color,
-                      size: 24,
-                    ),
+                    AnimatedContainer(
+                      curve: Curves.easeOut,
+                      duration: animationDuration,
+                      padding: isActive ? const EdgeInsets.only(bottom: 16) : EdgeInsets.zero,
 
-                    const SizedBox(height: innerPaddingSize/2),
-
-                    Text(
-                      buttonData.label,
-                      style: TextStyle(
-                        fontSize: 12,
-                        height: 1,
+                      child: Icon(
+                        isActive && buttonData.activeIcon != null ? buttonData.activeIcon : buttonData.icon,
+                        semanticLabel: buttonData.label,
                         color: color,
-                      ),
+                        size: 24,
+                      )
                     ),
-                  ],
-                ),
-              ),
+
+                    AnimatedPositioned(
+                      duration: animationDuration,
+                      curve: Curves.easeOut,
+                      bottom: isActive ? -1 : -appBarSize/4,
+
+                      child: AnimatedDefaultTextStyle(
+                        duration: animationDuration,
+                        curve: Curves.easeOut,
+                        style: TextStyle(
+                          fontSize: isActive ? 13 : 6,
+                        ),
+
+                        child: Text(
+                          buttonData.label,
+
+                          style: TextStyle(
+                            color: color,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
             );
           }).toList(),
         )),

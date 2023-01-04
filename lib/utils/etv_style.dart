@@ -54,7 +54,7 @@ final _lightColorScheme = ColorScheme.light(
 final _darkColorScheme = ColorScheme.dark(
   primary: etvRed,
 
-  surface: Colors.grey.shade900,
+  surface: darken(Colors.grey.shade900, 0.025),
   onPrimary: almostWhite,
 );
 
@@ -147,6 +147,15 @@ ThemeData getTheme(Brightness brightness)
     ),
 
     dividerColor: Colors.transparent,
+
+    drawerTheme: DrawerThemeData(
+      backgroundColor: colorScheme.surface,
+    ),
+    listTileTheme: ListTileThemeData(
+      contentPadding: const EdgeInsets.symmetric(horizontal: outerPaddingSize*1.25),
+      iconColor: colorScheme.onSurface,
+      style: ListTileStyle.drawer,
+    ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(

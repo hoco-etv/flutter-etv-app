@@ -22,89 +22,84 @@ class ActivityListing extends StatelessWidget {
   {
     return Card(
       shape: innerBorderShape,
+      clipBehavior: Clip.hardEdge,
 
-      child: ClipPath(
-        clipper: ShapeBorderClipper(shape: innerBorderShape),
+      child: Stack(children: [
+        InkWell(
+          onTap: () {
+            context.navigateTo(
+              ActivitiesTab(children: [
+                const ActivitiesRoute(),
+                ActivityRoute(activity: activity).copyWith(
+                  queryParams: { 'quick-view': quickViewLink },
+                )
+              ])
+            );
+          },
 
-        child: Stack(children: [
-          InkWell(
-            onTap: () {
-              context.navigateTo(
-                ActivitiesTab(children: [
-                  const ActivitiesRoute(),
-                  ActivityRoute(activity: activity).copyWith(
-                    queryParams: { 'quick-view': quickViewLink },
-                  )
-                ])
-              );
-            },
-
-            borderRadius: BorderRadius.circular(innerBorderRadius),
-
-            child: Container(
-              padding: innerPadding,
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: innerBorderRadius
-                  ),
+          child: Container(
+            padding: innerPadding,
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: innerBorderRadius
                 ),
               ),
+            ),
 
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
 
-                children: [
-                  /* Date */
-                  Row(children: [
+              children: [
+                /* Date */
+                Row(children: [
+                  Text(
+                    formatDate(activity.startAt, includeDay: true, includeTime: true),
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+
+                  if (activity.startAt.difference(DateTime.now()).inDays < 1) ...[
+                    const Text('  •  '),
                     Text(
-                      formatDate(activity.startAt, includeDay: true, includeTime: true),
-                      style: Theme.of(context).textTheme.bodyText2,
+                      timeLeftBeforeDate(activity.startAt),
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
+                  ],
+                ]),
 
-                    if (activity.startAt.difference(DateTime.now()).inDays < 1) ...[
-                      const Text('  •  '),
-                      Text(
-                        timeLeftBeforeDate(activity.startAt),
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ],
-                  ]),
+                /* Title */
+                Text(
+                  activity.name,
+                  style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(fontFamily: 'Roboto')),
+                ),
 
-                  /* Title */
-                  Text(
-                    activity.name,
-                    style: Theme.of(context).textTheme.headline5?.merge(const TextStyle(fontFamily: 'Roboto')),
-                  ),
-
-                  /* Subtitle */
-                  if (activity.summary != null)
-                  Text(
-                    activity.summary!,
-                    style: Theme.of(context).textTheme.subtitle2,
-                  ),
-                ],
-              ),
+                /* Subtitle */
+                if (activity.summary != null)
+                Text(
+                  activity.summary!,
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+              ],
             ),
           ),
+        ),
 
-          if (!activity.seen) Positioned(
-            right: innerBorderRadius,
-            top: innerBorderRadius,
-            child: Container(
-              decoration: BoxDecoration(
-                color: etvRed.shade100,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              constraints: const BoxConstraints(
-                minHeight: 8,
-                minWidth: 8,
-              ),
+        if (!activity.seen) Positioned(
+          right: innerBorderRadius,
+          top: innerBorderRadius,
+          child: Container(
+            decoration: BoxDecoration(
+              color: etvRed.shade100,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            constraints: const BoxConstraints(
+              minHeight: 8,
+              minWidth: 8,
             ),
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 }

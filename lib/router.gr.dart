@@ -15,7 +15,7 @@ import 'package:auto_route/auto_route.dart' as _i12;
 import 'package:auto_route/empty_router_widgets.dart' as _i3;
 import 'package:flutter/material.dart' as _i13;
 
-import 'data_source/api_client/main.dart' as _i14;
+import 'data_source/objects.dart' as _i14;
 import 'layouts/app_scaffold.dart' as _i1;
 import 'pages/activities.dart' as _i5;
 import 'pages/activity.dart' as _i6;

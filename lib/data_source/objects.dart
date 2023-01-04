@@ -324,27 +324,27 @@ class BoardPicture {
   final int id;
   final int priority;
   final String description;
-  final String url;
+  final String? url;
 
   const BoardPicture({
     required this.id,
     required this.priority,
     required this.description,
-    required this.url,
+    this.url,
   });
 }
 
 class BoardMember {
   final int personId;
-  final String personName;
   final String functionName;
+  final String? personName;
   final int functionNumber;
 
   const BoardMember({
     required this.personId,
-    required this.personName,
     required this.functionName,
     required this.functionNumber,
+    this.personName,
   });
 }
 
