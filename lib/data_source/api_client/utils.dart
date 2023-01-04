@@ -13,6 +13,11 @@ Map<String, String> authHeader()
   return headers;
 }
 
+String buildAlbumPhotoUrl(int albumId, String filename, {bool fullSize = false})
+{
+  return '$baseUrl/photo-albums/$albumId/$filename${fullSize ? '?thumbnail=0' : ''}';
+}
+
 String buildPictureUrl(PictureType type, int id)
 {
   return '$baseUrl/$type/$id/picture';

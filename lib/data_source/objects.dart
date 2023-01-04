@@ -495,6 +495,58 @@ class EtvBulletin {
   }
 }
 
+class PhotoAlbum {
+  final int id;
+  final String name;
+  final String? coverPhoto;
+  final DateTime date;
+  final List<String> tags;
+  final List<String>? photos;
+
+  bool seen;
+
+  PhotoAlbum({
+    required this.id,
+    required this.name,
+    required this.date,
+    required this.tags,
+    this.coverPhoto,
+    this.photos,
+
+    this.seen = false,
+  });
+
+  factory PhotoAlbum.fromMap(Map<String, dynamic> json)
+  {
+    return PhotoAlbum(
+      id:         json['id'],
+      name:       json['name'],
+      date:       DateTime.parse(json['date']),
+      tags:       List<String>.from(json['tags']),
+      photos:     json['photos'] != null
+                    ? Map<String, String>.from(json['photos']).values.toList()
+                    : null,
+      coverPhoto: json['cover_photo'],
+
+      seen:       json['seen'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toMap()
+  {
+    return {
+      'id':         id,
+      'name':       name,
+      'date':       date.toString().substring(0, 10),
+      'tags':       tags,
+      'photos':     photos,
+      'coverPhoto': coverPhoto,
+
+      'seen':       seen,
+    };
+  }
+}
+
 dynamic collapseLocalizedString(Map<String, String?> map)
 {
   final content = map.entries.firstWhere((e) => e.key.startsWith('nl-NL'), orElse: () => map.entries.first).value;

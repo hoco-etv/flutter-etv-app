@@ -28,6 +28,20 @@ Future<List<EtvBulletin>> fetchNews() async
     .toList();
 }
 
+Future<List<PhotoAlbum>> fetchPhotoAlbums() async
+{
+  return (await get('/photo-albums') as List<dynamic>)
+    .map((e) => PhotoAlbum.fromMap(e))
+    .toList();
+}
+
+Future<PhotoAlbum> fetchPhotoAlbum(int id) async
+{
+  return PhotoAlbum.fromMap(
+    await get('/photo-albums/$id')
+  );
+}
+
 /// returns `User | null`
 Future fetchProfile() async
 {
