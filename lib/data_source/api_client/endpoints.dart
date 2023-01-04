@@ -16,8 +16,8 @@ Future<List<EtvActivity>> fetchActivities([bool futureOnly = true]) async
 
 Future<EtvBoardroomState> fetchBoardroomState() async
 {
-  return EtvBoardroomState.fromMap(
-    await get('/boardroom')
+  return EtvBoardroomState.fromJson(
+    await get('/boardroom'), await get('/coffee/get')
   );
 }
 

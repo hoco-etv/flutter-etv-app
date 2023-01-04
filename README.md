@@ -46,7 +46,7 @@ No idea, this is a `//TODO`.
   - [x] Periodic background fetching
   - [ ] Notification bubble
   - [ ] Toggle for notifications
-- [ ] Koffietimer connection
+- [x] Koffietimer connection
 - [x] Ledensearch
 - [x] More profile info
 - [ ] Quotes
