@@ -498,7 +498,7 @@ class EtvBulletin {
 class PhotoAlbum {
   final int id;
   final String name;
-  final String coverPhoto;
+  final String? coverPhoto;
   final DateTime date;
   final List<String> tags;
   final List<String>? photos;
@@ -510,7 +510,7 @@ class PhotoAlbum {
     required this.name,
     required this.date,
     required this.tags,
-    required this.coverPhoto,
+    this.coverPhoto,
     this.photos,
 
     this.seen = false,
@@ -521,10 +521,12 @@ class PhotoAlbum {
     return PhotoAlbum(
       id:         json['id'],
       name:       json['name'],
-      date:       json['date'],
-      tags:       json['tags'],
-      photos:     json['photos'],
-      coverPhoto: json['coverPhoto'],
+      date:       DateTime.parse(json['date']),
+      tags:       List<String>.from(json['tags']),
+      photos:     json['photos'] != null
+                    ? Map<String, String>.from(json['photos']).values.toList()
+                    : null,
+      coverPhoto: json['cover_photo'],
 
       seen:       json['seen'] ?? false,
     );
@@ -535,7 +537,7 @@ class PhotoAlbum {
     return {
       'id':         id,
       'name':       name,
-      'date':       date.toString(),
+      'date':       date.toString().substring(0, 10),
       'tags':       tags,
       'photos':     photos,
       'coverPhoto': coverPhoto,

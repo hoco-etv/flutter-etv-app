@@ -8,6 +8,8 @@ import '/pages/profile.dart';
 import '/pages/activity.dart';
 import '/pages/bulletin.dart';
 import '/pages/activities.dart';
+import '/pages/photo_album.dart';
+import '/pages/photo_albums.dart';
 import '/pages/search_members.dart';
 
 @AdaptiveAutoRouter(
@@ -69,6 +71,23 @@ import '/pages/search_members.dart';
             //   page: MemberProfilePage,
             //   path: ':id',
             // ),
+          ]
+        ),
+
+        AutoRoute(
+          path: 'photo-albums',
+          name: 'PhotoAlbumsRoot',
+          page: EmptyRouterPage,
+
+          children: [
+            AutoRoute(
+              page: PhotoAlbumsPage,
+              initial: true,
+            ),
+            AutoRoute(
+              page: PhotoAlbumPage,
+              path: ':id',
+            ),
           ]
         ),
 

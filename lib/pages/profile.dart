@@ -1,8 +1,8 @@
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 
+import '/utils/feedback.dart';
 import '/utils/etv_style.dart';
 import '/layouts/default.dart';
 import '/widgets/profile_view.dart';
@@ -109,49 +109,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context)
   {
-    final emailUrl = Uri(
-      scheme: 'mailto',
-      path: 'HoCo-ETV@tudelft.nl',
-      queryParameters: {
-        'subject': '[HoCo] Suggestie voor de ETV-app',
-        'body': 'Hoi HoCo,\n\nIk heb een suggestie voor / klacht over de ETV-app: \n\n'
-      }
-    );
-    final githubNewIssueUrl = Uri(
-      scheme: 'https',
-      host: 'github.com',
-      path: 'hoco-etv/flutter-etv-app/issues'
-    );
-
-    final feedbackWidget = RichText(
+    final feedbackWidget = feedbackText(
+      context,
       textAlign: TextAlign.center,
-      textScaleFactor: 1.2,
-      text: TextSpan(
-        style: Theme.of(context).textTheme.bodyText1,
-        children: [
-          const TextSpan(text: 'Heb je ideeën of verbeterpunten voor deze app? Stuur dan een '),
-          TextSpan(
-            text: 'e-mail',
-            style: linkStyle,
-            recognizer: TapGestureRecognizer()..onTap = () { launchUrl(emailUrl); },
-          ),
-          const TextSpan(text: ', of '),
-          TextSpan(
-            text: 'maak een issue op GitHub',
-            style: linkStyle,
-            recognizer: TapGestureRecognizer()..onTap = () async {
-              if (await canLaunchUrl(githubNewIssueUrl)) {
-                launchUrl(githubNewIssueUrl, mode: LaunchMode.externalApplication);
-              }
-            },
-          ),
-          const TextSpan(text: '.'),
-        ]
-      ),
+      textScaleFactor: 1.2
     );
 
     return DefaultLayout(
       title: _loggedIn ? 'Profiel' : 'Log in',
+
       onRefresh: !_loggedIn ? null : () {
         return etv.fetchProfile()
         .then((p) {
@@ -165,14 +131,15 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       },
       refreshOnLoad: true,
-      pageContent: ListView(children: [
 
+      pageContent: ListView(children: [
         /* *** LOGIN PAGE *** */
         if (!_loggedIn) Container(
-          padding: outerPadding,
           alignment: Alignment.center,
 
           child: Card(
+            margin: outerPadding,
+
             child: Container(
               padding: outerPadding.copyWith(bottom: 0),
 
@@ -270,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
         /* *** PROFILE *** */
         if (_loggedIn) Container(
-          padding: outerPadding,
+          margin: outerPadding,
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -368,6 +335,21 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               )),
             ],
+          )
+        ),
+
+        /* ** Debug stuff ** */
+        if (kDebugMode) Card(
+          margin: outerPadding.copyWith(top: 0),
+          child: Container(
+            padding: innerPadding,
+
+            child: Table(children: [
+              TableRow(children: [
+                const Text('Token:'),
+                SelectableText(getToken().toString(), style: const TextStyle(fontFamily: 'RobotoMono')),
+              ])
+            ])
           )
         ),
       ]),
